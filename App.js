@@ -3,8 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
 
-import Profile from './screens/Profile';
+import EventDetails from './screens/EventDetails';
 import EventCatalog from './screens/EventCatalog';
+import Profile from './screens/Profile';
 import Wallet from './screens/Wallet';
 
 const Stack = createStackNavigator();
@@ -17,17 +18,22 @@ const App = () => {
           <Stack.Screen
             name="EventCatalog"
             component={EventCatalog}
-            options={{ headerShown: false }} // Hide title for EventCatalog screen
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Profile"
             component={Profile}
-            options={{ headerShown: false }} // Hide title for Profile screen
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="Wallet"
             component={Wallet}
-            options={{ headerShown: false }} // Hide title for Wallet screen
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EventDetails"
+            component={EventDetails}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

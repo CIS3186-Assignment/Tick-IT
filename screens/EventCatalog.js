@@ -28,8 +28,10 @@ const EventCatalog = () => {
   return (
     <View>
       <TextInput
+        label="Search..."
         value={query}
         onChangeText={query => setQuery(query)}
+        left={<TextInput.Icon icon="magnify" color="#3700B3"/>}
       />
       <FlatList
         data={events}

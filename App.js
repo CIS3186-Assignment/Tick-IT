@@ -1,20 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Provider as PaperProvider } from 'react-native-paper';
 
-export default function App() {
+import Profile from './screens/Profile';
+import EventCatalog from './screens/EventCatalog';
+import Wallet from './screens/Wallet';
+
+const Stack = createStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <PaperProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="EventCatalog">
+          <Stack.Screen
+            name="EventCatalog"
+            component={EventCatalog}
+            options={{ headerShown: false }} // Hide title for EventCatalog screen
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{ headerShown: false }} // Hide title for Profile screen
+          />
+          <Stack.Screen
+            name="Wallet"
+            component={Wallet}
+            options={{ headerShown: false }} // Hide title for Wallet screen
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

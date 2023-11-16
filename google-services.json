@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "192522835612",
+    "project_id": "tick-it-6452c",
+    "storage_bucket": "tick-it-6452c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192522835612:android:5fff96ec26c5d69d173f59",
+        "android_client_info": {
+          "package_name": "com.tickit.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192522835612-51lm445qabgmv74so01u481gg942ma7f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tickit.app",
+            "certificate_hash": "b759b68886f7097f15a03ec0d729e92f1ba410e9"
+          }
+        },
+        {
+          "client_id": "192522835612-oa6pic472tc625o56cbunvk2gjgbejl1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAda4bpjiLIgXCwawKpi8_a5bPBXfYQ-J8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192522835612-oa6pic472tc625o56cbunvk2gjgbejl1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

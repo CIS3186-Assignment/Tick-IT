@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View ,Button} from 'react-native';
 import {GoogleSignin, GoogleSigninButton, statusCodes} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+
 
 GoogleSignin.configure({
     webClientId: '192522835612-oa6pic472tc625o56cbunvk2gjgbejl1.apps.googleusercontent.com',
@@ -12,8 +14,9 @@ export default Login = ()=>{
         try{
 
             await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            console.log(userInfo)
+            const { idToken } = await GoogleSignin.signIn();
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            return auth().signInWithCredential(googleCredential);
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
               // User cancelled the sign-in process

@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Appbar, Text } from 'react-native-paper';
+import { StyleSheet, Text } from 'react-native';
+import { Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 const TopAppBar = ({ title }) => {
@@ -9,7 +9,7 @@ const TopAppBar = ({ title }) => {
   return (
     <Appbar.Header style={styles.container}>
       <Appbar.BackAction iconColor="#FFFFFF" onPress={() => navigation.goBack()} />
-      <Text variant='headlineMedium'>{title}</Text>
+      <Text style={styles.title}>{title}</Text>
     </Appbar.Header>
   );
 };
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   title:{
     color: "#FFFFFF",
-    fontSize: 300
+    fontSize: 30
   }
 });
 

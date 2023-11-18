@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton, Colors } from 'react-native-paper';
+import TopAppBar from '../components/TopAppBar';
 
 const EventDetails = ({ route }) => {
   const { event } = route.params;
@@ -25,16 +26,9 @@ const EventDetails = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <IconButton
-          icon="chevron-left"
-          color="#FFFFFF"
-          size={40}
-          style={styles.iconButton}
-          onPress={handleCardPress}
-        />
-        <Text style={styles.eventName}>{event.name}</Text>
-      </View>
+    <View style={styles.headerContainer}>
+      <TopAppBar title={event?.name}/>
+    </View>
 
       <Image style={styles.image} source={{ uri: event?.image }} />
 

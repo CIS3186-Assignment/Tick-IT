@@ -10,6 +10,7 @@ const EventCatalog = () => {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
+    sampleEvents.events = sampleEvents.events.slice(0,3)
     setEvents(sampleEvents.events);
   }, []);
 

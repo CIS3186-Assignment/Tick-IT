@@ -1,38 +1,40 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { IconButton, MD3Colors } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Appbar, MD3Colors } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 const BottomNavBar = ({ currentScreen }) => {
     const navigation = useNavigation();
+    const {bottom} = useSafeAreaInsets;
 
     const getIconColor = (screenName) => {
         return currentScreen === screenName ? "#03DAC6" : '#FFFFFF';
     };
 
     return (
-        <View style={styles.container}>
-            <IconButton
+        <Appbar style={styles.container} safeAreaInsets={{bottom}}>
+            <Appbar.Action
                 icon="home"
                 iconColor={getIconColor('EventCatalog')}
                 size={40}
                 onPress={() => navigation.navigate('EventCatalog')}
             />
 
-            <IconButton
+            <Appbar.Action
                 icon="wallet"
                 iconColor={getIconColor('Wallet')}
                 size={40}
                 onPress={() => navigation.navigate('Wallet')}
             />
 
-            <IconButton
+            <Appbar.Action
                 icon="account"
                 iconColor={getIconColor('Profile')}
                 size={40}
                 onPress={() => navigation.navigate('Profile')}
             />
-        </View>
+        </Appbar>
     );
 };
 
@@ -42,6 +44,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 10,
+        left: 0, 
+        right: 0,
+        top: 0,
+        bottom: 0
     },
 });
 

@@ -7,6 +7,8 @@ export const getAllEvents = async () => {
     const querySnapshot = await getDocs(eventsCollection);
 
     const events = [];
+    const creatorPromises = [];
+
     for (const documentSnapshot of querySnapshot.docs) {
       const event = {
         id: documentSnapshot.id,
@@ -14,9 +16,19 @@ export const getAllEvents = async () => {
       };
 
       const eventCreatorRef = event.EventCreator;
+      const creatorPromise = getDoc(eventCreatorRef);
 
-      const creatorDoc = await getDoc(eventCreatorRef);
-      
+      creatorPromises.push(creatorPromise);
+
+      events.push(event);
+    }
+
+    const creatorDocs = await Promise.all(creatorPromises);
+
+    for (let i = 0; i < creatorDocs.length; i++) {
+      const creatorDoc = creatorDocs[i];
+      const event = events[i];
+
       if (creatorDoc.exists()) {
         const creatorData = creatorDoc.data();
         event.eventCreator = {
@@ -26,9 +38,8 @@ export const getAllEvents = async () => {
           phone: creatorData.phone,
         };
       }
-
-      events.push(event);
     }
+
     return events;
   } catch (error) {
     console.error("Error fetching events:", error);

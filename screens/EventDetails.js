@@ -16,6 +16,17 @@ const EventDetails = ({ route }) => {
     navigation.navigate('EventCatalog');
   };
 
+  const formatDate = (timestamp) => {
+    if (!timestamp) {
+      return 'N/A'; 
+    }
+  
+    const date = new Date(timestamp.toDate());
+    const options = { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
+  
+    return new Intl.DateTimeFormat('en-GB', options).format(date);
+  };
+
   const handleTicketCountChange = (type, change) => {
     if (type === 'vip') {
       setVipTicketCount((prevCount) => Math.max(0, prevCount + change));
@@ -26,44 +37,52 @@ const EventDetails = ({ route }) => {
 
   return (
     <View style={styles.container}>
-    <View style={styles.headerContainer}>
-      <TopAppBar title={event?.name}/>
-    </View>
+      <View style={styles.headerContainer}>
+        <IconButton
+          icon="chevron-left"
+          color="#FFFFFF"
+          size={40}
+          style={styles.iconButton}
+          onPress={handleCardPress}
+        />
+        <Text style={styles.eventName}>{event.name}</Text>
+      </View>
 
       <Image style={styles.image} source={{ uri: event?.image }} />
 
       <View style={styles.gridContainer}>
-        <FlatList
-          data={[
-            { label: 'Creator', value: event.creator.name },
-            { label: 'Category', value: event.category.name },
-            {
-              label: 'Location',
-              value: event.location,
-              withIcon: true,
-            },
-            { label: 'Date and Time', value: event.datetime },
-            { label: 'Description', value: event.description },
-          ]}
-          renderItem={({ item }) => (
-            <View style={styles.gridRow}>
-              <Text style={styles.gridLabel}>{item.label}</Text>
-              <View style={styles.gridValueContainer}>
-                <Text style={styles.gridValue}>{item.value}</Text>
-                {item.withIcon && (
-                  <IconButton
-                    icon="map-marker"
-                    size={20}
-                    style={styles.iconButton}
-                    onPress={handleCardPress}
-                  />
-                )}
-              </View>
-            </View>
+  <FlatList
+    data={[
+      { label: 'Creator', value: event.eventCreator.name},
+      { label: 'Category', value: event.Category.name },
+      {
+        label: 'Location',
+        value: event.location_name,
+        withIcon: true,
+      },
+      { label: 'Date and Time', value: formatDate(event.date) },
+      { label: 'Description', value: event.description },
+    ]}
+    renderItem={({ item }) => (
+      <View style={styles.gridRow}>
+        <Text style={styles.gridLabel}>{item.label}</Text>
+        <View style={styles.gridValueContainer}>
+          <Text style={styles.gridValue}>{item.value}</Text>
+          {item.withIcon && (
+            <IconButton
+              icon="map-marker"
+              size={20}
+              style={styles.iconButton}
+              onPress={handleCardPress}
+            />
           )}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        </View>
       </View>
+    )}
+    keyExtractor={(item, index) => index.toString()}
+  />
+</View>
+
 
       <View style={styles.ticketContainer}>
         <View style={styles.ticketRow}>
@@ -111,7 +130,6 @@ const EventDetails = ({ route }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

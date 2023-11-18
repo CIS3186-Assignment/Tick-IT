@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import EventDetails from './screens/EventDetails';
 import EventCatalog from './screens/EventCatalog';
@@ -12,7 +13,8 @@ const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <PaperProvider>
+    <SafeAreaProvider>
+      <PaperProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="EventCatalog">
           <Stack.Screen
@@ -38,6 +40,7 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
+    </SafeAreaProvider>
   );
 };
 

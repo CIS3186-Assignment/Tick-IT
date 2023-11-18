@@ -9,7 +9,7 @@ const BottomNavBar = ({ currentScreen }) => {
     const {bottom} = useSafeAreaInsets;
 
     const getIconColor = (screenName) => {
-        return currentScreen === screenName ? "#03DAC6" : '#FFFFFF';
+        return currentScreen === screenName ? "#5581b9" : '#FFFFFF';
     };
 
     return (
@@ -40,7 +40,8 @@ const BottomNavBar = ({ currentScreen }) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#3700B3",
+        position: 'sticky',
+        backgroundColor: "#253354",
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 10,

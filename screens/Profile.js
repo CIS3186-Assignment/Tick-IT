@@ -7,8 +7,11 @@ const Profile = () => {
 
 
   return (
-    <View>
+    <View style={{ flex: 1, position: 'relative' }}>
       <Text>This is the Profile Screen</Text>
+      <View style={{ flex: 1 }}>
+        {/* Your main content goes here */}
+      </View>
       <BottomNavBar currentScreen="Profile"/>
     </View>
   );

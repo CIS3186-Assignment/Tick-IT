@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList } from "react-native";
-import BottomNavBar from "../Components/BottomNavBar.js";
+import BottomNavBar from "../components/BottomNavBar.js";
 import sampleEvents from "../sample_data/events.js";
-import EventCard from "../Components/EventCard.js";
+import EventCard from "../components/EventCard.js";
 import { TextInput } from "react-native-paper";
 
 const EventCatalog = () => {

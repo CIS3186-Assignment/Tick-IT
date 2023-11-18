@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
-import BottomNavBar from "../Components/BottomNavBar";
+import BottomNavBar from "../components/BottomNavBar";
 
 BottomNavBar;
 const Profile = () => {

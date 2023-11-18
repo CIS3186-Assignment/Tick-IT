@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, FlatList } from 'react-native';
-import BottomNavBar from '../components/BottomNavBar.js';
-import sampleEvents from '../sample_data/events.js';
-import EventCard from '../components/EventCard.js';
-import { TextInput } from 'react-native-paper';
+import React, { useState, useEffect } from "react";
+import { View, FlatList } from "react-native";
+import BottomNavBar from "../components/BottomNavBar.js";
+import sampleEvents from "../sample_data/events.js";
+import EventCard from "../components/EventCard.js";
+import { TextInput } from "react-native-paper";
 
 const EventCatalog = () => {
   const [events, setEvents] = useState([]);
@@ -31,15 +31,15 @@ const EventCatalog = () => {
       <TextInput
         label="Search..."
         value={query}
-        onChangeText={query => setQuery(query)}
-        left={<TextInput.Icon icon="magnify" color="#3700B3"/>}
+        onChangeText={(query) => setQuery(query)}
+        left={<TextInput.Icon icon="magnify" color="#3700B3" />}
       />
       <FlatList
         data={events}
         keyExtractor={(e) => e.id}
         renderItem={({ item }) => <EventCard event={item} />}
       />
-      <BottomNavBar currentScreen="EventCatalog"/>
+      <BottomNavBar currentScreen="EventCatalog" />
     </View>
   );
 };

@@ -4,26 +4,42 @@ import BottomNavBar from "../components/BottomNavBar.js";
 import sampleEvents from "../sample_data/events.js";
 import EventCard from "../components/EventCard.js";
 import { TextInput } from "react-native-paper";
+import {getAllEvents} from "../services/EventService.js"
 
 const EventCatalog = () => {
-  const [events, setEvents] = useState([]);
+  const [allEvents, setAllEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [query, setQuery] = useState("");
 
+  const fetchEvents = async () => {
+    try {
+      const events = await getAllEvents();
+      setAllEvents(events);
+      setFilteredEvents(events);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
+  };
+  
   useEffect(() => {
-    sampleEvents.events = sampleEvents.events.slice(0,3)
-    setEvents(sampleEvents.events);
+    fetchEvents();
   }, []);
 
   useEffect(() => {
-    const filteredEvents = sampleEvents.events.filter(
-      (event) =>
-        event.name.toLowerCase().includes(query.toLowerCase()) ||
-        event.location.toLowerCase().includes(query.toLowerCase()) ||
-        event.creator.name.toLowerCase().includes(query.toLowerCase()) ||
-        event.description.toLowerCase().includes(query.toLowerCase())
-    );
-    setEvents(filteredEvents);
-  }, [query]);
+    fetchEvents() // refetch events when query changes to get most recent events
+    if (!query) {
+      setFilteredEvents(allEvents)
+    } else {
+      const filteredEvents = allEvents.filter(
+        (event) =>
+          event.name.toLowerCase().includes(query.toLowerCase()) ||
+          event.location_name.toLowerCase().includes(query.toLowerCase()) ||
+          event.eventCreator.name.toLowerCase().includes(query.toLowerCase()) ||
+          event.description.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredEvents(filteredEvents);
+    }
+  }, [query, allEvents]);
 
   // TODO -> STYLING
   return (
@@ -35,7 +51,7 @@ const EventCatalog = () => {
         left={<TextInput.Icon icon="magnify" color="#3700B3" />}
       />
       <FlatList
-        data={events}
+        data={filteredEvents}
         keyExtractor={(e) => e.id}
         renderItem={({ item }) => <EventCard event={item} />}
       />

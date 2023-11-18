@@ -22,8 +22,8 @@ const EventCard = ({event}) => {
                 
                 <View style={styles.textContainer}>
                     <Text variant="titleLarge">{event?.name}</Text>
-                    <Text variant="bodyMedium">{event?.creator?.name}</Text>
-                    <Text variant="bodyMedium">{event?.location}</Text>
+                    <Text variant="bodyMedium">{event?.eventCreator?.name}</Text>
+                    <Text variant="bodyMedium">{event?.location_name}</Text>
                     <Text variant="bodyMedium">€25 - 30</Text>
                 </View>
                 

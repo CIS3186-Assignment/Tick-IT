@@ -21,7 +21,7 @@ const EventCatalog = () => {
       console.error("Error fetching events:", error);
     } finally {
       setLoading(false);
-      setRefreshing(false); // Set refreshing to false when the fetch is complete
+      setRefreshing(false);
     }
   };
 
@@ -30,6 +30,7 @@ const EventCatalog = () => {
   }, []);
 
   useEffect(() => {
+    fetchEvents() // fetch all events when query is changed to have a list which is up to date 
     if (!query) {
       setFilteredEvents(allEvents);
     } else {

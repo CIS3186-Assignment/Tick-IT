@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, RefreshControl } from "react-native";
 import { TextInput, ActivityIndicator } from "react-native-paper";
 import BottomNavBar from "../components/BottomNavBar.js";
 import EventCard from "../components/EventCard.js";
@@ -9,7 +9,8 @@ const EventCatalog = () => {
   const [allEvents, setAllEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchEvents = async () => {
     try {
@@ -20,6 +21,7 @@ const EventCatalog = () => {
       console.error("Error fetching events:", error);
     } finally {
       setLoading(false);
+      setRefreshing(false); // Set refreshing to false when the fetch is complete
     }
   };
 
@@ -42,6 +44,11 @@ const EventCatalog = () => {
     }
   }, [query, allEvents]);
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchEvents();
+  };
+
   return (
     <View>
       <TextInput
@@ -57,6 +64,9 @@ const EventCatalog = () => {
           data={filteredEvents}
           keyExtractor={(e) => e.id}
           renderItem={({ item }) => <EventCard event={item} />}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       )}
       <BottomNavBar currentScreen="EventCatalog" />

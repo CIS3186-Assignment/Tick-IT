@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList } from "react-native";
+import { TextInput, ActivityIndicator } from "react-native-paper";
 import BottomNavBar from "../components/BottomNavBar.js";
-import sampleEvents from "../sample_data/events.js";
 import EventCard from "../components/EventCard.js";
-import { TextInput } from "react-native-paper";
-import {getAllEvents} from "../services/EventService.js"
+import { getAllEvents } from "../services/EventService.js";
 
 const EventCatalog = () => {
   const [allEvents, setAllEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(true); // Add loading state
 
   const fetchEvents = async () => {
     try {
@@ -18,17 +18,18 @@ const EventCatalog = () => {
       setFilteredEvents(events);
     } catch (error) {
       console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchEvents();
   }, []);
 
   useEffect(() => {
-    fetchEvents() // refetch events when query changes to get most recent events
     if (!query) {
-      setFilteredEvents(allEvents)
+      setFilteredEvents(allEvents);
     } else {
       const filteredEvents = allEvents.filter(
         (event) =>
@@ -41,7 +42,6 @@ const EventCatalog = () => {
     }
   }, [query, allEvents]);
 
-  // TODO -> STYLING
   return (
     <View>
       <TextInput
@@ -50,11 +50,15 @@ const EventCatalog = () => {
         onChangeText={(query) => setQuery(query)}
         left={<TextInput.Icon icon="magnify" color="#3700B3" />}
       />
-      <FlatList
-        data={filteredEvents}
-        keyExtractor={(e) => e.id}
-        renderItem={({ item }) => <EventCard event={item} />}
-      />
+      {loading ? (
+        <ActivityIndicator animating={loading} color="#3700B3" size="large" />
+      ) : (
+        <FlatList
+          data={filteredEvents}
+          keyExtractor={(e) => e.id}
+          renderItem={({ item }) => <EventCard event={item} />}
+        />
+      )}
       <BottomNavBar currentScreen="EventCatalog" />
     </View>
   );

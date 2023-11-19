@@ -6,12 +6,31 @@ import { Icon, MD3Colors } from 'react-native-paper';
 
 
 const EventCard = ({event}) => {
-    // TODO -> PRICES
     const navigation = useNavigation();
-    
+   
+
     const handleCardPress = () => {
         navigation.navigate('EventDetails', { event });
     };
+
+    const getPriceRange = () => {
+        let prices = event.tickets.map(ticket => ticket.price);
+        let max = Math.max(...prices);
+        let min = Math.min(...prices);
+        let minTxt, maxTxt;
+      
+        if (min === 0) {
+          minTxt = "Free";
+          maxTxt = `€${max}`;
+        } else {
+          minTxt = `€${min}`;
+          maxTxt = `€${max}`;
+        }
+      
+        if (min === max) return minTxt;
+        return `${minTxt} - ${maxTxt}`;
+      };
+      
     
     return (
         <TouchableOpacity onPress={handleCardPress}>
@@ -24,7 +43,7 @@ const EventCard = ({event}) => {
                     <Text variant="titleLarge">{event?.name}</Text>
                     <Text variant="bodyMedium">{event?.eventCreator?.name}</Text>
                     <Text variant="bodyMedium">{event?.location_name}</Text>
-                    <Text variant="bodyMedium">€25 - 30</Text>
+                    <Text variant="bodyMedium">{getPriceRange()}</Text>
                 </View>
                 
                 <View style={styles.arrowContainer}>

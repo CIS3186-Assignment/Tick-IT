@@ -17,9 +17,7 @@ const EventCatalog = () => {
       const events = await getAllEvents();
       setAllEvents(events);
       setFilteredEvents(events);
-      console.log(events[0].tickets[0].name)
-      console.log(events[0].tickets[0].price)
-
+      console.log("fetched")
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {
@@ -33,10 +31,10 @@ const EventCatalog = () => {
   }, []);
 
   useEffect(() => {
-    fetchEvents() // fetch all events when query is changed to have a list which is up to date 
     if (!query) {
       setFilteredEvents(allEvents);
     } else {
+      setFilteredEvents(allEvents);
       const filteredEvents = allEvents.filter(
         (event) =>
           event.name.toLowerCase().includes(query.toLowerCase()) ||

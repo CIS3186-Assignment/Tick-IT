@@ -9,8 +9,18 @@ const EventDetails = ({ route }) => {
   const navigation = useNavigation();
   const details = event.details || [];
 
-  const [vipTicketCount, setVipTicketCount] = useState(0);
-  const [generalTicketCount, setGeneralTicketCount] = useState(0);
+  const [ticketCounts, setTicketCounts] = useState({});
+
+  const handleTicketCountChange = (ticketType, change) => {
+    const currentCount = ticketCounts[ticketType] || 0;
+    const newCount = Math.max(0, currentCount + change);
+
+    setTicketCounts((prevCounts) => ({
+      ...prevCounts,
+      [ticketType]: newCount,
+    }));
+  };
+
 
   const handleCardPress = () => {
     navigation.navigate('EventCatalog');
@@ -25,14 +35,6 @@ const EventDetails = ({ route }) => {
     const options = { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
   
     return new Intl.DateTimeFormat('en-GB', options).format(date);
-  };
-
-  const handleTicketCountChange = (type, change) => {
-    if (type === 'vip') {
-      setVipTicketCount((prevCount) => Math.max(0, prevCount + change));
-    } else if (type === 'general') {
-      setGeneralTicketCount((prevCount) => Math.max(0, prevCount + change));
-    }
   };
 
   return (
@@ -84,46 +86,32 @@ const EventDetails = ({ route }) => {
 </View>
 
 
-      <View style={styles.ticketContainer}>
-        <View style={styles.ticketRow}>
-          <Text style={styles.ticketLabel}>VIP Tickets</Text>
-          <View style={styles.ticketCountContainer}>
-            <IconButton
-              icon="minus"
-              size={20}
-              style={styles.iconButton}
-              onPress={() => handleTicketCountChange('vip', -1)}
-            />
-            <Text style={styles.ticketCount}>{vipTicketCount}</Text>
-            <IconButton
-              icon="plus"
-              size={20}
-              style={styles.iconButton}
-              onPress={() => handleTicketCountChange('vip', 1)}
-            />
-          </View>
-        </View>
-
-        <View style={styles.ticketRow}>
-          <Text style={styles.ticketLabel}>General Entry Tickets</Text>
-          <View style={styles.ticketCountContainer}>
-            <IconButton
-              icon="minus"
-              size={20}
-              style={styles.iconButton}
-              onPress={() => handleTicketCountChange('general', -1)}
-            />
-            <Text style={styles.ticketCount}>{generalTicketCount}</Text>
-            <IconButton
-              icon="plus"
-              size={20}
-              style={styles.iconButton}
-              onPress={() => handleTicketCountChange('general', 1)}
-            />
-          </View>
+<FlatList
+  data={event.tickets} 
+  renderItem={({ item }) => (
+    <View style={styles.ticketContainer}>
+      <View style={styles.ticketRow}>
+        <Text style={styles.ticketLabel}>{item.name}</Text>
+        <View style={styles.ticketCountContainer}>
+          <IconButton
+            icon="minus"
+            size={20}
+            style={styles.iconButton}
+            onPress={() => handleTicketCountChange(item.name, -1)}
+          />
+          <Text style={styles.ticketCount}>{ticketCounts[item.name] || 0}</Text>
+          <IconButton
+            icon="plus"
+            size={20}
+            style={styles.iconButton}
+            onPress={() => handleTicketCountChange(item.name, 1)}
+          />
         </View>
       </View>
-
+    </View>
+  )}
+  keyExtractor={(item) => item.name}
+/>
       <TouchableOpacity style={styles.buttonContainer}>
         <Text style={styles.buttonText}>Purchase</Text>
       </TouchableOpacity>

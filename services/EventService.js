@@ -1,8 +1,10 @@
 import { getDocs, collection, getDoc } from "firebase/firestore";
 import { FIRESTORE } from "../FirebaseConfig";
 
+
 export const getAllEvents = async () => {
   try {
+
     const eventsCollection = collection(FIRESTORE, "Events");
     const querySnapshot = await getDocs(eventsCollection);
 
@@ -14,6 +16,25 @@ export const getAllEvents = async () => {
         id: documentSnapshot.id,
         ...documentSnapshot.data(),
       };
+
+      let eventTicketsCollection = collection(FIRESTORE,documentSnapshot.ref.path,"EventTickets")
+
+      let eventTickets = []
+
+      let eventTicketsCollectionDocs = (await getDocs(eventTicketsCollection)).docs
+
+      for (let eventTicketsDoc of eventTicketsCollectionDocs){
+
+        ticket = {
+          ...eventTicketsDoc.data()
+        }
+
+        ticket.name = await ((await getDoc(ticket.TicketType)).data()).name
+
+        eventTickets.push(ticket)
+      }
+
+      event.tickets = eventTickets
 
       const eventCreatorRef = event.EventCreator;
       const creatorPromise = getDoc(eventCreatorRef);

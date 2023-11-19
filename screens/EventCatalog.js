@@ -17,6 +17,9 @@ const EventCatalog = () => {
       const events = await getAllEvents();
       setAllEvents(events);
       setFilteredEvents(events);
+      console.log(events[0].tickets[0].name)
+      console.log(events[0].tickets[0].price)
+
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {
@@ -43,7 +46,7 @@ const EventCatalog = () => {
       );
       setFilteredEvents(filteredEvents);
     }
-  }, [query, allEvents]);
+  }, [query]);
 
   const onRefresh = () => {
     setRefreshing(true);

@@ -34,7 +34,6 @@ const EventCatalog = () => {
     if (!query) {
       setFilteredEvents(allEvents);
     } else {
-      setFilteredEvents(allEvents);
       const filteredEvents = allEvents.filter(
         (event) =>
           event.name.toLowerCase().includes(query.toLowerCase()) ||

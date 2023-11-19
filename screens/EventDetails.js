@@ -39,16 +39,7 @@ const EventDetails = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <IconButton
-          icon="chevron-left"
-          color="#FFFFFF"
-          size={40}
-          style={styles.iconButton}
-          onPress={handleCardPress}
-        />
-        <Text style={styles.eventName}>{event.name}</Text>
-      </View>
+      <TopAppBar title={event.name}/>
 
       <Image style={styles.image} source={{ uri: event?.image }} />
 

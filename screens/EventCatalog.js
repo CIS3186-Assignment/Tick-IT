@@ -4,15 +4,35 @@ import BottomNavBar from '../components/BottomNavBar.js';
 import sampleEvents from '../sample_data/events.js';
 
 import EventCard from '../components/EventCard.js';
-import { TextInput } from 'react-native-paper';
+import { TextInput, Chip } from 'react-native-paper';
+
 
 const EventCatalog = () => {
   const [events, setEvents] = useState([]);
   const [query, setQuery] = useState("");
+  const [filters, setFilters] = useState([]);
 
   useEffect(() => {
     setEvents(sampleEvents.events);
   }, []);
+
+const handleChipPress = (categoryId) => {
+    // Check if the category is already in filters
+    if (filters.includes(categoryId)) {
+      // If selected, remove it from filters
+      setFilters((prevFilters) => prevFilters.filter((filter) => filter !== categoryId));
+    } else {
+      // If not selected, add it to filters
+      setFilters((prevFilters) => [...prevFilters, categoryId]);
+    }
+
+    // Update filteredEvents based on filters
+    if(filters.length === 0)
+      updatedFilteredEvents=events
+    else 
+      updatedFilteredEvents = events.filter((event) => filters.includes(event.categoryId));
+    setEvents(updatedFilteredEvents);
+};
 
   useEffect(() => {
     const filteredEvents = sampleEvents.events.filter(
@@ -25,15 +45,6 @@ const EventCatalog = () => {
     setEvents(filteredEvents);
   }, [query]);
 
-  // Dummy Data ghal filters
-  const emptyItems = Array.from({ length: 6 }, (_, index) => ({ id: index.toString() }));
-
-  const renderEmptyItem = ({ item, style }) => (
-    <View style={[styles.emptyItem, style]}>
-      <Text>{"Category"}</Text>
-    </View>
-  );
-
   return (
     <View style={{ ...styles.container, backgroundColor: '#253354' }}>
       <TextInput
@@ -44,15 +55,30 @@ const EventCatalog = () => {
         left={<TextInput.Icon icon="magnify" color="#3700B3" />}
       />
       
-      {/* Ghal meta inzidu il Categories/Filters */}
+      {/* Ghal meta inzidu il CategoryFilters */}
       <View style={styles.filter}>
         <FlatList
-          data={emptyItems}
+          data={[
+            { id: 1, title: "Party" },
+            { id: 2, title: "Concert" },
+            { id: 3, title: "Sports" },
+            { id: 4, title: "Workshops" },
+            { id: 5, title: "Food & Drink" },
+            { id: 6, title: "Adventure" },
+            { id: 7, title: "Art & Culture" },
+            { id: 8, title: "Academic" },
+          ]}
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.filter_items}
-          keyExtractor={(item) => item.id}
-          renderItem={renderEmptyItem}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({item}) => 
+          <Chip 
+              style={styles.category_chips}
+              selected={filters.includes(item.id)}
+              onPress={() => handleChipPress(item.id)}>
+              {item.title}
+          </Chip>}
         />
       </View>
 
@@ -61,7 +87,7 @@ const EventCatalog = () => {
         style={styles.flatList}
         showsVerticalScrollIndicator={false}
         keyExtractor={(e) => e.id.toString()}
-        renderItem={({ item }) => <EventCard event={item} style={styles.eventCard} />}
+        renderItem={({ item }) => <EventCard event={item}/>}
       />
       <BottomNavBar currentScreen="EventCatalog" />
     </View>
@@ -102,6 +128,11 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     marginHorizontal: 0,
     paddingHorizontal: 20
+  },
+  category_chips:{
+    marginRight: 10,
+    backgroundColor: '#ffff',
+    borderRadius: 20
   }
 });
 

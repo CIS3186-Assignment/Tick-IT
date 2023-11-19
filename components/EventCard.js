@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   image: {
     width: '40%',
     height: '110%',
+    borderRadius: 1,
     right: 5,
   },
   textContainer: {

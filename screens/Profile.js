@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import BottomNavBar from '../components/BottomNavBar';
 
 BottomNavBar
@@ -7,8 +7,8 @@ const Profile = () => {
 
 
   return (
-    <View style={{ flex: 1, position: 'relative' }}>
-      <Text>This is the Profile Screen</Text>
+    <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414'}}>
+      <Text style={styles.test}>This is the Profile Screen</Text>
       <View style={{ flex: 1 }}>
         {/* Your main content goes here */}
       </View>
@@ -16,5 +16,14 @@ const Profile = () => {
     </View>
   );
 };
+
+
+const styles = StyleSheet.create({
+  test: {
+    color: '#fff',
+    textAlign: 'center',
+    marginTop: '100%' 
+  }
+});
 
 export default Profile;

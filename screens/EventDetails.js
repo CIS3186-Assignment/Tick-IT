@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { IconButton, Colors } from 'react-native-paper';
 import TopAppBar from '../components/TopAppBar';
@@ -26,28 +26,38 @@ const EventDetails = ({ route }) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.gridRow}>
-      <Text style={styles.gridLabel}>{item.label}</Text>
+      <Text style={[styles.gridLabel, { color: '#FFFFFF' }]}>{item.label}</Text>
       <View style={styles.gridValueContainer}>
-        <Text style={styles.gridValue}>{item.value}</Text>
-        {item.withIcon && (
-          <IconButton
-            icon="map-marker"
-            size={20}
-            style={styles.iconButton}
-            onPress={handleCardPress}
-          />
+        {item.label === 'Description' ? (
+          <ScrollView style={styles.descriptionContainer}>
+            <Text style={[styles.description, { flex: 0, color: '#FFFFFF' }]} numberOfLines={0}>
+              {item.value}
+            </Text>
+          </ScrollView>
+        ) : (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={[styles.gridValue, { color: '#FFFFFF' }]}>{item.value}</Text>
+            {item.withIcon && (
+              <IconButton
+                icon="map-marker"
+                size={25}
+                style={styles.iconButton}
+                onPress={handleCardPress}
+              />
+            )}
+          </View>
         )}
       </View>
     </View>
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: '#141414' }]}>
       <TopAppBar title={event?.name} />
 
       <FlatList
         data={[
-          { label: 'Creator', value: event.creator.name },
+          { label: 'Organiser', value: event.creator.name },
           { label: 'Category', value: event.category.name },
           {
             label: 'Location',
@@ -58,6 +68,7 @@ const EventDetails = ({ route }) => {
           { label: 'Description', value: event.description },
         ]}
         renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         ListHeaderComponent={() => (
           <View style={styles.imageContainer}>
@@ -72,14 +83,14 @@ const EventDetails = ({ route }) => {
                 <View style={styles.ticketCountContainer}>
                   <IconButton
                     icon="minus"
-                    size={20}
+                    size={30}
                     style={styles.iconButton}
                     onPress={() => handleTicketCountChange('vip', -1)}
                   />
                   <Text style={styles.ticketCount}>{vipTicketCount}</Text>
                   <IconButton
                     icon="plus"
-                    size={20}
+                    size={30}
                     style={styles.iconButton}
                     onPress={() => handleTicketCountChange('vip', 1)}
                   />
@@ -91,14 +102,14 @@ const EventDetails = ({ route }) => {
                 <View style={styles.ticketCountContainer}>
                   <IconButton
                     icon="minus"
-                    size={20}
+                    size={30}
                     style={styles.iconButton}
                     onPress={() => handleTicketCountChange('general', -1)}
                   />
                   <Text style={styles.ticketCount}>{generalTicketCount}</Text>
                   <IconButton
                     icon="plus"
-                    size={20}
+                    size={30}
                     style={styles.iconButton}
                     onPress={() => handleTicketCountChange('general', 1)}
                   />
@@ -107,11 +118,10 @@ const EventDetails = ({ route }) => {
               <View>
                 <Text style={styles.total}>Total: €</Text>
               </View>
+                <TouchableOpacity style={styles.buttonContainer}>
+                  <Text style={styles.buttonText}>Purchase Tickets</Text>
+                </TouchableOpacity>
             </View>
-
-            <TouchableOpacity style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Purchase Tickets</Text>
-            </TouchableOpacity>
           </>
         )}
       />
@@ -122,6 +132,7 @@ const EventDetails = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   imageContainer: {
     alignItems: 'center',
@@ -137,7 +148,8 @@ const styles = StyleSheet.create({
   gridRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 5,
+    marginVertical: 10, 
+    paddingHorizontal: 20, 
   },
   gridLabel: {
     fontSize: 16,
@@ -152,14 +164,18 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   ticketContainer: {
-    marginHorizontal: 20,
-    marginBottom: 30,
+    borderColor: '#253354',
+    borderTopWidth: 5,
+    marginVertical: 20,
+    marginBottom: 0,
+    backgroundColor: '#fff'
   },
   ticketRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 5,
+    margin: 25,
+    marginBottom: 20,
   },
   ticketLabel: {
     fontSize: 16,
@@ -170,14 +186,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ticketCount: {
-    fontSize: 16,
+    fontSize: 20,
     marginHorizontal: 10,
   },
   buttonContainer: {
     backgroundColor: '#253354',
     padding: 20,
     borderRadius: 5,
-    marginHorizontal: 20,
+    marginHorizontal: 45,
     marginBottom: 30,
     alignItems: 'center',
   },
@@ -187,14 +203,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   iconButton: {
-    marginRight: 10,
+    margin: -10
   },
   total: {
     textAlign: 'center',
-    marginTop: 20,
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 25,
+    marginTop: 10,
+    marginBottom: 20
   },
+  
 });
 
 export default EventDetails;

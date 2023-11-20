@@ -1,19 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
-import BottomNavBar from '../components/BottomNavBar.js';
-import sampleEvents from '../sample_data/events.js';
-
-import EventCard from '../components/EventCard.js';
-import { TextInput, Chip } from 'react-native-paper';
-
+import React, { useState, useEffect } from "react";
+import { View, FlatList, RefreshControl, Text, StyleSheet } from "react-native";
+import { TextInput, ActivityIndicator, Chip } from "react-native-paper";
+import BottomNavBar from "../components/BottomNavBar.js";
+import EventCard from "../components/EventCard.js";
+import { getAllEvents } from "../services/EventService.js";
 
 const EventCatalog = () => {
-  const [events, setEvents] = useState([]);
+  const [allEvents, setAllEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchEvents = async () => {
+    try {
+      const events = await getAllEvents();
+      setAllEvents(events);
+      setFilteredEvents(events);
+      console.log("fetched")
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    setEvents(sampleEvents.events);
+    fetchEvents();
   }, []);
 
 const handleChipPress = (categoryId) => {
@@ -35,16 +50,26 @@ const handleChipPress = (categoryId) => {
 };
 
   useEffect(() => {
-    const filteredEvents = sampleEvents.events.filter(
-      (event) =>
-        event.name.toLowerCase().includes(query.toLowerCase()) ||
-        event.location.toLowerCase().includes(query.toLowerCase()) ||
-        event.creator.name.toLowerCase().includes(query.toLowerCase()) ||
-        event.description.toLowerCase().includes(query.toLowerCase())
-    );
-    setEvents(filteredEvents);
+    if (!query) {
+      setFilteredEvents(allEvents);
+    } else {
+      const filteredEvents = allEvents.filter(
+        (event) =>
+          event.name.toLowerCase().includes(query.toLowerCase()) ||
+          event.location_name.toLowerCase().includes(query.toLowerCase()) ||
+          event.eventCreator.name.toLowerCase().includes(query.toLowerCase()) ||
+          event.description.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredEvents(filteredEvents);
+    }
   }, [query]);
+  
+   const onRefresh = () => {
+    setRefreshing(true);
+    fetchEvents();
+  };
 
+  
   return (
     <View style={{ ...styles.container, backgroundColor: '#253354' }}>
       <TextInput
@@ -82,13 +107,18 @@ const handleChipPress = (categoryId) => {
         />
       </View>
 
-      <FlatList
-        data={events}
-        style={styles.flatList}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(e) => e.id.toString()}
-        renderItem={({ item }) => <EventCard event={item}/>}
-      />
+      {loading ? (
+        <ActivityIndicator animating={loading} color="#3700B3" size="large" />
+      ) : (
+        <FlatList
+          data={filteredEvents}
+          keyExtractor={(e) => e.id}
+          renderItem={({ item }) => <EventCard event={item} />}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
+      )}
       <BottomNavBar currentScreen="EventCatalog" />
     </View>
   );

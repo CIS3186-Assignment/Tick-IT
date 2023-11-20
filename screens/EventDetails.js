@@ -9,19 +9,32 @@ const EventDetails = ({ route }) => {
   const navigation = useNavigation();
   const details = event.details || [];
 
-  const [vipTicketCount, setVipTicketCount] = useState(0);
-  const [generalTicketCount, setGeneralTicketCount] = useState(0);
+  const [ticketCounts, setTicketCounts] = useState({});
+
+  const handleTicketCountChange = (ticketType, change) => {
+    const currentCount = ticketCounts[ticketType] || 0;
+    const newCount = Math.max(0, currentCount + change);
+
+    setTicketCounts((prevCounts) => ({
+      ...prevCounts,
+      [ticketType]: newCount,
+    }));
+  };
+
 
   const handleCardPress = () => {
     navigation.navigate('EventCatalog');
   };
 
-  const handleTicketCountChange = (type, change) => {
-    if (type === 'vip') {
-      setVipTicketCount((prevCount) => Math.max(0, prevCount + change));
-    } else if (type === 'general') {
-      setGeneralTicketCount((prevCount) => Math.max(0, prevCount + change));
+  const formatDate = (timestamp) => {
+    if (!timestamp) {
+      return 'N/A'; 
     }
+  
+    const date = new Date(timestamp.toDate());
+    const options = { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
+  
+    return new Intl.DateTimeFormat('en-GB', options).format(date);
   };
 
   const renderItem = ({ item }) => (
@@ -56,17 +69,7 @@ const EventDetails = ({ route }) => {
       <TopAppBar title={event?.name} />
 
       <FlatList
-        data={[
-          { label: 'Organiser', value: event.creator.name },
-          { label: 'Category', value: event.category.name },
-          {
-            label: 'Location',
-            value: event.location,
-            withIcon: true,
-          },
-          { label: 'Date and Time', value: event.datetime },
-          { label: 'Description', value: event.description },
-        ]}
+        data={event.tickets}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
@@ -128,7 +131,6 @@ const EventDetails = ({ route }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

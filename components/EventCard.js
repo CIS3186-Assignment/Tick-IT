@@ -10,6 +10,25 @@ const EventCard = ({ event }) => {
   const handleCardPress = () => {
     navigation.navigate('EventDetails', { event });
   };
+  
+  const getPriceRange = () => {
+        let prices = event.tickets.map(ticket => ticket.price);
+        let max = Math.max(...prices);
+        let min = Math.min(...prices);
+        let minTxt, maxTxt;
+      
+        if (min === 0) {
+          minTxt = "Free";
+          maxTxt = `€${max}`;
+        } else {
+          minTxt = `€${min}`;
+          maxTxt = `€${max}`;
+        }
+      
+        if (min === max) return minTxt;
+        return `${minTxt} - ${maxTxt}`;
+      };
+  
 
   return (
     <TouchableOpacity onPress={handleCardPress}>
@@ -43,7 +62,7 @@ const EventCard = ({ event }) => {
                 style={styles.iconButton}
                 color="white"
               />
-              <Text style={styles.infoText}>25 - 30</Text>
+              <Text style={styles.infoText}>{getPriceRange()}</Text>
             </View>
           </View>
         </Card.Content>

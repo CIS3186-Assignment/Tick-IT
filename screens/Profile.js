@@ -2,10 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import BottomNavBar from '../components/BottomNavBar';
 
-BottomNavBar
+BottomNavBar;
 const Profile = () => {
-
-
   return (
     <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414'}}>
       <Text style={styles.test}>This is the Profile Screen</Text>

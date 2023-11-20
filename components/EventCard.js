@@ -44,7 +44,7 @@ const EventCard = ({ event }) => {
                 style={styles.iconButton}
                 color="white"
               />
-              <Text style={styles.infoText}>{event?.location}</Text>
+              <Text style={styles.infoText}>{event?.location_name}</Text>
             </View>
             <View style={styles.infoContainer}>
               <IconButton
@@ -53,7 +53,7 @@ const EventCard = ({ event }) => {
                 style={styles.iconButton}
                 color="white"
               />
-              <Text style={styles.infoText}>{event?.creator?.name}</Text>
+              <Text style={styles.infoText}>{event?.eventCreator?.name}</Text>
             </View>
             <View style={styles.infoContainer}>
               <IconButton

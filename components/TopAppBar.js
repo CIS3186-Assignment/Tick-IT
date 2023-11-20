@@ -8,7 +8,7 @@ const TopAppBar = ({ title }) => {
 
   return (
     <Appbar.Header style={styles.container}>
-      <Appbar.BackAction iconColor="#FFFFFF" onPress={() => navigation.goBack()} />
+      <Appbar.BackAction iconColor="#FFFFFF" style={styles.back} onPress={() => navigation.goBack()} />
       <Text style={styles.title}>{title}</Text>
     </Appbar.Header>
   );
@@ -16,14 +16,22 @@ const TopAppBar = ({ title }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#3700B3",
+    backgroundColor: "#253354",
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: 56, 
+    position: 'relative', 
   },
-  title:{
-    color: "#FFFFFF",
-    fontSize: 30
-  }
+  title: {
+    color: "#FFFF",
+    fontSize: 30,
+  },
+  back: {
+    position: 'absolute', 
+    left: 20, 
+  },
 });
+
 
 export default TopAppBar;

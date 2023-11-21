@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { IconButton, Colors } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import TopAppBar from '../components/TopAppBar';
 
 const EventDetails = ({ route }) => {
   const { event } = route.params;
   const navigation = useNavigation();
-  const details = event.details || [];
+  const details = event.details || {};
 
   const [ticketCounts, setTicketCounts] = useState({});
-  const vipTicketCount = ticketCounts['vip'] || 0;
-  const generalTicketCount = ticketCounts['general'] || 0;
 
   const handleTicketCountChange = (ticketType, change) => {
     const currentCount = ticketCounts[ticketType] || 0;
@@ -27,104 +25,102 @@ const EventDetails = ({ route }) => {
     navigation.navigate('EventCatalog');
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.gridRow}>
-      <Text style={[styles.gridLabel, { color: '#FFFFFF' }]}>{item.label}</Text>
-      <View style={styles.gridValueContainer}>
-        {item.label === 'Description' ? (
-          <ScrollView style={styles.descriptionContainer}>
-            <Text style={[styles.description, { flex: 0, color: '#FFFFFF' }]} numberOfLines={0}>
-              {item.value}
-            </Text>
-          </ScrollView>
-        ) : (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={[styles.gridValue, { color: '#FFFFFF' }]}>{item.value}</Text>
-            {item.withIcon && (
-              <IconButton
-                icon="map-marker"
-                size={25}
-                style={styles.iconButton}
-                onPress={handleCardPress}
-              />
-            )}
-          </View>
-        )}
-      </View>
-    </View>
-  );
+  const formatDate = (timestamp) => {
+    if (!timestamp) {
+      return 'N/A';
+    }
+
+    const date = new Date(timestamp.toDate());
+    const options = { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
+
+    return new Intl.DateTimeFormat('en-GB', options).format(date);
+  };
 
   return (
-    <View style={[styles.container, { backgroundColor: '#141414' }]}>
-      <TopAppBar title={event?.name} />
-
+    <View style={styles.container}>
+      <TopAppBar title={event.name} />
+  
       <FlatList
-        data={event.tickets}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        ListHeaderComponent={() => (
+        ListHeaderComponent={
           <View style={styles.imageContainer}>
             <Image style={styles.image} source={{ uri: event?.image }} />
           </View>
-        )}
-        ListFooterComponent={() => (
-          <>
-            <View style={styles.ticketContainer}>
-              <View style={styles.ticketRow}>
-                <Text style={styles.ticketLabel}>General Entry (€10)</Text>
-                <View style={styles.ticketCountContainer}>
-                  <IconButton
-                    icon="minus"
-                    size={30}
-                    style={styles.iconButton}
-                    onPress={() => handleTicketCountChange('vip', -1)}
-                  />
-                  <Text style={styles.ticketCount}>{vipTicketCount}</Text>
-                  <IconButton
-                    icon="plus"
-                    size={30}
-                    style={styles.iconButton}
-                    onPress={() => handleTicketCountChange('vip', 1)}
-                  />
+        }
+        data={[
+          { type: 'grid', label: 'Creator', value: event.eventCreator.name },
+          { type: 'grid', label: 'Category', value: event.Category.name },
+          {
+            type: 'grid',
+            label: 'Location',
+            value: event.location_name,
+            withIcon: true,
+          },
+          { type: 'grid', label: 'Date and Time', value: formatDate(event.date) },
+          { type: 'grid', label: 'Description', value: event.description },
+          ...event.tickets.map(ticket => ({ type: 'ticket', ...ticket })),
+          { type: 'button' },
+        ]}
+        renderItem={({ item }) => {
+          if (item.type === 'grid') {
+            return (
+              <View style={styles.gridRow}>
+                <Text style={styles.gridLabel}>{item.label}</Text>
+                <View style={styles.gridValueContainer}>
+                  <Text style={styles.gridValue}>{item.value}</Text>
+                  {item.withIcon && (
+                    <IconButton
+                      icon="map-marker"
+                      size={20}
+                      style={styles.iconButton}
+                      onPress={handleCardPress}
+                    />
+                  )}
                 </View>
               </View>
-
-              <View style={styles.ticketRow}>
-                <Text style={styles.ticketLabel}>VIP Ticket(€20)</Text>
-                <View style={styles.ticketCountContainer}>
-                  <IconButton
-                    icon="minus"
-                    size={30}
-                    style={styles.iconButton}
-                    onPress={() => handleTicketCountChange('general', -1)}
-                  />
-                  <Text style={styles.ticketCount}>{generalTicketCount}</Text>
-                  <IconButton
-                    icon="plus"
-                    size={30}
-                    style={styles.iconButton}
-                    onPress={() => handleTicketCountChange('general', 1)}
-                  />
+            );
+          } else if (item.type === 'ticket') {
+            return (
+              <View style={styles.ticketContainer}>
+                <View style={styles.ticketRow}>
+                  <Text style={styles.ticketLabel}>{item.name}</Text>
+                  <View style={styles.ticketCountContainer}>
+                    <IconButton
+                      icon="minus"
+                      size={20}
+                      style={styles.iconButton}
+                      onPress={() => handleTicketCountChange(item.name, -1)}
+                    />
+                    <Text style={styles.ticketCount}>{ticketCounts[item.name] || 0}</Text>
+                    <IconButton
+                      icon="plus"
+                      size={20}
+                      style={styles.iconButton}
+                      onPress={() => handleTicketCountChange(item.name, 1)}
+                    />
+                  </View>
                 </View>
               </View>
-              <View>
-                <Text style={styles.total}>Total: €</Text>
-              </View>
-                <TouchableOpacity style={styles.buttonContainer}>
-                  <Text style={styles.buttonText}>Purchase Tickets</Text>
-                </TouchableOpacity>
-            </View>
-          </>
-        )}
+            );
+          } else if (item.type === 'button') {
+            return (
+              <TouchableOpacity style={styles.buttonContainer}>
+                <Text style={styles.buttonText}>Purchase</Text>
+              </TouchableOpacity>
+            );
+          }
+          return null; // or handle other types as needed
+        }}
+        keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );
+  
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#aaa',
   },
   imageContainer: {
     alignItems: 'center',
@@ -133,36 +129,47 @@ const styles = StyleSheet.create({
   image: {
     width: '70%',
     height: 300,
-    backgroundColor: '#aaa',
     resizeMode: 'cover',
     borderRadius: 25,
     marginVertical: 20,
+    backgroundColor: '#000',
+    alignSelf: 'center', // Center the image horizontally
   },
   gridRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 10,
-    paddingHorizontal: 20,
+    paddingLeft: 30,
+    paddingRight: 20
   },
   gridLabel: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#FFFFFF',
+    flexShrink: 1,
   },
   gridValueContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: '25', // Add marginLeft for spacing
+    flex: 1,
   },
   gridValue: {
     fontSize: 16,
-    marginRight: 5,
+    color: '#FFFFFF',
+    marginRight: 10, // Add marginRight for spacing
+    flex: 1,
+    flexWrap: 'wrap', // Allow value to wrap to the next line
+  },
+  iconButton: {
+    margin: -10,
   },
   descriptionContainer: {
-    flex: 0,
-    height: 2000,
+    flex: 1,
   },
   description: {
     fontSize: 16,
-    color: '#fff',
+    color: '#FFFFFF',
   },
   ticketContainer: {
     borderColor: '#253354',
@@ -181,7 +188,6 @@ const styles = StyleSheet.create({
   ticketLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#253354',
   },
   ticketCountContainer: {
     flexDirection: 'row',
@@ -204,15 +210,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  iconButton: {
-    margin: -10,
-  },
   total: {
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 25,
     marginTop: 10,
     marginBottom: 20,
+    color: '#000',
   },
 });
 

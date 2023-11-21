@@ -115,7 +115,7 @@ const handleChipPress = (categoryId) => {
       ) : (
         <FlatList
           data={filteredEvents}
-          keyExtractor={(e) => e.id}
+          keyExtractor={(e) => e.id.toString()}
           style={styles.eventCard}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => <EventCard event={item} />}
@@ -157,7 +157,9 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   filter: {
-    marginVertical: 10
+    marginVertical: 0,
+    borderBottomWidth: 0.7,
+    borderColor: 'white',
   },
   filter_items: {
     marginVertical: 15,
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
   },
   chips: {
     marginRight: 20,
-    paddingRight: 10
+    paddingRight: 10,
   }
 });
 

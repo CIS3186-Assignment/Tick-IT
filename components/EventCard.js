@@ -10,25 +10,24 @@ const EventCard = ({ event }) => {
   const handleCardPress = () => {
     navigation.navigate('EventDetails', { event });
   };
-  
+
   const getPriceRange = () => {
-        let prices = event.tickets.map(ticket => ticket.price);
-        let max = Math.max(...prices);
-        let min = Math.min(...prices);
-        let minTxt, maxTxt;
-      
-        if (min === 0) {
-          minTxt = "Free";
-          maxTxt = `€${max}`;
-        } else {
-          minTxt = `€${min}`;
-          maxTxt = `€${max}`;
-        }
-      
-        if (min === max) return minTxt;
-        return `${minTxt} - ${maxTxt}`;
-      };
-  
+    let prices = event.tickets.map((ticket) => ticket.price);
+    let max = Math.max(...prices);
+    let min = Math.min(...prices);
+    let minTxt, maxTxt;
+
+    if (min === 0) {
+      minTxt = 'Free';
+      maxTxt = `${max}`;
+    } else {
+      minTxt = `${min}`;
+      maxTxt = `${max}`;
+    }
+
+    if (min === max) return minTxt;
+    return `${minTxt} - ${maxTxt}`;
+  };
 
   return (
     <TouchableOpacity onPress={handleCardPress}>
@@ -74,46 +73,38 @@ const EventCard = ({ event }) => {
 const styles = StyleSheet.create({
   cardContent: {
     marginVertical: 15,
-    marginHorizontal: -5,
-    borderWidth: 0.3, 
-    borderColor: 'white', 
-    borderRadius: 10, 
+    marginHorizontal: 0,
+    borderTopWidth: 0.3,
+    borderBottomWidth: 0.4,
+    borderColor: 'white',
+    borderRadius: 0,
     backgroundColor: '#253354',
   },
   content: {
     flexDirection: 'row',
     alignItems: 'center',
-    height:240
+    height: 240,
   },
   image: {
-    width: '50%',
-    height: '105%',
+    width: '45%',
+    height: '100%',
     borderRadius: 10,
     right: 5,
+    backgroundColor: '#aaa',
   },
   textContainer: {
-    marginLeft: 10,
+    flex: 1, 
+    marginTop: 5,
+    marginLeft: 8,
+    marginRight: 5,
     flexDirection: 'column',
   },
   eventName: {
-    color: 'white', 
-    fontSize: 25, 
-    fontWeight: '800', 
-    marginBottom: 5,
-  },
-  creatorName: {
-    color: 'white', 
-    fontSize: 16, 
-    marginBottom: 5, 
-  },
-  location: {
-    color: 'white', 
-    fontSize: 16, 
-    marginBottom: 5, 
-  },
-  priceRange: {
-    color: 'white', 
-    fontSize: 16, 
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '800',
+    marginBottom: 15,
   },
   infoContainer: {
     flexDirection: 'row',
@@ -122,12 +113,12 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     marginRight: -3,
-    marginLeft: -15,
-    color: 'white'
+    marginLeft: -10,
+    color: 'white',
   },
   infoText: {
-    color: "white",
-    fontSize: 16,
+    color: 'white',
+    fontSize: 15,
   },
 });
 

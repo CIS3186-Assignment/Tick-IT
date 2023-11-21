@@ -40,7 +40,7 @@ const BottomNavBar = ({ currentScreen }) => {
 
 const styles = StyleSheet.create({
     container: {
-        position: 'sticky',
+        position: 'relative',
         backgroundColor: "#253354",
         flexDirection: 'row',
         justifyContent: 'space-around',

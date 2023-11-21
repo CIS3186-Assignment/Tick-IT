@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Image, StyleSheet, FlatList, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { IconButton } from 'react-native-paper';
+import { IconButton, MD3Colors } from 'react-native-paper';
 import TopAppBar from '../components/TopAppBar';
 
 const EventDetails = ({ route }) => {
@@ -46,9 +46,21 @@ const EventDetails = ({ route }) => {
             <Image style={styles.image} source={{ uri: event?.image }} />
           </View>
         }
+        ListFooterComponent={
+          <View>
+            <Text style={styles.total}>
+              {`Total: €${event.tickets.reduce(
+                (total, ticket) => total + (ticketCounts[ticket.name] || 0) * ticket.price,
+                0
+              )}`}
+            </Text>
+            <TouchableOpacity style={styles.buttonContainer}>
+              <Text style={styles.buttonText}>Purchase</Text>
+            </TouchableOpacity>
+          </View>
+        }
         data={[
           { type: 'grid', label: 'Creator', value: event.eventCreator.name },
-          { type: 'grid', label: 'Category', value: event.Category.name },
           {
             type: 'grid',
             label: 'Location',
@@ -64,13 +76,14 @@ const EventDetails = ({ route }) => {
           if (item.type === 'grid') {
             return (
               <View style={styles.gridRow}>
-                <Text style={styles.gridLabel}>{item.label}</Text>
+                <Text style={styles.gridLabel}>{item.label}:</Text>
                 <View style={styles.gridValueContainer}>
                   <Text style={styles.gridValue}>{item.value}</Text>
                   {item.withIcon && (
                     <IconButton
                       icon="map-marker"
-                      size={20}
+                      size={35}
+                      iconColor={MD3Colors.error60}
                       style={styles.iconButton}
                       onPress={handleCardPress}
                     />
@@ -82,18 +95,18 @@ const EventDetails = ({ route }) => {
             return (
               <View style={styles.ticketContainer}>
                 <View style={styles.ticketRow}>
-                  <Text style={styles.ticketLabel}>{item.name}</Text>
+                  <Text style={styles.ticketLabel}>{item.name} (€{item.price})</Text>
                   <View style={styles.ticketCountContainer}>
                     <IconButton
                       icon="minus"
-                      size={20}
+                      size={35}
                       style={styles.iconButton}
                       onPress={() => handleTicketCountChange(item.name, -1)}
                     />
                     <Text style={styles.ticketCount}>{ticketCounts[item.name] || 0}</Text>
                     <IconButton
                       icon="plus"
-                      size={20}
+                      size={35}
                       style={styles.iconButton}
                       onPress={() => handleTicketCountChange(item.name, 1)}
                     />
@@ -101,26 +114,18 @@ const EventDetails = ({ route }) => {
                 </View>
               </View>
             );
-          } else if (item.type === 'button') {
-            return (
-              <TouchableOpacity style={styles.buttonContainer}>
-                <Text style={styles.buttonText}>Purchase</Text>
-              </TouchableOpacity>
-            );
-          }
-          return null; // or handle other types as needed
-        }}
-        keyExtractor={(item, index) => index.toString()}
+        }
+      }
+    }
       />
     </View>
   );
-  
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#aaa',
+    backgroundColor: '#141414',
   },
   imageContainer: {
     alignItems: 'center',
@@ -132,34 +137,31 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderRadius: 25,
     marginVertical: 20,
-    backgroundColor: '#000',
-    alignSelf: 'center', // Center the image horizontally
+    backgroundColor: '#bbe',
+    alignSelf: 'center', 
   },
   gridRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column', 
+    alignItems: 'flex-start', 
     marginVertical: 10,
     paddingLeft: 30,
     paddingRight: 20
   },
   gridLabel: {
-    fontSize: 16,
+    fontSize: 25,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    flexShrink: 1,
+    marginBottom: 5, 
   },
   gridValueContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row', 
     alignItems: 'center',
-    marginLeft: '25', // Add marginLeft for spacing
-    flex: 1,
   },
   gridValue: {
     fontSize: 16,
     color: '#FFFFFF',
-    marginRight: 10, // Add marginRight for spacing
-    flex: 1,
-    flexWrap: 'wrap', // Allow value to wrap to the next line
+    marginRight: 5, 
+    flexWrap: 'wrap', 
   },
   iconButton: {
     margin: -10,
@@ -173,10 +175,12 @@ const styles = StyleSheet.create({
   },
   ticketContainer: {
     borderColor: '#253354',
-    borderTopWidth: 5,
-    marginVertical: 20,
+    borderTopWidth: 1.5,
+    marginVertical: 0,
     marginBottom: 0,
     backgroundColor: '#fff',
+    marginTop: 30,
+    marginBottom: -30
   },
   ticketRow: {
     flexDirection: 'row',
@@ -186,7 +190,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   ticketLabel: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   ticketCountContainer: {
@@ -194,8 +198,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   ticketCount: {
-    fontSize: 20,
-    marginHorizontal: 10,
+    fontSize: 25,
+    marginHorizontal: 20,
   },
   buttonContainer: {
     backgroundColor: '#253354',
@@ -214,9 +218,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     fontSize: 25,
-    marginTop: 10,
+    marginTop: 60,
     marginBottom: 20,
-    color: '#000',
+    color: '#fff',
   },
 });
 

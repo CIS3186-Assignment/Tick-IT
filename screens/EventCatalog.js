@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList, RefreshControl, Text, StyleSheet } from "react-native";
-import { TextInput, ActivityIndicator, Chip } from "react-native-paper";
+import { TextInput, ActivityIndicator, Chip, MD3Colors } from "react-native-paper";
 import BottomNavBar from "../components/BottomNavBar.js";
 import EventCard from "../components/EventCard.js";
 import { getAllEvents } from "../services/EventService.js";

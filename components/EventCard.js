@@ -41,7 +41,7 @@ const EventCard = ({ event }) => {
                 icon="map-marker"
                 size={18}
                 style={styles.iconButton}
-                color="white"
+                iconColor={MD3Colors.neutral100}
               />
               <Text style={styles.infoText}>{event?.location_name}</Text>
             </View>
@@ -50,7 +50,7 @@ const EventCard = ({ event }) => {
                 icon="account"
                 size={18}
                 style={styles.iconButton}
-                color="white"
+                iconColor={MD3Colors.neutral100}
               />
               <Text style={styles.infoText}>{event?.eventCreator?.name}</Text>
             </View>
@@ -59,7 +59,7 @@ const EventCard = ({ event }) => {
                 icon="currency-eur"
                 size={18}
                 style={styles.iconButton}
-                color="white"
+                iconColor={MD3Colors.neutral100}
               />
               <Text style={styles.infoText}>{getPriceRange()}</Text>
             </View>
@@ -110,11 +110,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 5,
+    marginLeft: -1
   },
   iconButton: {
-    marginRight: -3,
+    marginRight: -2,
     marginLeft: -10,
-    color: 'white',
   },
   infoText: {
     color: 'white',

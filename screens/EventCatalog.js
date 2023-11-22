@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList, RefreshControl, Text, StyleSheet } from "react-native";
-import { TextInput, ActivityIndicator, Chip } from "react-native-paper";
+import { TextInput, ActivityIndicator, Chip, MD3Colors } from "react-native-paper";
 import BottomNavBar from "../components/BottomNavBar.js";
 import EventCard from "../components/EventCard.js";
 import { getAllEvents } from "../services/EventService.js";
@@ -71,7 +71,7 @@ const handleChipPress = (categoryId) => {
 
   
   return (
-    <View style={{ ...styles.container, backgroundColor: '#253354' }}>
+    <View style={{ ...styles.container, backgroundColor: '#141414' }}>
       <TextInput
         style={styles.search_bar}
         label="Search..."
@@ -98,12 +98,15 @@ const handleChipPress = (categoryId) => {
           style={styles.filter_items}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({item}) => 
-          <Chip 
+          <View style={styles.chips}>
+            <Chip 
               style={styles.category_chips}
               selected={filters.includes(item.id)}
               onPress={() => handleChipPress(item.id)}>
               {item.title}
-          </Chip>}
+          </Chip>
+          </View>
+          }
         />
       </View>
 
@@ -112,7 +115,9 @@ const handleChipPress = (categoryId) => {
       ) : (
         <FlatList
           data={filteredEvents}
-          keyExtractor={(e) => e.id}
+          keyExtractor={(e) => e.id.toString()}
+          style={styles.eventCard}
+          showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => <EventCard event={item} />}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -149,10 +154,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#141414'
   },
   eventCard: {
-    margin: 20,
+    marginBottom: 0,
   },
   filter: {
-    marginVertical: 10
+    marginVertical: 0,
+    borderBottomWidth: 0.7,
+    borderColor: 'white',
   },
   filter_items: {
     marginVertical: 15,
@@ -160,9 +167,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20
   },
   category_chips:{
-    marginRight: 10,
+    marginRight: 5,
     backgroundColor: '#ffff',
     borderRadius: 20
+  },
+  chips: {
+    marginRight: 20,
+    paddingRight: 10,
   }
 });
 

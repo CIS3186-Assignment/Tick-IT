@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#FFFF",
-    fontSize: 30,
+    fontSize: 25,
+    marginLeft: 15,
+    textAlign: 'center'
   },
   back: {
     position: 'absolute', 

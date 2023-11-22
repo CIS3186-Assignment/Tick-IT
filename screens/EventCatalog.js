@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList, RefreshControl, Text, StyleSheet } from "react-native";
-import { TextInput, ActivityIndicator, Chip, MD3Colors } from "react-native-paper";
-import BottomNavBar from "../components/BottomNavBar.js";
-import EventCard from "../components/EventCard.js";
+import {
+  View,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Image,
+  Text,
+} from "react-native";
+import { TextInput, ActivityIndicator, Chip } from "react-native-paper";
 import { getAllEvents } from "../services/EventService.js";
+import { getDownloadURL, ref } from "firebase/storage";
+import { STORAGE } from "../FirebaseConfig.js";
+import EventCard from "../components/EventCard.js";
+import BottomNavBar from "../components/BottomNavBar.js";
 
 const EventCatalog = () => {
   const [allEvents, setAllEvents] = useState([]);
@@ -18,7 +27,23 @@ const EventCatalog = () => {
       const events = await getAllEvents();
       setAllEvents(events);
       setFilteredEvents(events);
-      console.log("fetched")
+      console.log("fetched");
+
+      // Fetch download URLs for images
+      const eventsWithImages = await Promise.all(
+        events.map(async (event) => {
+          try {
+            const imageRef = ref(STORAGE, `images/${event.image_id}.png`);
+            const imageURL = await getDownloadURL(imageRef);
+
+            return { ...event, imageURL };
+          } catch (error) {
+            return { ...event, imageURL: null };
+          }
+        })
+      );
+
+      setFilteredEvents(eventsWithImages);
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {
@@ -31,23 +56,26 @@ const EventCatalog = () => {
     fetchEvents();
   }, []);
 
-const handleChipPress = (categoryId) => {
+  const handleChipPress = (categoryId) => {
     // Check if the category is already in filters
     if (filters.includes(categoryId)) {
       // If selected, remove it from filters
-      setFilters((prevFilters) => prevFilters.filter((filter) => filter !== categoryId));
+      setFilters((prevFilters) =>
+        prevFilters.filter((filter) => filter !== categoryId)
+      );
     } else {
       // If not selected, add it to filters
       setFilters((prevFilters) => [...prevFilters, categoryId]);
     }
 
     // Update filteredEvents based on filters
-    if(filters.length === 0)
-      updatedFilteredEvents=events
-    else 
-      updatedFilteredEvents = events.filter((event) => filters.includes(event.categoryId));
+    if (filters.length === 0) updatedFilteredEvents = events;
+    else
+      updatedFilteredEvents = events.filter((event) =>
+        filters.includes(event.categoryId)
+      );
     setEvents(updatedFilteredEvents);
-};
+  };
 
   useEffect(() => {
     if (!query) {
@@ -63,15 +91,14 @@ const handleChipPress = (categoryId) => {
       setFilteredEvents(filteredEvents);
     }
   }, [query]);
-  
-   const onRefresh = () => {
+
+  const onRefresh = () => {
     setRefreshing(true);
     fetchEvents();
   };
 
-  
   return (
-    <View style={{ ...styles.container, backgroundColor: '#141414' }}>
+    <View style={{ ...styles.container, backgroundColor: "#141414" }}>
       <TextInput
         style={styles.search_bar}
         label="Search..."
@@ -79,8 +106,7 @@ const handleChipPress = (categoryId) => {
         onChangeText={(query) => setQuery(query)}
         left={<TextInput.Icon icon="magnify" color="#3700B3" />}
       />
-      
-      {/* Ghal meta inzidu il CategoryFilters */}
+
       <View style={styles.filter}>
         <FlatList
           data={[
@@ -97,16 +123,17 @@ const handleChipPress = (categoryId) => {
           showsHorizontalScrollIndicator={false}
           style={styles.filter_items}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({item}) => 
-          <View style={styles.chips}>
-            <Chip 
-              style={styles.category_chips}
-              selected={filters.includes(item.id)}
-              onPress={() => handleChipPress(item.id)}>
-              {item.title}
-          </Chip>
-          </View>
-          }
+          renderItem={({ item }) => (
+            <View style={styles.chips}>
+              <Chip
+                style={styles.category_chips}
+                selected={filters.includes(item.id)}
+                onPress={() => handleChipPress(item.id)}
+              >
+                {item.title}
+              </Chip>
+            </View>
+          )}
         />
       </View>
 
@@ -118,12 +145,15 @@ const handleChipPress = (categoryId) => {
           keyExtractor={(e) => e.id.toString()}
           style={styles.eventCard}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => <EventCard event={item} />}
+          renderItem={({ item }) => (
+            <EventCard event={item} imageURL={item.imageURL} />
+          )}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         />
       )}
+
       <BottomNavBar currentScreen="EventCatalog" />
     </View>
   );
@@ -132,7 +162,7 @@ const handleChipPress = (categoryId) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative',
+    position: "relative",
   },
   search_bar: {
     marginTop: 55,
@@ -140,18 +170,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF'
-  },
-  emptyItem: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    marginRight: 10,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-  },
-  flatList: {
-    paddingHorizontal: 20,
-    backgroundColor: '#141414'
+    backgroundColor: "#FFFFFF",
   },
   eventCard: {
     marginBottom: 0,
@@ -159,22 +178,22 @@ const styles = StyleSheet.create({
   filter: {
     marginVertical: 0,
     borderBottomWidth: 0.7,
-    borderColor: 'white',
+    borderColor: "white",
   },
   filter_items: {
     marginVertical: 15,
     marginHorizontal: 0,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
-  category_chips:{
+  category_chips: {
     marginRight: 5,
-    backgroundColor: '#ffff',
-    borderRadius: 20
+    backgroundColor: "#ffff",
+    borderRadius: 20,
   },
   chips: {
     marginRight: 20,
     paddingRight: 10,
-  }
+  },
 });
 
 export default EventCatalog;

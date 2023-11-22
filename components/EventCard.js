@@ -1,14 +1,14 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Card } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import { IconButton, MD3Colors } from 'react-native-paper';
+import React from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { Card } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { IconButton, MD3Colors } from "react-native-paper";
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, imageURL }) => {
   const navigation = useNavigation();
 
   const handleCardPress = () => {
-    navigation.navigate('EventDetails', { event });
+    navigation.navigate("EventDetails", { event });
   };
 
   const getPriceRange = () => {
@@ -18,7 +18,7 @@ const EventCard = ({ event }) => {
     let minTxt, maxTxt;
 
     if (min === 0) {
-      minTxt = 'Free';
+      minTxt = "Free";
       maxTxt = `${max}`;
     } else {
       minTxt = `${min}`;
@@ -33,7 +33,13 @@ const EventCard = ({ event }) => {
     <TouchableOpacity onPress={handleCardPress}>
       <Card style={styles.cardContent}>
         <Card.Content style={styles.content}>
-          <Image style={styles.image} source={{ uri: event?.image }} />
+          {imageURL && (
+            <Image
+              style={styles.image}
+              source={{ uri: imageURL }}
+              resizeMode="contain"
+            />
+          )}
           <View style={styles.textContainer}>
             <Text style={styles.eventName}>{event?.name}</Text>
             <View style={styles.infoContainer}>
@@ -76,48 +82,48 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     borderTopWidth: 0.3,
     borderBottomWidth: 0.4,
-    borderColor: 'white',
+    borderColor: "white",
     borderRadius: 0,
-    backgroundColor: '#253354',
+    backgroundColor: "#253354",
   },
   content: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     height: 240,
   },
   image: {
-    width: '45%',
-    height: '100%',
+    width: "45%",
+    height: "100%",
     borderRadius: 10,
     right: 5,
-    backgroundColor: '#aaa',
+    backgroundColor: "#aaa",
   },
   textContainer: {
-    flex: 1, 
+    flex: 1,
     marginTop: 5,
     marginLeft: 4,
     marginRight: 5,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   eventName: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: "800",
     marginBottom: 15,
   },
   infoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 5,
-    marginLeft: -1
+    marginLeft: -1,
   },
   iconButton: {
     marginRight: -2,
     marginLeft: -10,
   },
   infoText: {
-    color: 'white',
+    color: "white",
     fontSize: 15,
   },
 });

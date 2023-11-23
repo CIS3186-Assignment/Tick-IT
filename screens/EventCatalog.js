@@ -13,8 +13,11 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { STORAGE } from "../FirebaseConfig.js";
 import EventCard from "../components/EventCard.js";
 import BottomNavBar from "../components/BottomNavBar.js";
+import { getCategories } from "../services/CategoriesService.js";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry.js";
 
 const EventCatalog = () => {
+  const [categories, setCategories] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [query, setQuery] = useState("");
@@ -54,6 +57,19 @@ const EventCatalog = () => {
 
   useEffect(() => {
     fetchEvents();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const categories = await getCategories();
+      setCategories(categories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories();
   }, []);
 
   const handleChipPress = (categoryId) => {
@@ -109,16 +125,7 @@ const EventCatalog = () => {
 
       <View style={styles.filter}>
         <FlatList
-          data={[
-            { id: 1, title: "Party" },
-            { id: 2, title: "Concert" },
-            { id: 3, title: "Sports" },
-            { id: 4, title: "Workshops" },
-            { id: 5, title: "Food & Drink" },
-            { id: 6, title: "Adventure" },
-            { id: 7, title: "Art & Culture" },
-            { id: 8, title: "Academic" },
-          ]}
+          data={categories}
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.filter_items}
@@ -130,7 +137,7 @@ const EventCatalog = () => {
                 selected={filters.includes(item.id)}
                 onPress={() => handleChipPress(item.id)}
               >
-                {item.title}
+                {item.name}
               </Chip>
             </View>
           )}

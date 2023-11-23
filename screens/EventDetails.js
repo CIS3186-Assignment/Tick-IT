@@ -6,6 +6,7 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
+  Button,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
@@ -71,7 +72,7 @@ const EventDetails = ({ route }) => {
               )}`}
             </Text>
             <TouchableOpacity style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Purchase</Text>
+              <Button style={styles.buttonText}>Purchase</Button>
             </TouchableOpacity>
           </View>
         }

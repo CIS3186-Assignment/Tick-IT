@@ -23,6 +23,9 @@ export const getCategories = async() =>{
 
     // Return the list of categories
     console.log(categories);
+
+    categories.sort((a,b) => a.order-b.order);
+
     return categories;
   } catch (error) {
     console.error('Error getting categories:', error);

@@ -6,7 +6,6 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
-  Button,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
@@ -29,8 +28,11 @@ const EventDetails = ({ route }) => {
     }));
   };
 
-  const handleCardPress = () => {
-    navigation.navigate("EventCatalog");
+  const handlePurchasePress = () => {
+    navigation.navigate("Checkout", {
+      event,
+      ticketCounts,
+    });
   };
 
   const formatDate = (timestamp) => {
@@ -71,8 +73,11 @@ const EventDetails = ({ route }) => {
                 0
               )}`}
             </Text>
-            <TouchableOpacity style={styles.buttonContainer}>
-              <Button style={styles.buttonText}>Purchase</Button>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={handlePurchasePress}
+            >
+              <Text style={styles.buttonText}>Purchase</Text>
             </TouchableOpacity>
           </View>
         }
@@ -106,7 +111,7 @@ const EventDetails = ({ route }) => {
                       size={35}
                       iconColor={MD3Colors.error60}
                       style={styles.iconButton}
-                      onPress={handleCardPress}
+                      onPress={handlePurchasePress} // Update the onPress handler
                     />
                   )}
                 </View>

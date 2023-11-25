@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 
-//ADD localhost address of your server
-const API_URL = "http://localhost:3000";
+const API_URL = "http://localhost:8080";
 
 const StripeApp = (props) => {
   const [email, setEmail] = useState();
@@ -16,13 +15,18 @@ const StripeApp = (props) => {
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        currency: "eur",
+      }),
     });
-    const { clientSecret, error } = await response.json();
-    return { clientSecret, error };
+    const { clientSecret } = await response.json();
+
+    return clientSecret;
   };
 
+  // Card details
+  // 4242 4242 4242 4242 / any future date / 000 / 000
   const handlePayPress = async () => {
-    //1.Gather the customer's billing information (e.g., email)
     if (!cardDetails?.complete || !email) {
       Alert.alert("Please enter Complete card details and Email");
       return;
@@ -30,10 +34,8 @@ const StripeApp = (props) => {
     const billingDetails = {
       email: email,
     };
-    //2.Fetch the intent client secret from the backend
     try {
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
-      //2. confirm the payment
       if (error) {
         console.log("Unable to process payment");
       } else {
@@ -51,7 +53,6 @@ const StripeApp = (props) => {
     } catch (e) {
       console.log(e);
     }
-    //3.Confirm the payment with the card details
   };
 
   return (

@@ -8,6 +8,8 @@ import EventDetails from './screens/EventDetails';
 import EventCatalog from './screens/EventCatalog';
 import Profile from './screens/Profile';
 import Wallet from './screens/Wallet';
+import Login from './screens/Login';
+import Register from './screens/Register';
 
 const Stack = createStackNavigator();
 
@@ -16,7 +18,7 @@ const App = () => {
     <SafeAreaProvider>
       <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="EventCatalog">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="EventCatalog"
             component={EventCatalog}
@@ -25,6 +27,16 @@ const App = () => {
           <Stack.Screen
             name="Profile"
             component={Profile}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={Register}
             options={{ headerShown: false }}
           />
           <Stack.Screen

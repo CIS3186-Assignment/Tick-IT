@@ -7,7 +7,7 @@ import {
   Image,
   Text,
 } from "react-native";
-import { TextInput, ActivityIndicator, Chip } from "react-native-paper";
+import { TextInput, ActivityIndicator, Chip, Searchbar } from "react-native-paper";
 import { getAllEvents } from "../services/EventService.js";
 import { getDownloadURL, ref } from "firebase/storage";
 import { STORAGE } from "../FirebaseConfig.js";
@@ -115,12 +115,11 @@ const EventCatalog = () => {
 
   return (
     <View style={{ ...styles.container, backgroundColor: "#141414" }}>
-      <TextInput
-        style={styles.search_bar}
-        label="Search..."
+      <Searchbar
+        placeholder="Search"
+        onChangeText={setQuery}
         value={query}
-        onChangeText={(query) => setQuery(query)}
-        left={<TextInput.Icon icon="magnify" color="#3700B3" />}
+        style={styles.search_bar}
       />
 
       <View style={styles.filter}>

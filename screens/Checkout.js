@@ -1,123 +1,102 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
-import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import * as React from "react";
+import { Button, Text, View, StyleSheet, Alert } from "react-native";
+import {
+  StripeProvider,
+  CardField,
+  useConfirmPayment,
+} from "@stripe/stripe-react-native";
+import { useRoute } from "@react-navigation/native";
 
-const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
+export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
+export const PUBLISHABLE_KEY =
+  "pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC";
 
-const StripeApp = (props) => {
-  const [email, setEmail] = useState("");
-  const [cardDetails, setCardDetails] = useState({});
+export default function App() {
   const { confirmPayment, loading } = useConfirmPayment();
+  const [success, setSuccess] = React.useState(false);
+  const route = useRoute();
+  const { totalAmount, event, ticketCounts } = route.params;
 
-  const fetchPaymentIntentClientSecret = async () => {
-    try {
-      const response = await fetch(`${API_URL}/create-payment-intent`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          currency: "eur",
-        }),
+  fetchPaymentIntentClientSecret = async () => {
+    const res = await fetch(`${API_URL}/createPaymentIntent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount: totalAmount * 100,
+        currency: "usd",
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => data)
+      .catch((error) => {
+        console.log(error);
       });
 
-      const data = await response.text(); // Read the response as text
-      try {
-        const jsonData = JSON.parse(data); // Attempt to parse as JSON
-        if (!response.ok) {
-          throw new Error(jsonData.error || "Server error");
-        }
-
-        if (!jsonData.clientSecret) {
-          throw new Error("Invalid response from server");
-        }
-
-        return { clientSecret: jsonData.clientSecret };
-      } catch (jsonParseError) {
-        // Log the non-JSON response for debugging
-        console.error("Non-JSON response from server:", data);
-        throw jsonParseError; // Rethrow the JSON parse error
-      }
-    } catch (error) {
-      console.error("Error fetching payment intent:", error.message);
-      throw error;
-    }
+    return res?.client_secret;
   };
 
   const handlePayPress = async () => {
-    if (!cardDetails.complete || !email) {
-      Alert.alert("Please enter complete card details and email");
-      return;
-    }
-
     const billingDetails = {
-      email: email,
+      email: "jenny.rosen@example.com", //ToDo replace with SSO email
     };
 
-    try {
-      const { clientSecret } = await fetchPaymentIntentClientSecret();
-      const { paymentIntent, error } = await confirmPayment(clientSecret, {
-        type: "Card",
-        billingDetails: billingDetails,
-      });
+    const clientSecret = await fetchPaymentIntentClientSecret();
 
-      if (error) {
-        Alert.alert(`Payment Confirmation Error: ${error.message}`);
-      } else if (paymentIntent) {
-        Alert.alert("Payment Successful");
-        console.log("Payment successful", paymentIntent);
-      }
-    } catch (e) {
-      console.error("Error handling payment:", e.message);
+    const { paymentIntent, error } = await confirmPayment(clientSecret, {
+      paymentMethodType: "Card",
+      paymentMethodData: {
+        billingDetails,
+      },
+    });
+
+    if (error) {
+      console.log("Payment confirmation error", error);
+      Alert.alert("Error!");
+    } else if (paymentIntent) {
+      console.log("Success from promise", paymentIntent);
+      Alert.alert("Payment Successful!");
+      setSuccess(true);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        autoCapitalize="none"
-        placeholder="E-mail"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-        style={styles.input}
-      />
-      <CardField
-        postalCodeEnabled={true}
-        placeholder={{
-          number: "4242 4242 4242 4242",
-        }}
-        cardStyle={styles.card}
-        style={styles.cardContainer}
-        onCardChange={(cardDetails) => {
-          setCardDetails(cardDetails);
-        }}
-      />
-      <Button onPress={handlePayPress} title="Pay" disabled={loading} />
-    </View>
+    <StripeProvider publishableKey={PUBLISHABLE_KEY}>
+      <View style={styles.container}>
+        <Text style={styles.totalAmount}>
+          Total Amount: ${totalAmount.toFixed(2)}
+        </Text>
+        <CardField
+          postalCodeEnabled={false}
+          autofocus
+          style={styles.cardField}
+          cardStyle={{
+            textColor: "#1c1c1c",
+          }}
+        />
+        <Button
+          onPress={handlePayPress}
+          title="Pay"
+          disabled={loading || success}
+        />
+      </View>
+    </StripeProvider>
   );
-};
-
-export default StripeApp;
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    margin: 20,
+    padding: 8,
   },
-  input: {
-    backgroundColor: "#efefef",
-    borderRadius: 8,
-    fontSize: 20,
-    height: 50,
-    padding: 10,
+  cardField: {
+    height: 40,
   },
-  card: {
-    backgroundColor: "#efefef",
-  },
-  cardContainer: {
-    height: 50,
-    marginVertical: 30,
+  totalAmount: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
 });

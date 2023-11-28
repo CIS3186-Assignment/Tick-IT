@@ -8,7 +8,7 @@ exports.createPaymentIntent = functions.https.onRequest((request, response) => {
   stripe.paymentIntents
       .create({
         amount: request.body.amount,
-        currency: "eur",
+        currency: "usd",
         payment_method_types: ["card"],
       })
       .then((token) => {

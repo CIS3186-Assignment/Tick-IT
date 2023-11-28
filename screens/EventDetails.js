@@ -29,9 +29,16 @@ const EventDetails = ({ route }) => {
   };
 
   const handlePurchasePress = () => {
+    const totalAmount = event.tickets.reduce(
+      (total, ticket) =>
+        total + (ticketCounts[ticket.name] || 0) * ticket.price,
+      0
+    );
+
     navigation.navigate("Checkout", {
       event,
       ticketCounts,
+      totalAmount,
     });
   };
 

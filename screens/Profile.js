@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import BottomNavBar from '../components/BottomNavBar';
 
-BottomNavBar;
 const Profile = () => {
   return (
     <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414'}}>

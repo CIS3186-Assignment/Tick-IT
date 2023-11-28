@@ -104,7 +104,6 @@ const EventCatalog = () => {
     // Update filteredEvents based on filters
     if (filters.length > 0) {      
       filteredEvents = filteredEvents.filter((event) =>{
-          console.log(filters.includes(event.category.id))
           return filters.includes(event.category.id)
         }
       );

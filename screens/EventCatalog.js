@@ -83,30 +83,36 @@ const EventCatalog = () => {
       // If not selected, add it to filters
       setFilters((prevFilters) => [...prevFilters, categoryId]);
     }
-
-    // Update filteredEvents based on filters
-    if (filters.length === 0) updatedFilteredEvents = events;
-    else
-      updatedFilteredEvents = events.filter((event) =>
-        filters.includes(event.categoryId)
-      );
-    setEvents(updatedFilteredEvents);
   };
 
   useEffect(() => {
-    if (!query) {
-      setFilteredEvents(allEvents);
-    } else {
-      const filteredEvents = allEvents.filter(
+
+    console.log("filtering")
+
+    let filteredEvents = allEvents;
+
+    if (query) {
+      filteredEvents = allEvents.filter(
         (event) =>
           event.name.toLowerCase().includes(query.toLowerCase()) ||
           event.location_name.toLowerCase().includes(query.toLowerCase()) ||
           event.eventCreator.name.toLowerCase().includes(query.toLowerCase()) ||
           event.description.toLowerCase().includes(query.toLowerCase())
       );
-      setFilteredEvents(filteredEvents);
     }
-  }, [query]);
+
+    // Update filteredEvents based on filters
+    if (filters.length > 0) {      
+      filteredEvents = filteredEvents.filter((event) =>{
+          console.log(filters.includes(event.category.id))
+          return filters.includes(event.category.id)
+        }
+      );
+    }
+
+    setFilteredEvents(filteredEvents);
+
+  }, [query,filters]);
 
   const onRefresh = () => {
     setRefreshing(true);

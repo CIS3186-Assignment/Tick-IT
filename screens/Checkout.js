@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Text, View, StyleSheet, Alert } from "react-native";
+import { Button, Text, View, StyleSheet, Alert, FlatList, Image } from "react-native";
 import {
   StripeProvider,
   CardField,
@@ -60,10 +60,28 @@ export default function App() {
       setSuccess(true);
     }
   };
+  
+  const TicketCost = ({ticketKey}) => {
+    const quantity = ticketCounts[ticketKey];
+    const price = event.tickets.find(ticket => ticket.name === ticketKey).price;
+
+    return (
+      <Text>
+        {ticketKey} (${price}) x {quantity} = ${price * quantity}
+      </Text>
+    );
+  }
 
   return (
     <StripeProvider publishableKey={PUBLISHABLE_KEY}>
       <View style={styles.container}>
+        <Image style={styles.image} source={{ uri: event.imageURL }} />
+        <Text>{event.name}</Text>
+        <FlatList
+          data = {Object.keys(ticketCounts)}
+          keyExtractor={item => item}
+          renderItem={({item}) => <TicketCost ticketKey={item}/>}
+        />
         <Text style={styles.totalAmount}>
           Total Amount: ${totalAmount.toFixed(2)}
         </Text>
@@ -98,5 +116,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 20,
+  },
+  image: {
+    width: "70%",
+    height: 300,
+    resizeMode: "cover",
+    borderRadius: 25,
+    marginVertical: 20,
+    backgroundColor: "#bbe",
+    alignSelf: "center",
   },
 });

@@ -10,6 +10,8 @@ export const getAllEvents = async () => {
 
     const events = [];
     const creatorPromises = [];
+    const categoryPromises = [];
+
 
     for (const documentSnapshot of querySnapshot.docs) {
       const event = {
@@ -36,6 +38,11 @@ export const getAllEvents = async () => {
 
       event.tickets = eventTickets
 
+
+      const eventCategoryRef = event.Category;
+      const categoryPromise = getDoc(eventCategoryRef)
+      categoryPromises.push(categoryPromise);
+
       const eventCreatorRef = event.EventCreator;
       const creatorPromise = getDoc(eventCreatorRef);
 
@@ -44,7 +51,21 @@ export const getAllEvents = async () => {
       events.push(event);
     }
 
-    const creatorDocs = await Promise.all(creatorPromises);
+    const creatorDocs = await Promise.all([...creatorPromises]);
+    const categoryDocs = await Promise.all([...categoryPromises]);
+
+    for (let i = 0; i < categoryDocs.length; i++) {
+      const categoryDoc = categoryDocs[i];
+      const event = events[i];
+
+      if (categoryDoc.exists()) {
+        const categoryData = categoryDoc.data();
+        event.category = {
+          id: categoryDoc.id,
+          ...categoryData,
+        };
+      }
+    }
 
     for (let i = 0; i < creatorDocs.length; i++) {
       const creatorDoc = creatorDocs[i];

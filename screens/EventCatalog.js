@@ -7,14 +7,17 @@ import {
   Image,
   Text,
 } from "react-native";
-import { TextInput, ActivityIndicator, Chip } from "react-native-paper";
+import { TextInput, ActivityIndicator, Chip, Searchbar } from "react-native-paper";
 import { getAllEvents } from "../services/EventService.js";
 import { getDownloadURL, ref } from "firebase/storage";
 import { STORAGE } from "../FirebaseConfig.js";
 import EventCard from "../components/EventCard.js";
 import BottomNavBar from "../components/BottomNavBar.js";
+import { getCategories } from "../services/CategoriesService.js";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry.js";
 
 const EventCatalog = () => {
+  const [categories, setCategories] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [query, setQuery] = useState("");
@@ -56,6 +59,19 @@ const EventCatalog = () => {
     fetchEvents();
   }, []);
 
+  const fetchCategories = async () => {
+    try {
+      const categories = await getCategories();
+      setCategories(categories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   const handleChipPress = (categoryId) => {
     // Check if the category is already in filters
     if (filters.includes(categoryId)) {
@@ -67,30 +83,36 @@ const EventCatalog = () => {
       // If not selected, add it to filters
       setFilters((prevFilters) => [...prevFilters, categoryId]);
     }
-
-    // Update filteredEvents based on filters
-    if (filters.length === 0) updatedFilteredEvents = events;
-    else
-      updatedFilteredEvents = events.filter((event) =>
-        filters.includes(event.categoryId)
-      );
-    setEvents(updatedFilteredEvents);
   };
 
   useEffect(() => {
-    if (!query) {
-      setFilteredEvents(allEvents);
-    } else {
-      const filteredEvents = allEvents.filter(
+
+    console.log("filtering")
+
+    let filteredEvents = allEvents;
+
+    if (query) {
+      filteredEvents = allEvents.filter(
         (event) =>
           event.name.toLowerCase().includes(query.toLowerCase()) ||
           event.location_name.toLowerCase().includes(query.toLowerCase()) ||
           event.eventCreator.name.toLowerCase().includes(query.toLowerCase()) ||
           event.description.toLowerCase().includes(query.toLowerCase())
       );
-      setFilteredEvents(filteredEvents);
     }
-  }, [query]);
+
+    // Update filteredEvents based on filters
+    if (filters.length > 0) {      
+      filteredEvents = filteredEvents.filter((event) =>{
+          console.log(filters.includes(event.category.id))
+          return filters.includes(event.category.id)
+        }
+      );
+    }
+
+    setFilteredEvents(filteredEvents);
+
+  }, [query,filters]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -99,26 +121,16 @@ const EventCatalog = () => {
 
   return (
     <View style={{ ...styles.container, backgroundColor: "#141414" }}>
-      <TextInput
-        style={styles.search_bar}
-        label="Search..."
+      <Searchbar
+        placeholder="Search"
+        onChangeText={setQuery}
         value={query}
-        onChangeText={(query) => setQuery(query)}
-        left={<TextInput.Icon icon="magnify" color="#3700B3" />}
+        style={styles.search_bar}
       />
 
       <View style={styles.filter}>
         <FlatList
-          data={[
-            { id: 1, title: "Party" },
-            { id: 2, title: "Concert" },
-            { id: 3, title: "Sports" },
-            { id: 4, title: "Workshops" },
-            { id: 5, title: "Food & Drink" },
-            { id: 6, title: "Adventure" },
-            { id: 7, title: "Art & Culture" },
-            { id: 8, title: "Academic" },
-          ]}
+          data={categories}
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.filter_items}
@@ -130,7 +142,7 @@ const EventCatalog = () => {
                 selected={filters.includes(item.id)}
                 onPress={() => handleChipPress(item.id)}
               >
-                {item.title}
+                {item.name}
               </Chip>
             </View>
           )}

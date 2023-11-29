@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Text, View, StyleSheet, Alert, FlatList, Image } from "react-native";
+import { Button, Text, View, StyleSheet, Alert} from "react-native";
 import {
   StripeProvider,
   CardField,
@@ -7,6 +7,7 @@ import {
 } from "@stripe/stripe-react-native";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import PurchaseSummary from "../components/PurchaseSummary";
 
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
@@ -83,16 +84,7 @@ export default function App() {
   return (
     <StripeProvider publishableKey={PUBLISHABLE_KEY}>
       <View style={styles.container}>
-        <Image style={styles.image} source={{ uri: event.imageURL }} />
-        <Text>{event.name}</Text>
-        <FlatList
-          data = {Object.keys(ticketCounts)}
-          keyExtractor={item => item}
-          renderItem={({item}) => <TicketCost ticketKey={item}/>}
-        />
-        <Text style={styles.totalAmount}>
-          Total Amount: ${totalAmount.toFixed(2)}
-        </Text>
+        <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts}/>
         <CardField
           postalCodeEnabled={false}
           autofocus

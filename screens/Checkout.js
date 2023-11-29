@@ -70,17 +70,6 @@ export default function App() {
     }
   };
   
-  const TicketCost = ({ticketKey}) => {
-    const quantity = ticketCounts[ticketKey];
-    const price = event.tickets.find(ticket => ticket.name === ticketKey).price;
-
-    return (
-      <Text>
-        {ticketKey} (${price}) x {quantity} = ${price * quantity}
-      </Text>
-    );
-  }
-
   return (
     <StripeProvider publishableKey={PUBLISHABLE_KEY}>
       <View style={styles.container}>

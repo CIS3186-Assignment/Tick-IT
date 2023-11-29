@@ -10,16 +10,7 @@ const Receipt = () => {
     const navigation = useNavigation();
     const { totalAmount, event, ticketCounts } = route.params;
     
-    const TicketCost = ({ticketKey}) => {
-        const quantity = ticketCounts[ticketKey];
-        const price = event.tickets.find(ticket => ticket.name === ticketKey).price;
     
-        return (
-          <Text>
-            {ticketKey} (${price}) x {quantity} = ${price * quantity}
-          </Text>
-        );
-    }
 
     return (
         <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414'}}>

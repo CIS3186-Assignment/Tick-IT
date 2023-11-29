@@ -10,6 +10,7 @@ import EventCatalog from "./screens/EventCatalog";
 import Profile from "./screens/Profile";
 import Wallet from "./screens/Wallet";
 import Checkout from "./screens/Checkout"; // Import the Checkout component
+import Receipt from "./screens/Receipt";
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,11 @@ const App = () => {
               <Stack.Screen
                 name="Checkout"
                 component={Checkout}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Receipt"
+                component={Receipt}
                 options={{ headerShown: false }}
               />
             </Stack.Navigator>

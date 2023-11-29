@@ -6,6 +6,8 @@ import {
   useConfirmPayment,
 } from "@stripe/stripe-react-native";
 import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
 export const PUBLISHABLE_KEY =
@@ -15,6 +17,7 @@ export default function App() {
   const { confirmPayment, loading } = useConfirmPayment();
   const [success, setSuccess] = React.useState(false);
   const route = useRoute();
+  const navigation = useNavigation();
   const { totalAmount, event, ticketCounts } = route.params;
 
   fetchPaymentIntentClientSecret = async () => {
@@ -56,8 +59,13 @@ export default function App() {
       Alert.alert("Error!");
     } else if (paymentIntent) {
       console.log("Success from promise", paymentIntent);
-      Alert.alert("Payment Successful!");
+      // Alert.alert("Payment Successful!");
       setSuccess(true);
+      navigation.navigate("Receipt", {
+        event,
+        ticketCounts,
+        totalAmount,
+      });
     }
   };
   

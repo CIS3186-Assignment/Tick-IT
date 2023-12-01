@@ -28,8 +28,18 @@ const EventDetails = ({ route }) => {
     }));
   };
 
-  const handleCardPress = () => {
-    navigation.navigate("EventCatalog");
+  const handlePurchasePress = () => {
+    const totalAmount = event.tickets.reduce(
+      (total, ticket) =>
+        total + (ticketCounts[ticket.name] || 0) * ticket.price,
+      0
+    );
+
+    navigation.navigate("Checkout", {
+      event,
+      ticketCounts,
+      totalAmount,
+    });
   };
 
   const formatDate = (timestamp) => {
@@ -70,7 +80,10 @@ const EventDetails = ({ route }) => {
                 0
               )}`}
             </Text>
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={handlePurchasePress}
+            >
               <Text style={styles.buttonText}>Purchase</Text>
             </TouchableOpacity>
           </View>
@@ -105,7 +118,7 @@ const EventDetails = ({ route }) => {
                       size={35}
                       iconColor={MD3Colors.error60}
                       style={styles.iconButton}
-                      onPress={handleCardPress}
+                      onPress={handlePurchasePress} // Update the onPress handler
                     />
                   )}
                 </View>

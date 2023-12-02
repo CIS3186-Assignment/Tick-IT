@@ -1,11 +1,14 @@
 import * as React from "react";
-import { Button, Text, View, StyleSheet, Alert } from "react-native";
+import { Button, Text, View, StyleSheet, Alert} from "react-native";
 import {
   StripeProvider,
   CardField,
   useConfirmPayment,
 } from "@stripe/stripe-react-native";
 import { useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import PurchaseSummary from "../components/PurchaseSummary";
+
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
 export const PUBLISHABLE_KEY =
@@ -15,6 +18,7 @@ export default function App() {
   const { confirmPayment, loading } = useConfirmPayment();
   const [success, setSuccess] = React.useState(false);
   const route = useRoute();
+  const navigation = useNavigation();
   const { totalAmount, event, ticketCounts } = route.params;
 
   fetchPaymentIntentClientSecret = async () => {
@@ -56,17 +60,20 @@ export default function App() {
       Alert.alert("Error!");
     } else if (paymentIntent) {
       console.log("Success from promise", paymentIntent);
-      Alert.alert("Payment Successful!");
+      // Alert.alert("Payment Successful!");
       setSuccess(true);
+      navigation.navigate("Receipt", {
+        event,
+        ticketCounts,
+        totalAmount,
+      });
     }
   };
-
+  
   return (
     <StripeProvider publishableKey={PUBLISHABLE_KEY}>
       <View style={styles.container}>
-        <Text style={styles.totalAmount}>
-          Total Amount: ${totalAmount.toFixed(2)}
-        </Text>
+        <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts}/>
         <CardField
           postalCodeEnabled={false}
           autofocus
@@ -98,5 +105,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 20,
+  },
+  image: {
+    width: "70%",
+    height: 300,
+    resizeMode: "cover",
+    borderRadius: 25,
+    marginVertical: 20,
+    backgroundColor: "#bbe",
+    alignSelf: "center",
   },
 });

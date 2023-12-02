@@ -6,7 +6,7 @@ import TopAppBar from "../components/TopAppBar";
 
 const TicketDetails = ({ route }) => {
   const { event } = route.params;
-  const navigation = useNavigation();
+  console.log(event);
 
   const formatDate = (timestamp) => {
     if (!timestamp) {
@@ -182,3 +182,4 @@ const styles = StyleSheet.create({
   },
 });
 
+export default TicketDetails;

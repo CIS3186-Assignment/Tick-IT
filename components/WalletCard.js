@@ -4,7 +4,7 @@ import { Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
 
-const WalletCard = ({ event, imageURL }) => {
+const WalletCard = ({ event, image }) => {
   const navigation = useNavigation();
 
   const handleCardPress = () => {

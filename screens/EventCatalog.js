@@ -7,14 +7,18 @@ import {
   Image,
   Text,
 } from "react-native";
-import { TextInput, ActivityIndicator, Chip, Searchbar } from "react-native-paper";
+import {
+  TextInput,
+  ActivityIndicator,
+  Chip,
+  Searchbar,
+} from "react-native-paper";
 import { getAllEvents } from "../services/EventService.js";
 import { getDownloadURL, ref } from "firebase/storage";
 import { STORAGE } from "../FirebaseConfig.js";
 import EventCard from "../components/EventCard.js";
 import BottomNavBar from "../components/BottomNavBar.js";
 import { getCategories } from "../services/CategoriesService.js";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry.js";
 
 const EventCatalog = () => {
   const [categories, setCategories] = useState([]);
@@ -25,14 +29,8 @@ const EventCatalog = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchEvents = async () => {
+  const fetchImagesForEvents = async (events) => {
     try {
-      const events = await getAllEvents();
-      setAllEvents(events);
-      setFilteredEvents(events);
-      console.log("fetched");
-
-      // Fetch download URLs for images
       const eventsWithImages = await Promise.all(
         events.map(async (event) => {
           try {
@@ -41,12 +39,30 @@ const EventCatalog = () => {
 
             return { ...event, imageURL };
           } catch (error) {
+            console.error(
+              "Error fetching image URL for event:",
+              event.id,
+              error
+            );
             return { ...event, imageURL: null };
           }
         })
       );
 
       setFilteredEvents(eventsWithImages);
+    } catch (error) {
+      console.error("Error fetching images for events:", error);
+    }
+  };
+
+  const fetchEvents = async () => {
+    try {
+      const events = await getAllEvents();
+      setAllEvents(events);
+      setFilteredEvents(events);
+      console.log("fetched");
+
+      await fetchImagesForEvents(events);
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {
@@ -66,28 +82,24 @@ const EventCatalog = () => {
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
   const handleChipPress = (categoryId) => {
-    // Check if the category is already in filters
     if (filters.includes(categoryId)) {
-      // If selected, remove it from filters
       setFilters((prevFilters) =>
         prevFilters.filter((filter) => filter !== categoryId)
       );
     } else {
-      // If not selected, add it to filters
       setFilters((prevFilters) => [...prevFilters, categoryId]);
     }
   };
 
   useEffect(() => {
-
-    console.log("filtering")
+    console.log("filtering");
 
     let filteredEvents = allEvents;
 
@@ -101,17 +113,14 @@ const EventCatalog = () => {
       );
     }
 
-    // Update filteredEvents based on filters
-    if (filters.length > 0) {      
-      filteredEvents = filteredEvents.filter((event) =>{
-          return filters.includes(event.category.id)
-        }
+    if (filters.length > 0) {
+      filteredEvents = filteredEvents.filter((event) =>
+        filters.includes(event.category.id)
       );
     }
 
-    setFilteredEvents(filteredEvents);
-
-  }, [query,filters]);
+    fetchImagesForEvents(filteredEvents);
+  }, [query, filters]);
 
   const onRefresh = () => {
     setRefreshing(true);

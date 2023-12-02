@@ -77,7 +77,7 @@ export const getAllEvents = async () => {
           name: creatorData.name,
           address: creatorData.address,
           email: creatorData.email,
-          phone: creatorData.phone,
+          phone: creatorData.contact_number,
         };
       }
     }

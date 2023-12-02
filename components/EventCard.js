@@ -11,6 +11,11 @@ const EventCard = ({ event, imageURL }) => {
     navigation.navigate("EventDetails", { event });
   };
 
+  const goToEventCreator = () => {
+    creator = event.eventCreator
+    navigation.navigate("EventCreator", { creator });
+  }
+
   const getPriceRange = () => {
     let prices = event.tickets.map((ticket) => ticket.price);
     let max = Math.max(...prices);
@@ -58,7 +63,9 @@ const EventCard = ({ event, imageURL }) => {
                 style={styles.iconButton}
                 iconColor={MD3Colors.neutral100}
               />
-              <Text style={styles.infoText}>{event?.eventCreator?.name}</Text>
+              <TouchableOpacity onPress={goToEventCreator}>
+                <Text style={styles.infoText}>{event?.eventCreator?.name}</Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.infoContainer}>
               <IconButton

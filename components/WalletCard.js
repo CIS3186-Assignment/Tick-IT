@@ -4,11 +4,11 @@ import { Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
 
-const EventCard = ({ event, imageURL }) => {
+const WalletCard = ({ event, imageURL }) => {
   const navigation = useNavigation();
 
   const handleCardPress = () => {
-    navigation.navigate("EventDetails", { event });
+    navigation.navigate("TicketDetails", { event });
   };
 
   const goToEventCreator = () => {
@@ -117,4 +117,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventCard;
+export default WalletCard;

@@ -1,13 +1,10 @@
 import * as React from "react";
-import { Button, Text, View, StyleSheet, Alert} from "react-native";
-import {
-  StripeProvider,
-  CardField,
-  useConfirmPayment,
-} from "@stripe/stripe-react-native";
+import { Button, Text, View, StyleSheet, Alert, TouchableOpacity, KeyboardAvoidingView,} from "react-native";
+import {StripeProvider, CardField, useConfirmPayment,} from "@stripe/stripe-react-native";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from "../components/PurchaseSummary";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
@@ -71,24 +68,38 @@ export default function App() {
   };
   
   return (
-    <StripeProvider publishableKey={PUBLISHABLE_KEY}>
+    <SafeAreaProvider> 
+      <View> 
+          <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts}/>
+      </View>
+      <StripeProvider publishableKey={PUBLISHABLE_KEY}>
       <View style={styles.container}>
-        <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts}/>
-        <CardField
-          postalCodeEnabled={false}
-          autofocus
-          style={styles.cardField}
-          cardStyle={{
-            textColor: "#1c1c1c",
-          }}
-        />
-        <Button
-          onPress={handlePayPress}
-          title="Pay"
-          disabled={loading || success}
-        />
+        <View style={styles.paymentSection}>
+          <KeyboardAvoidingView>
+          <CardField
+            postalCodeEnabled={false}
+            autofocus
+            style={[styles.cardField, styles.cardFieldContainer]}
+            cardStyle={{
+              textColor: "#1c1c1c",
+            }}
+          />
+          </KeyboardAvoidingView>
+          <TouchableOpacity
+              onPress={handlePayPress}
+              disabled={loading || success}
+              style={[
+                styles.button,
+                { backgroundColor: loading || success ? "gray" : "#253354" },
+              ]}
+            >
+              <Text style={styles.buttonText}>Purchase</Text>
+            </TouchableOpacity>
+        </View>
       </View>
     </StripeProvider>
+    </SafeAreaProvider>
+    
   );
 }
 
@@ -96,10 +107,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    padding: 8,
+    padding: 0,
+    backgroundColor: "#141414",
   },
   cardField: {
-    height: 40,
+    height: 60,
   },
   totalAmount: {
     fontSize: 18,
@@ -115,4 +127,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#bbe",
     alignSelf: "center",
   },
+  paymentSection: {
+    marginTop: 20,
+    marginHorizontal: 25,
+    paddingBottom: 70
+  },
+  button: {
+    backgroundColor: "#2ecc71",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  buttonText:{
+    color: '#fff',
+    fontSize: 18
+  }
 });

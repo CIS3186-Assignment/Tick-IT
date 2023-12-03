@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, KeyboardAvoidingView } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   back: {
     position: 'absolute', 
-    left: 20, 
+    left: 10, 
   },
 });
 

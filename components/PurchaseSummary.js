@@ -17,7 +17,6 @@ const PurchaseSummary = ({ totalAmount, event, ticketCounts }) => {
     return (
       <View>
         <View style={styles.imageSection}>
-        <TopAppBar title={event.name}/>
           <Image style={styles.image} source={{ uri: event.imageURL }} />
         </View>
         <View style={styles.ticketTotals}>
@@ -64,7 +63,6 @@ const styles = StyleSheet.create({
       alignSelf: "center",
     },
     imageSection: {
-      marginTop: 25,
       backgroundColor: '#141414',
       borderBottomWidth: 2.5,
       borderColor: '#fff',
@@ -93,7 +91,7 @@ const styles = StyleSheet.create({
       borderBottomWidth: 2,
       marginBottom: 10,
       borderBlockColor: '#fff',
-      marginRight: 140
+      marginRight: 125
     } 
   });
 

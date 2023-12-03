@@ -13,6 +13,7 @@ import Wallet from "./screens/Wallet";
 import EventCreator from './screens/EventCreator';
 import Checkout from "./screens/Checkout"; // Import the Checkout component
 import Receipt from "./screens/Receipt";
+import TicketDetails from "./screens/TicketDetails";
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,11 @@ const App = () => {
               <Stack.Screen
                 name="Wallet"
                 component={Wallet}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="TicketDetails"
+                component={TicketDetails}
                 options={{ headerShown: false }}
               />
               <Stack.Screen

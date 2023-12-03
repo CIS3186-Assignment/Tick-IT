@@ -6,6 +6,7 @@ import TopAppBar from "../components/TopAppBar";
 
 const TicketDetails = ({ route }) => {
   const { event } = route.params;
+  const navigation = useNavigation();
   console.log(event);
 
   const formatDate = (timestamp) => {
@@ -38,7 +39,7 @@ const TicketDetails = ({ route }) => {
           </View>
         }
         data={[
-          { type: "grid", label: "Creator", value: event.eventCreator.name },
+          { type: "grid", label: "Creator", value: event.creator.name },
           {
             type: "grid",
             label: "Location",
@@ -51,7 +52,6 @@ const TicketDetails = ({ route }) => {
             value: formatDate(event.date),
           },
           { type: "grid", label: "Description", value: event.description },
-          ...event.tickets.map((ticket) => ({ type: "ticket", ...ticket })),
           { type: "button" },
         ]}
         renderItem={({ item }) => {
@@ -67,7 +67,6 @@ const TicketDetails = ({ route }) => {
                       size={35}
                       iconColor={MD3Colors.error60}
                       style={styles.iconButton}
-                      onPress={handlePurchasePress}
                     />
                   )}
                 </View>

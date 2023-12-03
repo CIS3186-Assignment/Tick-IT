@@ -102,7 +102,7 @@ export default function App() {
                   { backgroundColor: loading || success ? "gray" : "#253354" },
                 ]}
               >
-                <Text style={styles.buttonText}>Purchase</Text>
+                <Text style={styles.buttonText}>Pay</Text>
               </TouchableOpacity>
             </View>
           </View>

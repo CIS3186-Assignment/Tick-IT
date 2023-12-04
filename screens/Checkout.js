@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
   },
   cardField: {
     height: 60,
+    backgroundColor: '#fff'
   },
   totalAmount: {
     fontSize: 18,

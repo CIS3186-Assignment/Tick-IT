@@ -21,11 +21,9 @@ const PurchaseSummary = ({ totalAmount, event, ticketCounts }) => {
         </View>
         <View style={styles.ticketTotals}>
         <Text style={styles.order}>Your Order:</Text>
-          <FlatList
-          data={Object.keys(ticketCounts)}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => <TicketCost ticketKey={item} event={event} ticketCounts={ticketCounts}/>}
-        />
+        {Object.keys(ticketCounts).map((ticketKey) => (
+          <TicketCost key={ticketKey} ticketKey={ticketKey} event={event} ticketCounts={ticketCounts} />
+        ))}
         <View style={styles.divider}></View>
         <Text style={styles.totalAmount}>
           Total Amount: ${totalAmount.toFixed(2)}

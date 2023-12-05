@@ -35,6 +35,8 @@ const Wallet = () => {
             {item.eventDetails.map((ticket) => {
               const imageURL = ticket.eventDetails?.image || "";
               const eventName = ticket.eventDetails?.name || "Event Name";
+              const eventCreator =
+                ticket.eventDetails?.EventCreator || "Event Creator";
               const eventDescription =
                 ticket.eventDetails?.description || "Event Description";
               const eventLocation =
@@ -48,6 +50,7 @@ const Wallet = () => {
                   key={ticket.id}
                   event={{
                     name: eventName,
+                    creator: eventCreator,
                     description: eventDescription,
                     location: eventLocation,
                     datetime: eventDatetime,

@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, Image, StyleSheet, FlatList, Text,TouchableOpacity} from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  FlatList,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
@@ -39,7 +46,11 @@ const TicketDetails = ({ route }) => {
           </View>
         }
         data={[
-          { type: "grid", label: "Creator", value: event.creator.name },
+          {
+            type: "grid",
+            label: "Creator",
+            value: event.creator?.name || "N/A",
+          },
           {
             type: "grid",
             label: "Location",
@@ -72,13 +83,13 @@ const TicketDetails = ({ route }) => {
                 </View>
               </View>
             );
-          } 
+          }
+          return null; // Handle other types if needed
         }}
       />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

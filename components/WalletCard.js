@@ -12,7 +12,8 @@ const WalletCard = ({ event, imageURL }) => {
   };
 
   const goToEventCreator = () => {
-    creator = event.creator;
+    // Use event.creator instead of undeclared creator
+    const creator = event.creator;
     navigation.navigate("EventCreator", { creator });
   };
 
@@ -64,7 +65,6 @@ const WalletCard = ({ event, imageURL }) => {
     </TouchableOpacity>
   );
 };
-
 const styles = StyleSheet.create({
   cardContent: {
     marginVertical: 15,

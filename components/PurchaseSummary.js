@@ -1,12 +1,13 @@
 import React from "react";
-import {Text, View, StyleSheet, FlatList, Image } from "react-native";
+import {Text, View, StyleSheet, FlatList, Image, KeyboardAvoidingView } from "react-native";
+import TopAppBar from "../components/TopAppBar";
 
 const TicketCost = ({ticketKey, event, ticketCounts}) => {
     const quantity = ticketCounts[ticketKey];
     const price = event.tickets.find(ticket => ticket.name === ticketKey).price;
 
     return (
-      <Text>
+      <Text style={styles.ticketSum}>
         {ticketKey} (${price}) x {quantity} = ${price * quantity}
       </Text>
     );
@@ -15,16 +16,19 @@ const TicketCost = ({ticketKey, event, ticketCounts}) => {
 const PurchaseSummary = ({ totalAmount, event, ticketCounts }) => {
     return (
       <View>
-        <Image style={styles.image} source={{ uri: event.imageURL }} />
-        <Text style={styles.totalAmount}>{event.name}</Text>
-        <FlatList
-          data={Object.keys(ticketCounts)}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => <TicketCost ticketKey={item} event={event} ticketCounts={ticketCounts}/>}
-        />
+        <View style={styles.imageSection}>
+          <Image style={styles.image} source={{ uri: event.imageURL }} />
+        </View>
+        <View style={styles.ticketTotals}>
+        <Text style={styles.order}>Your Order:</Text>
+        {Object.keys(ticketCounts).map((ticketKey) => (
+          <TicketCost key={ticketKey} ticketKey={ticketKey} event={event} ticketCounts={ticketCounts} />
+        ))}
+        <View style={styles.divider}></View>
         <Text style={styles.totalAmount}>
           Total Amount: ${totalAmount.toFixed(2)}
         </Text>
+        </View>
       </View>
     );
   };
@@ -35,15 +39,17 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: "center",
       padding: 8,
+      backgroundColor: "#141414",
     },
     cardField: {
       height: 40,
     },
     totalAmount: {
-      fontSize: 18,
+      fontSize: 22,
       fontWeight: "bold",
-      marginBottom: 20,
-      color: "black"
+      marginBottom: 10,
+      color: "white",
+      textAlign: "left"
     },
     image: {
       width: "70%",
@@ -51,9 +57,40 @@ const styles = StyleSheet.create({
       resizeMode: "cover",
       borderRadius: 25,
       marginVertical: 20,
-      backgroundColor: "#bbe",
+      backgroundColor: "#141414",
       alignSelf: "center",
     },
+    imageSection: {
+      backgroundColor: '#141414',
+      borderBottomWidth: 2.5,
+      borderColor: '#fff',
+    },
+    ticketSum:{
+      fontSize: 16,
+      marginBottom: 20,
+      color: "white",
+      textAlign: "left"
+    },
+    ticketTotals:{
+      paddingTop: 20,
+      paddingLeft: 35,
+      backgroundColor: '#141414'
+    },
+    order:{
+      color: '#fff',
+      textAlign: "left",
+      marginBottom: 20,
+      fontSize: 16,
+      textDecorationLine: 'underline',
+      textDecorationColor: '#fff',
+      textDecorationStyle: 'solid'
+    },
+    divider:{
+      borderBottomWidth: 2,
+      marginBottom: 10,
+      borderBlockColor: '#fff',
+      marginRight: 125
+    } 
   });
 
 export default PurchaseSummary

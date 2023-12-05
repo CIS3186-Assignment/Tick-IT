@@ -1,18 +1,15 @@
 import * as React from "react";
-import { Button, Text, View, StyleSheet, Alert} from "react-native";
-import {
-  StripeProvider,
-  CardField,
-  useConfirmPayment,
-} from "@stripe/stripe-react-native";
+import { Button, Text, View, StyleSheet, Alert, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import TopAppBar from "../components/TopAppBar";
+import { StripeProvider, CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from "../components/PurchaseSummary";
-
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
-export const PUBLISHABLE_KEY =
-  "pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC";
+export const PUBLISHABLE_KEY = "pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC";
 
 export default function App() {
   const { confirmPayment, loading } = useConfirmPayment();
@@ -21,7 +18,7 @@ export default function App() {
   const navigation = useNavigation();
   const { totalAmount, event, ticketCounts } = route.params;
 
-  fetchPaymentIntentClientSecret = async () => {
+  const fetchPaymentIntentClientSecret = async () => {
     const res = await fetch(`${API_URL}/createPaymentIntent`, {
       method: "POST",
       headers: {
@@ -43,7 +40,7 @@ export default function App() {
 
   const handlePayPress = async () => {
     const billingDetails = {
-      email: "jenny.rosen@example.com", //ToDo replace with SSO email
+      email: "jenny.rosen@example.com",
     };
 
     const clientSecret = await fetchPaymentIntentClientSecret();
@@ -60,7 +57,6 @@ export default function App() {
       Alert.alert("Error!");
     } else if (paymentIntent) {
       console.log("Success from promise", paymentIntent);
-      // Alert.alert("Payment Successful!");
       setSuccess(true);
       navigation.navigate("Receipt", {
         event,
@@ -69,37 +65,66 @@ export default function App() {
       });
     }
   };
-  
+
   return (
-    <StripeProvider publishableKey={PUBLISHABLE_KEY}>
-      <View style={styles.container}>
-        <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts}/>
-        <CardField
-          postalCodeEnabled={false}
-          autofocus
-          style={styles.cardField}
-          cardStyle={{
-            textColor: "#1c1c1c",
-          }}
-        />
-        <Button
-          onPress={handlePayPress}
-          title="Pay"
-          disabled={loading || success}
-        />
-      </View>
-    </StripeProvider>
+    <SafeAreaProvider>
+      <TopAppBar title={event.name}/>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        enableOnAndroid
+        style={styles.keyboardScroll}
+        extraHeight={Platform.select({ android: 40 })}
+      >
+        <View>
+          <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts} />
+        </View>
+        <StripeProvider publishableKey={PUBLISHABLE_KEY}>
+          <View style={styles.container}>
+            <View style={styles.paymentSection}>
+              <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.keyboardAvoidingView}
+              >
+                <CardField
+                  postalCodeEnabled={false}
+                  autofocus
+                  style={[styles.cardField, styles.cardFieldContainer]}
+                  cardStyle={{
+                    textColor: "#1c1c1c",
+                  }}
+                />
+              </KeyboardAvoidingView>
+              <TouchableOpacity
+                onPress={handlePayPress}
+                disabled={loading || success}
+                style={[
+                  styles.button,
+                  { backgroundColor: loading || success ? "gray" : "#253354" },
+                ]}
+              >
+                <Text style={styles.buttonText}>Pay</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </StripeProvider>
+      </KeyboardAwareScrollView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollViewContent: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     justifyContent: "center",
-    padding: 8,
+    padding: 0,
+    backgroundColor: "#141414",
   },
   cardField: {
-    height: 40,
+    height: 60,
+    backgroundColor: '#fff'
   },
   totalAmount: {
     fontSize: 18,
@@ -115,4 +140,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#bbe",
     alignSelf: "center",
   },
+  paymentSection: {
+    marginTop: 20,
+    marginHorizontal: 25,
+    paddingBottom: 70,
+  },
+  button: {
+    backgroundColor: "#2ecc71",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  keyboardScroll: {
+    backgroundColor: '#141414',
+  }
 });

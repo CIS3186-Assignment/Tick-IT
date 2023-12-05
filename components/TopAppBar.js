@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   back: {
     position: 'absolute', 
-    left: 20, 
+    left: 10, 
   },
 });
 

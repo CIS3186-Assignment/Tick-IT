@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 25,
     marginVertical: 20,
-    backgroundColor: "#bbe",
+    backgroundColor: "#141414",
     alignSelf: "center",
   },
   gridRow: {

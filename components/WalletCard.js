@@ -4,7 +4,7 @@ import { Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
 
-const WalletCard = ({ event, image }) => {
+const WalletCard = ({ event, imageURL }) => {
   const navigation = useNavigation();
 
   const handleCardPress = () => {
@@ -12,18 +12,18 @@ const WalletCard = ({ event, image }) => {
   };
 
   const goToEventCreator = () => {
-    creator = event.creator
+    creator = event.creator;
     navigation.navigate("EventCreator", { creator });
-  }
+  };
 
   return (
     <TouchableOpacity onPress={handleCardPress}>
       <Card style={styles.cardContent}>
         <Card.Content style={styles.content}>
-          {event?.image && (
+          {imageURL && (
             <Image
               style={styles.image}
-              source={{ uri: event.image }}
+              source={{ uri: imageURL }}
               resizeMode="contain"
             />
           )}

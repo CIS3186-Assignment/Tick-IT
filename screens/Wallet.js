@@ -1,43 +1,65 @@
-import React from 'react';
-import { View, StyleSheet, SafeAreaView, FlatList } from 'react-native';
-import { SegmentedButtons } from 'react-native-paper';
-import BottomNavBar from '../components/BottomNavBar';
-import { STORAGE } from '../FirebaseConfig.js';
-import WalletCard from '../components/WalletCard.js';
-import { getCategories } from '../services/CategoriesService.js';
-import sampleEvents from '../sample_data/events';
-
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, SafeAreaView, FlatList } from "react-native";
+import { SegmentedButtons } from "react-native-paper";
+import BottomNavBar from "../components/BottomNavBar";
+import WalletCard from "../components/WalletCard";
+import { getUserBookedEvents } from "../services/WalletService";
 
 const Wallet = () => {
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState("");
+  const [bookedEvents, setBookedEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchBookedEvents = async () => {
+      try {
+        const userId = "T08aFSTUuGoc5yUdh9Sy"; // ToDo: Replace with the actual user ID
+        const events = await getUserBookedEvents(userId);
+        setBookedEvents(events);
+      } catch (error) {
+        console.error("Error fetching booked events:", error);
+      }
+    };
+
+    fetchBookedEvents();
+  }, []);
+
   return (
     <View style={{ ...styles.container, backgroundColor: "#141414" }}>
-      <View>
-        <SegmentedButtons
-          value={value}
-          onValueChange={setValue}
-          style={styles.segmentedButtons}
-          buttons={[
-            {
-              value: 'upcoming',
-              label: 'Upcoming',
-            },
-            {
-              value: 'past',
-              label: 'Past',
-            },
-          ]}
-        />
-      </View>
       <FlatList
-        data={sampleEvents.events}
+        data={bookedEvents}
         keyExtractor={(item) => item.id}
         style={styles.eventCard}
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
-          <WalletCard event={item} imageURL={item.image} />
+          <>
+            {item.eventDetails.map((ticket) => {
+              const imageURL = ticket.eventDetails?.image || "";
+              const eventName = ticket.eventDetails?.name || "Event Name";
+              const eventDescription =
+                ticket.eventDetails?.description || "Event Description";
+              const eventLocation =
+                ticket.eventDetails?.location_name || "Event Location";
+              const eventDatetime =
+                ticket.eventDetails?.date || "Event Date & Time";
+              const eventPrice = ticket.price || "Event Price";
+
+              return (
+                <WalletCard
+                  key={ticket.id}
+                  event={{
+                    name: eventName,
+                    description: eventDescription,
+                    location: eventLocation,
+                    datetime: eventDatetime,
+                    price: eventPrice,
+                  }}
+                  imageURL={imageURL}
+                />
+              );
+            })}
+          </>
         )}
-      />      
+      />
       <BottomNavBar currentScreen="Wallet" />
     </View>
   );
@@ -58,25 +80,6 @@ const styles = StyleSheet.create({
   },
   eventCard: {
     marginBottom: 0,
-  },
-  filter: {
-    marginVertical: 0,
-    borderBottomWidth: 0.7,
-    borderColor: "white",
-  },
-  filter_items: {
-    marginVertical: 15,
-    marginHorizontal: 0,
-    paddingHorizontal: 20,
-  },
-  category_chips: {
-    marginRight: 5,
-    backgroundColor: "#ffff",
-    borderRadius: 20,
-  },
-  chips: {
-    marginRight: 20,
-    paddingRight: 10,
   },
 });
 

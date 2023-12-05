@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, SafeAreaView, FlatList } from "react-native";
+import { View, StyleSheet, SafeAreaView, FlatList, Text } from "react-native";
 import { SegmentedButtons } from "react-native-paper";
 import BottomNavBar from "../components/BottomNavBar";
 import WalletCard from "../components/WalletCard";
@@ -33,7 +33,7 @@ const Wallet = () => {
         renderItem={({ item }) => (
           <>
             {item.eventDetails.map((ticket) => {
-              const imageURL = ticket.eventDetails?.image || "";
+              const imageURL = ticket.eventDetails?.image_id || "";
               const eventName = ticket.eventDetails?.name || "Event Name";
               const eventCreator =
                 ticket.eventDetails?.EventCreator || "Event Creator";
@@ -41,23 +41,33 @@ const Wallet = () => {
                 ticket.eventDetails?.description || "Event Description";
               const eventLocation =
                 ticket.eventDetails?.location_name || "Event Location";
-              const eventDatetime =
-                ticket.eventDetails?.date || "Event Date & Time";
+
+              // Extract seconds from eventDatetime
+              const eventDatetime = ticket.eventDetails?.date?.seconds || 0;
+
+              // Convert seconds to a Date object
+              const dateObject = new Date(eventDatetime * 1000); // Multiply by 1000 to convert seconds to milliseconds
+
+              // Format the date as needed (adjust the format according to your requirements)
+              const formattedDate = `${dateObject.toLocaleDateString()} ${dateObject.toLocaleTimeString()}`;
+
               const eventPrice = ticket.price || "Event Price";
 
               return (
-                <WalletCard
-                  key={ticket.id}
-                  event={{
-                    name: eventName,
-                    creator: eventCreator,
-                    description: eventDescription,
-                    location: eventLocation,
-                    datetime: eventDatetime,
-                    price: eventPrice,
-                  }}
-                  imageURL={imageURL}
-                />
+                <View key={ticket.id}>
+                  <Text style={styles.dateText}>{formattedDate}</Text>
+                  <WalletCard
+                    event={{
+                      name: eventName,
+                      creator: eventCreator,
+                      description: eventDescription,
+                      location: eventLocation,
+                      datetime: formattedDate,
+                      price: eventPrice,
+                    }}
+                    imageURL={imageURL}
+                  />
+                </View>
               );
             })}
           </>

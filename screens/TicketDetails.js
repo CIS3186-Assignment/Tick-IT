@@ -41,7 +41,7 @@ const TicketDetails = ({ route }) => {
         ListHeaderComponent={
           <View style={styles.imageContainer}>
             {event.image && (
-              <Image style={styles.image} source={{ uri: event.image }} />
+              <Image style={styles.image} source={{ uri: event.image_id }} />
             )}
           </View>
         }

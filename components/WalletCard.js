@@ -12,7 +12,6 @@ const WalletCard = ({ event, imageURL }) => {
   };
 
   const goToEventCreator = () => {
-    // Use event.creator instead of undeclared creator
     const creator = event.creator;
     navigation.navigate("EventCreator", { creator });
   };
@@ -52,6 +51,15 @@ const WalletCard = ({ event, imageURL }) => {
             </View>
             <View style={styles.infoContainer}>
               <IconButton
+                icon="calendar"
+                size={18}
+                style={styles.iconButton}
+                iconColor={MD3Colors.neutral100}
+              />
+              <Text style={styles.infoText}>{event?.datetime}</Text>
+            </View>
+            <View style={styles.infoContainer}>
+              <IconButton
                 icon="currency-eur"
                 size={18}
                 style={styles.iconButton}
@@ -65,6 +73,7 @@ const WalletCard = ({ event, imageURL }) => {
     </TouchableOpacity>
   );
 };
+
 const styles = StyleSheet.create({
   cardContent: {
     marginVertical: 15,

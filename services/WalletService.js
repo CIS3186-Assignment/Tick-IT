@@ -100,7 +100,6 @@ export const getUserBookedEvents = async (userId) => {
           const eventDoc = await getDoc(eventRef);
 
           if (eventDoc.exists()) {
-            // Fetch eventCreator details
             const eventCreatorRef = eventDoc.data().EventCreator;
             const eventCreatorDoc = await getDoc(eventCreatorRef);
             const eventCreator = eventCreatorDoc.exists()
@@ -116,8 +115,6 @@ export const getUserBookedEvents = async (userId) => {
               },
               ...ticket,
             };
-
-            console.log(`Fetched details for event ${eventId}:`, eventDetails);
 
             const eventWithImage = await fetchImagesForEvents([eventDetails]);
             bookingTickets.push(eventWithImage[0]);

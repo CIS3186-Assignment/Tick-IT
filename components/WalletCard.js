@@ -29,7 +29,11 @@ const WalletCard = ({ event, imageURL }) => {
           <View style={styles.textContainer}>
             <Text style={styles.eventName}>{event?.name}</Text>
             {renderInfo("map-marker", event?.location)}
-            {renderInfo("account", event?.eventCreator?.name, goToEventCreator)}
+            {renderInfo(
+              "account",
+              event?.eventDetails?.eventCreator?.name,
+              goToEventCreator
+            )}
 
             {renderInfo("calendar", event?.datetime)}
             {renderInfo("currency-eur", event?.price)}

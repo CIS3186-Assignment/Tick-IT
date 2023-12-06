@@ -35,10 +35,10 @@ const Wallet = () => {
         renderItem={({ item }) => (
           <>
             {item.eventDetails.map((ticket) => {
-              const imageURL = ticket.imageURL || ""; // Use the correct property name
+              const imageURL = ticket.imageURL || "";
               const eventName = ticket.eventDetails?.name || "Event Name";
-              const eventCreator =
-                ticket.eventDetails?.EventCreator || "Event Creator";
+              const eventCreatorName =
+                ticket.eventDetails?.eventCreator?.name || "Event Creator";
               const eventDescription =
                 ticket.eventDetails?.description || "Event Description";
               const eventLocation =
@@ -58,7 +58,11 @@ const Wallet = () => {
                   <WalletCard
                     event={{
                       name: eventName,
-                      creator: eventCreator,
+                      eventDetails: {
+                        eventCreator: {
+                          name: eventCreatorName,
+                        },
+                      },
                       description: eventDescription,
                       location: eventLocation,
                       datetime: formattedDate,

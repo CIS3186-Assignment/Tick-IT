@@ -5,15 +5,14 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StripeProvider } from "@stripe/stripe-react-native"; // Import StripeProvider
 
-
 import EventDetails from "./screens/EventDetails";
 import EventCatalog from "./screens/EventCatalog";
 import Profile from "./screens/Profile";
 import Wallet from "./screens/Wallet";
-import EventCreator from './screens/EventCreator';
+import EventCreator from "./screens/EventCreator";
 import Checkout from "./screens/Checkout"; // Import the Checkout component
 import Receipt from "./screens/Receipt";
-import TicketDetails from "./screens/TicketDetails";
+import TicketDetails from "./screens/TicketQRCode";
 
 const Stack = createStackNavigator();
 

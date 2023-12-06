@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, SafeAreaView, FlatList, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text } from "react-native";
 import { getUserBookedEvents } from "../services/WalletService";
 import { fetchImagesForEvents } from "../services/WalletService";
 import BottomNavBar from "../components/BottomNavBar";
@@ -7,6 +7,7 @@ import WalletCard from "../components/WalletCard";
 
 const Wallet = () => {
   const [bookedEvents, setBookedEvents] = useState([]);
+  const [lastRenderedDate, setLastRenderedDate] = useState(null);
 
   useEffect(() => {
     const fetchBookedEvents = async () => {
@@ -34,7 +35,7 @@ const Wallet = () => {
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
           <>
-            {item.eventDetails.map((ticket) => {
+            {item.eventDetails.map((ticket, index) => {
               const imageURL = ticket.imageURL || "";
               const eventName = ticket.eventDetails?.name || "Event Name";
               const eventCreatorName =
@@ -50,27 +51,30 @@ const Wallet = () => {
 
               const formattedDate = `${dateObject.toLocaleDateString()} ${dateObject.toLocaleTimeString()}`;
 
-              const eventPrice = ticket.price || "Event Price";
+              const showDate = lastRenderedDate !== formattedDate;
+
+              if (showDate) {
+                setLastRenderedDate(formattedDate);
+                return <Text style={styles.dateText}>{formattedDate}</Text>;
+              }
 
               return (
-                <View key={ticket.id}>
-                  <Text style={styles.dateText}>{formattedDate}</Text>
-                  <WalletCard
-                    event={{
-                      name: eventName,
-                      eventDetails: {
-                        eventCreator: {
-                          name: eventCreatorName,
-                        },
+                <WalletCard
+                  key={ticket.id}
+                  event={{
+                    name: eventName,
+                    eventDetails: {
+                      eventCreator: {
+                        name: eventCreatorName,
                       },
-                      description: eventDescription,
-                      location: eventLocation,
-                      datetime: formattedDate,
-                      price: eventPrice,
-                    }}
-                    imageURL={imageURL}
-                  />
-                </View>
+                    },
+                    description: eventDescription,
+                    location: eventLocation,
+                    datetime: formattedDate,
+                    price: ticket.price || "Event Price",
+                  }}
+                  imageURL={imageURL}
+                />
               );
             })}
           </>
@@ -86,16 +90,15 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
   },
-  segmentedButtons: {
-    marginTop: 55,
-    marginHorizontal: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderRadius: 20,
-    backgroundColor: "#FFFFFF",
-  },
   eventCard: {
     marginBottom: 0,
+  },
+  dateText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 18,
+    fontWeight: "800",
+    marginBottom: 15,
   },
 });
 

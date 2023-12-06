@@ -29,17 +29,25 @@ const EventDetails = ({ route }) => {
   };
 
   const handlePurchasePress = () => {
-    const totalAmount = event.tickets.reduce(
-      (total, ticket) =>
-        total + (ticketCounts[ticket.name] || 0) * ticket.price,
-      0
+    const isAnyTicketSelected = Object.values(ticketCounts).some(
+      (count) => count > 0
     );
 
-    navigation.navigate("Checkout", {
-      event,
-      ticketCounts,
-      totalAmount,
-    });
+    if (isAnyTicketSelected) {
+      const totalAmount = event.tickets.reduce(
+        (total, ticket) =>
+          total + (ticketCounts[ticket.name] || 0) * ticket.price,
+        0
+      );
+
+      navigation.navigate("Checkout", {
+        event,
+        ticketCounts,
+        totalAmount,
+      });
+    } else {
+      alert("Please select at least one ticket before purchasing.");
+    }
   };
 
   const formatDate = (timestamp) => {

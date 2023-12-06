@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, SafeAreaView, FlatList, Text } from "react-native";
-import { SegmentedButtons } from "react-native-paper";
+import { getUserBookedEvents } from "../services/WalletService";
+import { fetchImagesForEvents } from "../services/WalletService";
 import BottomNavBar from "../components/BottomNavBar";
 import WalletCard from "../components/WalletCard";
-import { getUserBookedEvents } from "../services/WalletService";
 
 const Wallet = () => {
-  const [value, setValue] = React.useState("");
   const [bookedEvents, setBookedEvents] = useState([]);
 
   useEffect(() => {
@@ -14,7 +13,10 @@ const Wallet = () => {
       try {
         const userId = "T08aFSTUuGoc5yUdh9Sy"; // ToDo: Replace with the actual user ID
         const events = await getUserBookedEvents(userId);
-        setBookedEvents(events);
+
+        const eventsWithImages = await fetchImagesForEvents(events);
+
+        setBookedEvents(eventsWithImages);
       } catch (error) {
         console.error("Error fetching booked events:", error);
       }
@@ -33,7 +35,7 @@ const Wallet = () => {
         renderItem={({ item }) => (
           <>
             {item.eventDetails.map((ticket) => {
-              const imageURL = ticket.eventDetails?.image_id || "";
+              const imageURL = ticket.imageURL || ""; // Use the correct property name
               const eventName = ticket.eventDetails?.name || "Event Name";
               const eventCreator =
                 ticket.eventDetails?.EventCreator || "Event Creator";
@@ -42,13 +44,10 @@ const Wallet = () => {
               const eventLocation =
                 ticket.eventDetails?.location_name || "Event Location";
 
-              // Extract seconds from eventDatetime
               const eventDatetime = ticket.eventDetails?.date?.seconds || 0;
 
-              // Convert seconds to a Date object
-              const dateObject = new Date(eventDatetime * 1000); // Multiply by 1000 to convert seconds to milliseconds
+              const dateObject = new Date(eventDatetime * 1000);
 
-              // Format the date as needed (adjust the format according to your requirements)
               const formattedDate = `${dateObject.toLocaleDateString()} ${dateObject.toLocaleTimeString()}`;
 
               const eventPrice = ticket.price || "Event Price";

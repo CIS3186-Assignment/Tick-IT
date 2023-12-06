@@ -1,5 +1,40 @@
+import { ref as storageRef, getDownloadURL } from "firebase/storage";
 import { getDoc, doc, getDocs, collection } from "firebase/firestore";
-import { FIRESTORE } from "../FirebaseConfig";
+import { FIRESTORE, STORAGE } from "../FirebaseConfig";
+
+export const fetchImagesForEvents = async (events) => {
+  try {
+    const eventsWithImages = await Promise.all(
+      events.map(async (event) => {
+        try {
+          if (!event.eventDetails.image_id) {
+            return { ...event, imageURL: null };
+          }
+
+          const imageRef = storageRef(
+            STORAGE,
+            `images/${event.eventDetails.image_id}.png`
+          );
+          const imageURL = await getDownloadURL(imageRef);
+
+          console.log(`Fetched image for event ${event.id}: ${imageURL}`);
+
+          event.imageURL = imageURL;
+
+          return event;
+        } catch (error) {
+          console.error("Error fetching image URL for event:", event.id, error);
+          return { ...event, imageURL: null };
+        }
+      })
+    );
+
+    return eventsWithImages;
+  } catch (error) {
+    console.error("Error fetching images for events:", error);
+    throw error;
+  }
+};
 
 export const getUserBookedEvents = async (userId) => {
   try {
@@ -67,12 +102,17 @@ export const getUserBookedEvents = async (userId) => {
           const eventDoc = await getDoc(eventRef);
 
           if (eventDoc.exists()) {
-            bookingTickets.push({
+            const eventDetails = {
               id: ticketDoc.id,
               eventId,
               eventDetails: eventDoc.data(),
               ...ticket,
-            });
+            };
+
+            console.log(`Fetched details for event ${eventId}:`, eventDetails);
+
+            const eventWithImage = await fetchImagesForEvents([eventDetails]);
+            bookingTickets.push(eventWithImage[0]);
           } else {
             console.error("Event not found for eventId:", eventId);
           }
@@ -94,3 +134,5 @@ export const getUserBookedEvents = async (userId) => {
     throw error;
   }
 };
+
+export default { fetchImagesForEvents, getUserBookedEvents };

@@ -12,9 +12,9 @@ import { IconButton, MD3Colors } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
 
 const TicketDetails = ({ route }) => {
-  const { event } = route.params;
+  const { event, imageURL } = route.params;
+  console.log("Image URL in TicketDetails:", imageURL);
   const navigation = useNavigation();
-  console.log(event);
 
   const formatDate = (timestamp) => {
     if (!timestamp) {
@@ -40,8 +40,8 @@ const TicketDetails = ({ route }) => {
       <FlatList
         ListHeaderComponent={
           <View style={styles.imageContainer}>
-            {event.image && (
-              <Image style={styles.image} source={{ uri: event.image_id }} />
+            {imageURL && (
+              <Image style={styles.image} source={{ uri: imageURL }} />
             )}
           </View>
         }
@@ -49,7 +49,7 @@ const TicketDetails = ({ route }) => {
           {
             type: "grid",
             label: "Creator",
-            value: event.creator?.name || "N/A",
+            value: event.eventCreator?.name || "N/A",
           },
           {
             type: "grid",
@@ -90,6 +90,7 @@ const TicketDetails = ({ route }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

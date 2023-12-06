@@ -1,14 +1,14 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { Card } from "react-native-paper";
+import { Card, IconButton, MD3Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { IconButton, MD3Colors } from "react-native-paper";
 
 const WalletCard = ({ event, imageURL }) => {
   const navigation = useNavigation();
 
   const handleCardPress = () => {
-    navigation.navigate("TicketDetails", { event });
+    console.log("Image URL:", imageURL);
+    navigation.navigate("TicketDetails", { event, imageURL });
   };
 
   const goToEventCreator = () => {
@@ -29,50 +29,30 @@ const WalletCard = ({ event, imageURL }) => {
           )}
           <View style={styles.textContainer}>
             <Text style={styles.eventName}>{event?.name}</Text>
-            <View style={styles.infoContainer}>
-              <IconButton
-                icon="map-marker"
-                size={18}
-                style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
-              />
-              <Text style={styles.infoText}>{event?.location}</Text>
-            </View>
-            <View style={styles.infoContainer}>
-              <IconButton
-                icon="account"
-                size={18}
-                style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
-              />
-              <TouchableOpacity onPress={goToEventCreator}>
-                <Text style={styles.infoText}>{event?.creator?.name}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.infoContainer}>
-              <IconButton
-                icon="calendar"
-                size={18}
-                style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
-              />
-              <Text style={styles.infoText}>{event?.datetime}</Text>
-            </View>
-            <View style={styles.infoContainer}>
-              <IconButton
-                icon="currency-eur"
-                size={18}
-                style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
-              />
-              <Text style={styles.infoText}>{event?.price}</Text>
-            </View>
+            {renderInfo("map-marker", event?.location)}
+            {renderInfo("account", event?.eventCreator?.name, goToEventCreator)}
+            {renderInfo("calendar", event?.datetime)}
+            {renderInfo("currency-eur", event?.price)}
           </View>
         </Card.Content>
       </Card>
     </TouchableOpacity>
   );
 };
+
+const renderInfo = (icon, text, onPress) => (
+  <View style={styles.infoContainer}>
+    <IconButton
+      icon={icon}
+      size={18}
+      style={styles.iconButton}
+      iconColor={MD3Colors.neutral100}
+    />
+    <TouchableOpacity onPress={onPress}>
+      <Text style={styles.infoText}>{text}</Text>
+    </TouchableOpacity>
+  </View>
+);
 
 const styles = StyleSheet.create({
   cardContent: {

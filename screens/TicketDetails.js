@@ -12,8 +12,8 @@ import { IconButton, MD3Colors } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
 
 const TicketDetails = ({ route }) => {
+  console.log("Event:", route.params.event); // Add this line
   const { event, imageURL } = route.params;
-  console.log("Image URL in TicketDetails:", imageURL);
   const navigation = useNavigation();
 
   const formatDate = (timestamp) => {
@@ -49,7 +49,7 @@ const TicketDetails = ({ route }) => {
           {
             type: "grid",
             label: "Creator",
-            value: event.eventCreator?.name || "N/A",
+            const creatorName = event.creator?._key?.name;
           },
           {
             type: "grid",
@@ -60,7 +60,7 @@ const TicketDetails = ({ route }) => {
           {
             type: "grid",
             label: "Date and Time",
-            value: formatDate(event.date),
+            value: event.datetime,
           },
           { type: "grid", label: "Description", value: event.description },
           { type: "button" },
@@ -84,7 +84,7 @@ const TicketDetails = ({ route }) => {
               </View>
             );
           }
-          return null; // Handle other types if needed
+          return null;
         }}
       />
     </View>

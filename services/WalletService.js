@@ -17,8 +17,6 @@ export const fetchImagesForEvents = async (events) => {
           );
           const imageURL = await getDownloadURL(imageRef);
 
-          console.log(`Fetched image for event ${event.id}: ${imageURL}`);
-
           event.imageURL = imageURL;
 
           return event;
@@ -102,10 +100,20 @@ export const getUserBookedEvents = async (userId) => {
           const eventDoc = await getDoc(eventRef);
 
           if (eventDoc.exists()) {
+            // Fetch eventCreator details
+            const eventCreatorRef = eventDoc.data().EventCreator;
+            const eventCreatorDoc = await getDoc(eventCreatorRef);
+            const eventCreator = eventCreatorDoc.exists()
+              ? eventCreatorDoc.data()
+              : null;
+
             const eventDetails = {
               id: ticketDoc.id,
               eventId,
-              eventDetails: eventDoc.data(),
+              eventDetails: {
+                ...eventDoc.data(),
+                eventCreator,
+              },
               ...ticket,
             };
 
@@ -127,7 +135,6 @@ export const getUserBookedEvents = async (userId) => {
       });
     }
 
-    console.log("Booked events:", bookedEvents);
     return bookedEvents;
   } catch (error) {
     console.error("Error fetching booked events:", error);

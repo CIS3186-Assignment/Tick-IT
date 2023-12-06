@@ -7,12 +7,11 @@ const WalletCard = ({ event, imageURL }) => {
   const navigation = useNavigation();
 
   const handleCardPress = () => {
-    console.log("Image URL:", imageURL);
     navigation.navigate("TicketDetails", { event, imageURL });
   };
 
   const goToEventCreator = () => {
-    const creator = event.creator;
+    const creator = event.eventCreator;
     navigation.navigate("EventCreator", { creator });
   };
 
@@ -31,6 +30,7 @@ const WalletCard = ({ event, imageURL }) => {
             <Text style={styles.eventName}>{event?.name}</Text>
             {renderInfo("map-marker", event?.location)}
             {renderInfo("account", event?.eventCreator?.name, goToEventCreator)}
+
             {renderInfo("calendar", event?.datetime)}
             {renderInfo("currency-eur", event?.price)}
           </View>

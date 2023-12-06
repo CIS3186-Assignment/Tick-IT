@@ -11,61 +11,9 @@ import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
 
-const EventDetails = ({ route }) => {
-  const { event } = route.params;
+const TicketDetails = ({ route }) => {
+  const { event, imageURL } = route.params;
   const navigation = useNavigation();
-  const details = event.details || {};
-
-  const [ticketCounts, setTicketCounts] = useState({});
-
-  const handleTicketCountChange = (ticketType, change) => {
-    const currentCount = ticketCounts[ticketType] || 0;
-    const newCount = Math.max(0, currentCount + change);
-
-    setTicketCounts((prevCounts) => ({
-      ...prevCounts,
-      [ticketType]: newCount,
-    }));
-  };
-
-  const handlePurchasePress = () => {
-    const isAnyTicketSelected = Object.values(ticketCounts).some(
-      (count) => count > 0
-    );
-
-    if (isAnyTicketSelected) {
-      const totalAmount = event.tickets.reduce(
-        (total, ticket) =>
-          total + (ticketCounts[ticket.name] || 0) * ticket.price,
-        0
-      );
-
-      navigation.navigate("Checkout", {
-        event,
-        ticketCounts,
-        totalAmount,
-      });
-    } else {
-      alert("Please select at least one ticket before purchasing.");
-    }
-  };
-
-  const formatDate = (timestamp) => {
-    if (!timestamp) {
-      return "N/A";
-    }
-
-    const date = new Date(timestamp.toDate());
-    const options = {
-      day: "numeric",
-      month: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    };
-
-    return new Intl.DateTimeFormat("en-GB", options).format(date);
-  };
 
   return (
     <View style={styles.container}>
@@ -74,43 +22,29 @@ const EventDetails = ({ route }) => {
       <FlatList
         ListHeaderComponent={
           <View style={styles.imageContainer}>
-            {event.imageURL && (
-              <Image style={styles.image} source={{ uri: event.imageURL }} />
+            {imageURL && (
+              <Image style={styles.image} source={{ uri: imageURL }} />
             )}
           </View>
         }
-        ListFooterComponent={
-          <View>
-            <Text style={styles.total}>
-              {`Total: €${event.tickets.reduce(
-                (total, ticket) =>
-                  total + (ticketCounts[ticket.name] || 0) * ticket.price,
-                0
-              )}`}
-            </Text>
-            <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={handlePurchasePress}
-            >
-              <Text style={styles.buttonText}>Purchase</Text>
-            </TouchableOpacity>
-          </View>
-        }
         data={[
-          { type: "grid", label: "Creator", value: event.eventCreator.name },
+          {
+            type: "grid",
+            label: "Creator",
+            value: event?.eventDetails?.eventCreator?.name || "N/A",
+          },
           {
             type: "grid",
             label: "Location",
-            value: event.location_name,
+            value: event.location,
             withIcon: true,
           },
           {
             type: "grid",
             label: "Date and Time",
-            value: formatDate(event.date),
+            value: event.datetime,
           },
           { type: "grid", label: "Description", value: event.description },
-          ...event.tickets.map((ticket) => ({ type: "ticket", ...ticket })),
           { type: "button" },
         ]}
         renderItem={({ item }) => {
@@ -126,40 +60,13 @@ const EventDetails = ({ route }) => {
                       size={35}
                       iconColor={MD3Colors.error60}
                       style={styles.iconButton}
-                      onPress={handlePurchasePress} // Update the onPress handler
                     />
                   )}
                 </View>
               </View>
             );
-          } else if (item.type === "ticket") {
-            return (
-              <View style={styles.ticketContainer}>
-                <View style={styles.ticketRow}>
-                  <Text style={styles.ticketLabel}>
-                    {item.name} (€{item.price})
-                  </Text>
-                  <View style={styles.ticketCountContainer}>
-                    <IconButton
-                      icon="minus"
-                      size={35}
-                      style={styles.iconButton}
-                      onPress={() => handleTicketCountChange(item.name, -1)}
-                    />
-                    <Text style={styles.ticketCount}>
-                      {ticketCounts[item.name] || 0}
-                    </Text>
-                    <IconButton
-                      icon="plus"
-                      size={35}
-                      style={styles.iconButton}
-                      onPress={() => handleTicketCountChange(item.name, 1)}
-                    />
-                  </View>
-                </View>
-              </View>
-            );
           }
+          return null;
         }}
       />
     </View>
@@ -181,7 +88,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 25,
     marginVertical: 20,
-    backgroundColor: "#141414",
+    backgroundColor: "#bbe",
     alignSelf: "center",
   },
   gridRow: {
@@ -268,4 +175,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventDetails;
+export default TicketDetails;

@@ -1,10 +1,8 @@
 import { getDocs, collection, getDoc } from "firebase/firestore";
 import { FIRESTORE } from "../FirebaseConfig";
 
-
 export const getAllEvents = async () => {
   try {
-
     const eventsCollection = collection(FIRESTORE, "Events");
     const querySnapshot = await getDocs(eventsCollection);
 
@@ -12,35 +10,37 @@ export const getAllEvents = async () => {
     const creatorPromises = [];
     const categoryPromises = [];
 
-
     for (const documentSnapshot of querySnapshot.docs) {
       const event = {
         id: documentSnapshot.id,
         ...documentSnapshot.data(),
       };
 
-      let eventTicketsCollection = collection(FIRESTORE,documentSnapshot.ref.path,"EventTickets")
+      let eventTicketsCollection = collection(
+        FIRESTORE,
+        documentSnapshot.ref.path,
+        "EventTickets"
+      );
 
-      let eventTickets = []
+      let eventTickets = [];
 
-      let eventTicketsCollectionDocs = (await getDocs(eventTicketsCollection)).docs
+      let eventTicketsCollectionDocs = (await getDocs(eventTicketsCollection))
+        .docs;
 
-      for (let eventTicketsDoc of eventTicketsCollectionDocs){
-
+      for (let eventTicketsDoc of eventTicketsCollectionDocs) {
         ticket = {
-          ...eventTicketsDoc.data()
-        }
+          ...eventTicketsDoc.data(),
+        };
 
-        ticket.name = await ((await getDoc(ticket.TicketType)).data()).name
+        ticket.name = await (await getDoc(ticket.TicketType)).data().name;
 
-        eventTickets.push(ticket)
+        eventTickets.push(ticket);
       }
 
-      event.tickets = eventTickets
-
+      event.tickets = eventTickets;
 
       const eventCategoryRef = event.Category;
-      const categoryPromise = getDoc(eventCategoryRef)
+      const categoryPromise = getDoc(eventCategoryRef);
       categoryPromises.push(categoryPromise);
 
       const eventCreatorRef = event.EventCreator;

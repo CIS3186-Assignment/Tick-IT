@@ -30,8 +30,6 @@ export const getAllEvents = async () => {
         ...documentSnapshot.data(),
       };
 
-      console.log("loaded event");
-
       const eventTicketsCollection = collection(
         FIRESTORE,
         documentSnapshot.ref.path,

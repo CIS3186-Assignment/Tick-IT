@@ -4,12 +4,15 @@ import { View, Text, StyleSheet } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
 import { createUserWithEmailAndPassword,updateProfile } from 'firebase/auth';
+import { useNavigation } from '@react-navigation/native';
 
 const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    
+    const navigation = useNavigation();
 
     const signUp = async () => {
         try {
@@ -18,6 +21,7 @@ const Register = () => {
             const user = userCredential.user;
             await updateProfile(user, { displayName: name });
             console.log(user);
+            navigation.navigate("Login")
         } catch (error) {
             // Handle different authentication errors
             switch (error.code) {

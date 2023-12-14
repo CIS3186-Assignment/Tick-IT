@@ -20,6 +20,7 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
             const user = userCredential.user;
             console.log(user);
+            navigation.navigate("EventCatalog")
         } catch (error) {
             // Handle different authentication errors
             switch (error.code) {

@@ -1,26 +1,45 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import BottomNavBar from '../components/BottomNavBar';
+import { Icon } from 'react-native-paper';
+import { onAuthStateChanged, currentUser } from 'firebase/auth';
+import { FIREBASE_AUTH } from '../FirebaseConfig';
 
 const Profile = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
+      if (authUser) {
+        console.log(authUser)
+        setUser(authUser);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414'}}>
-      <Text style={styles.test}>This is the Profile Screen</Text>
+    <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414' }}>
+        <Icon source="account" color="#fff" size={128} />
+        <Text style={styles.test}>{user?.displayName}</Text>
+        <FlatList/> {/* transaction list */}
       <View style={{ flex: 1 }}>
-        {/* Your main content goes here */}
+      
+        {/* Add your FlatList content here */}
+
       </View>
-      <BottomNavBar currentScreen="Profile"/>
+      <BottomNavBar currentScreen="Profile" />
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   test: {
     color: '#fff',
     textAlign: 'center',
-    marginTop: '100%' 
-  }
+    marginTop: '100%',
+  },
 });
 
 export default Profile;

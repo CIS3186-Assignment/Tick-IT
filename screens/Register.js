@@ -1,10 +1,11 @@
 // SignUpScreen.js
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
 import { createUserWithEmailAndPassword,updateProfile } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -42,15 +43,23 @@ const Register = () => {
     };
 
     return (
-        <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414' }}>
-            <View style={{ flex: 1 }}>
-                <TextInput label="Name" value={name} onChangeText={setName} />
-                <TextInput label="Email" value={email} onChangeText={setEmail} />
-                <TextInput label="Password" secureTextEntry={true} value={password} onChangeText={setPassword} />
-                {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
-                <Button onPress={signUp} textColor='#fff'>Sign Up</Button>
+        <KeyboardAwareScrollView
+            style={{ flex: 0, backgroundColor: '#141414' }}
+            contentContainerStyle={{ flex: 1 }}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            scrollEnabled={false}
+        >
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                
+                <Image source={require('../assets/logo.png')}style={styles.Image}/>
+                <Text style={styles.register}>Register</Text>
+                <TextInput label="Name" value={name} onChangeText={setName} style={styles.input}/>
+                <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input}/>
+                <TextInput label="Password" secureTextEntry={true} value={password} onChangeText={setPassword} style={styles.input}/>
+                    {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+                <Button onPress={signUp} textColor='#fff' style={styles.signUp}>Sign Up</Button>    
             </View>
-        </View>
+        </KeyboardAwareScrollView>
     );
 };
 
@@ -58,9 +67,42 @@ const styles = StyleSheet.create({
     errorText: {
         color: 'red',
         marginTop: 10,
-        marginBottom: 10,
+        paddingHorizontal: 20,
+        textAlign: 'center',
     },
-    // ... your other styles
+    Image: {
+        alignSelf: 'center', 
+        width: 400, 
+        height: 200,
+        borderRadius: 50, 
+        marginBottom: 50
+    },
+    input: {
+        height: 70,
+        width: '80%',  
+        marginHorizontal: '10%',  
+        marginVertical: 15,
+        borderRadius: 20,
+        borderTopStartRadius: 20,
+        borderTopRightRadius: 20,
+    },
+    register:{
+        color: '#fff',
+        fontSize: 25,
+        alignContent: 'center',
+        paddingHorizontal: '25%',
+        marginBottom: 10
+    },
+    signUp: {
+        backgroundColor: '#253354',
+        marginHorizontal: '10%',  
+        marginTop: 20, 
+        paddingVertical: 10, 
+        paddingHorizontal: 20,
+        borderRadius: 30, 
+        justifyContent: 'center', 
+        alignItems: 'center',  
+    }
 });
 
 export default Register;

@@ -9,9 +9,12 @@ import EventDetails from "./screens/EventDetails";
 import EventCatalog from "./screens/EventCatalog";
 import Profile from "./screens/Profile";
 import Wallet from "./screens/Wallet";
+import EventCreator from "./screens/EventCreator";
 import Checkout from "./screens/Checkout"; // Import the Checkout component
 import Login from './screens/Login';
 import Register from './screens/Register';
+import Receipt from "./screens/Receipt";
+import TicketDetails from "./screens/TicketQRCode";
 
 const Stack = createStackNavigator();
 
@@ -28,6 +31,11 @@ const App = () => {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
+                name="EventCreator"
+                component={EventCreator}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
                 name="Profile"
                 component={Profile}
                 options={{ headerShown: false }}
@@ -35,6 +43,11 @@ const App = () => {
               <Stack.Screen
                 name="Wallet"
                 component={Wallet}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="TicketDetails"
+                component={TicketDetails}
                 options={{ headerShown: false }}
               />
               <Stack.Screen
@@ -55,6 +68,8 @@ const App = () => {
               <Stack.Screen
                 name="Register"
                 component={Register}
+                name="Receipt"
+                component={Receipt}
                 options={{ headerShown: false }}
               />
             </Stack.Navigator>

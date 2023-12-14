@@ -1,4 +1,3 @@
-// LoginScreen.js
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
@@ -42,15 +41,15 @@ const Login = () => {
             scrollEnabled={false}
         >
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Image source={require('../assets/logo.png')}style={styles.Image}/>
+                <Image source={require('../assets/logo.png')}style={styles.Image} accessibilityLabel="Tick-IT"/>
                 <Text style={styles.login}>Log In</Text>
-                <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.inputs} />
-                <TextInput label="Password" secureTextEntry={true} value={password} onChangeText={setPassword} style={styles.inputs} />
+                <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.inputs} accessibilityLabel="Enter email"/>
+                <TextInput label="Password" secureTextEntry={true} value={password} onChangeText={setPassword} style={styles.inputs} accessibilityLabel="Enter password"/>
                     {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
-                <Button onPress={signIn} textColor='#fff' style={styles.signIn}>
+                <Button onPress={signIn} textColor='#fff' style={styles.signIn} accessibilityLabel="Sign In">
                     <Text style={styles.signInText}>Sign In</Text>
                 </Button>
-                <Button onPress={() => navigation.navigate('Register')} textColor='#fff'>
+                <Button onPress={() => navigation.navigate('Register')} textColor='#fff' accessibilityLabel="Register">
                     <Text style={styles.noAccount}>No account? Sign Up</Text>
                 </Button>
             </View>

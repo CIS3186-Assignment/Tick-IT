@@ -43,9 +43,29 @@ const EventCreator = ({ route }) => {
             <Text style={styles.test}>Phone Number: {creator.phone}</Text>
             <Text style={styles.test}>Email Address: {creator.email}</Text>
             <View>
-                <Button mode="contained" icon="phone" onPress={callPhone}>Call</Button>
-                <Button mode="contained" icon="email" onPress={openEmail}>Send an Email</Button>
-            </View>
+            <Button
+                mode="contained"
+                icon="phone"
+                onPress={callPhone}
+                contentStyle={styles.buttonContent}
+                accessibilityLabel={`Call ${creator.name}`}
+                accessibilityRole="button"
+                accessibilityState={{ disabled: false }}
+            >
+                Call
+            </Button>
+            <Button
+                mode="contained"
+                icon="email"
+                onPress={openEmail}
+                contentStyle={styles.buttonContent}
+                accessibilityLabel={`Send an Email to ${creator.name}`}
+                accessibilityRole="button"
+                accessibilityState={{ disabled: false }}
+            >
+                Send an Email
+            </Button>
+        </View>
         </View>
         </View>
     );

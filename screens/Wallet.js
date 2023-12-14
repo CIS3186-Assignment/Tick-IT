@@ -55,11 +55,12 @@ const Wallet = () => {
 
               if (showDate) {
                 setLastRenderedDate(formattedDate);
-                return <Text style={styles.dateText}>{formattedDate}</Text>;
+                return <Text style={styles.dateText} accessibilityLabel={`Date: ${formattedDate}`}>{formattedDate}</Text>;
               }
 
               return (
                 <WalletCard
+                  accessibilityLabel={`Event Card for ${eventName}`}
                   key={ticket.id}
                   event={{
                     name: eventName,

@@ -60,6 +60,7 @@ const TicketDetails = ({ route }) => {
                       size={35}
                       iconColor={MD3Colors.error60}
                       style={styles.iconButton}
+                      accessibilityLabel="Location"
                     />
                   )}
                 </View>

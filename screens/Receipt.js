@@ -20,6 +20,7 @@ const Receipt = () => {
             <Button
             onPress={() => navigation.navigate("EventCatalog")}
             title="Go back to Catalog"
+            accessibilityLabel="Go back to Catalog"
             />
             </View>
         </View>

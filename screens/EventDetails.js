@@ -139,6 +139,7 @@ const EventDetails = ({ route }) => {
                       iconColor={MD3Colors.error60}
                       style={styles.iconButton}
                       onPress={openGoogleMaps}
+                      accessibilityLabel="Open Google Maps"
                     />
                   )}
                 </View>
@@ -157,6 +158,7 @@ const EventDetails = ({ route }) => {
                       size={35}
                       style={styles.iconButton}
                       onPress={() => handleTicketCountChange(item.name, -1)}
+                      accessibilityLabel={`Decrease ${item.name} count`}
                     />
                     <Text style={styles.ticketCount}>
                       {ticketCounts[item.name] || 0}
@@ -166,6 +168,7 @@ const EventDetails = ({ route }) => {
                       size={35}
                       style={styles.iconButton}
                       onPress={() => handleTicketCountChange(item.name, 1)}
+                      accessibilityLabel={`Increase ${item.name} count`}
                     />
                   </View>
                 </View>

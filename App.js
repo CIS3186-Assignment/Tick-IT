@@ -10,7 +10,9 @@ import EventCatalog from "./screens/EventCatalog";
 import Profile from "./screens/Profile";
 import Wallet from "./screens/Wallet";
 import EventCreator from "./screens/EventCreator";
-import Checkout from "./screens/Checkout";
+import Checkout from "./screens/Checkout"; // Import the Checkout component
+import Login from './screens/Login';
+import Register from './screens/Register';
 import Receipt from "./screens/Receipt";
 import TicketQRCode from "./screens/TicketQRCode";
 
@@ -22,7 +24,7 @@ const App = () => {
       <PaperProvider>
         <StripeProvider publishableKey="pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC">
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="EventCatalog">
+            <Stack.Navigator initialRouteName="Login">
               <Stack.Screen
                 name="EventCatalog"
                 component={EventCatalog}
@@ -59,8 +61,13 @@ const App = () => {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
-                name="Receipt"
-                component={Receipt}
+                name="Login"
+                component={Login}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Register"
+                component={Register}
                 options={{ headerShown: false }}
               />
             </Stack.Navigator>

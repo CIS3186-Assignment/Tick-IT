@@ -51,9 +51,9 @@ const TicketDetails = ({ route }) => {
           if (item.type === "grid") {
             return (
               <View style={styles.gridRow}>
-                <Text style={styles.gridLabel}>{item.label}:</Text>
+                <Text style={styles.gridLabel} allowFontScaling={true}>{item.label}:</Text>
                 <View style={styles.gridValueContainer}>
-                  <Text style={styles.gridValue}>{item.value}</Text>
+                  <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
                   {item.withIcon && (
                     <IconButton
                       icon="map-marker"

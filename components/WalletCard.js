@@ -30,7 +30,7 @@ const WalletCard = ({ event, imageURL }) => {
             />
           )}
           <View style={styles.textContainer}>
-            <Text style={styles.eventName}>{event?.name}</Text>
+            <Text style={styles.eventName} allowFontScaling={true}>{event?.name}</Text>
             {renderInfo("map-marker", event?.location)}
             {renderInfo(
               "account",
@@ -59,7 +59,7 @@ const renderInfo = (icon, text, onPress) => (
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`Go to ${text}`}>
-      <Text style={styles.infoText}>{text}</Text>
+      <Text style={styles.infoText} allowFontScaling={true}>{text}</Text>
     </TouchableOpacity>
   </View>
 );

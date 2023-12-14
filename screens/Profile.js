@@ -22,7 +22,7 @@ const Profile = () => {
   return (
     <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414' }}>
         <Icon source="account" color="#fff" size={128} />
-        <Text style={styles.test}>{user?.displayName}</Text>
+        <Text style={styles.test} allowFontScaling={true}>{user?.displayName}</Text>
         <FlatList/> {/* transaction list */}
       <View style={{ flex: 1 }}>
       

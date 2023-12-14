@@ -9,7 +9,7 @@ const TopAppBar = ({ title }) => {
   return (
     <Appbar.Header style={styles.container}>
       <Appbar.BackAction iconColor="#FFFFFF" style={styles.back} onPress={() => navigation.goBack()} accessibilityLabel="Go back" />
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title} allowFontScaling={true}>{title}</Text>
     </Appbar.Header>
   );
 };

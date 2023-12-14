@@ -93,7 +93,7 @@ const EventDetails = ({ route }) => {
         }
         ListFooterComponent={
           <View>
-            <Text style={styles.total}>
+            <Text style={styles.total} allowFontScaling={true}>
               {`Total: €${event.tickets.reduce(
                 (total, ticket) =>
                   total + (ticketCounts[ticket.name] || 0) * ticket.price,
@@ -104,7 +104,7 @@ const EventDetails = ({ route }) => {
               style={styles.buttonContainer}
               onPress={handlePurchasePress}
             >
-              <Text style={styles.buttonText}>Purchase</Text>
+              <Text style={styles.buttonText} allowFontScaling={true}>Purchase</Text>
             </TouchableOpacity>
           </View>
         }
@@ -129,9 +129,9 @@ const EventDetails = ({ route }) => {
           if (item.type === "grid") {
             return (
               <View style={styles.gridRow}>
-                <Text style={styles.gridLabel}>{item.label}:</Text>
+                <Text style={styles.gridLabel} allowFontScaling={true}>{item.label}:</Text>
                 <View style={styles.gridValueContainer}>
-                  <Text style={styles.gridValue}>{item.value}</Text>
+                  <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
                   {item.withIcon && (
                     <IconButton
                       icon="map-marker"
@@ -149,7 +149,7 @@ const EventDetails = ({ route }) => {
             return (
               <View style={styles.ticketContainer}>
                 <View style={styles.ticketRow}>
-                  <Text style={styles.ticketLabel}>
+                  <Text style={styles.ticketLabel} allowFontScaling={true}>
                     {item.name} (€{item.price})
                   </Text>
                   <View style={styles.ticketCountContainer}>
@@ -160,7 +160,7 @@ const EventDetails = ({ route }) => {
                       onPress={() => handleTicketCountChange(item.name, -1)}
                       accessibilityLabel={`Decrease ${item.name} count`}
                     />
-                    <Text style={styles.ticketCount}>
+                    <Text style={styles.ticketCount} allowFontScaling={true}>
                       {ticketCounts[item.name] || 0}
                     </Text>
                     <IconButton

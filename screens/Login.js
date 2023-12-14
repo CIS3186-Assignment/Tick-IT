@@ -42,15 +42,15 @@ const Login = () => {
         >
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Image source={require('../assets/logo.png')}style={styles.Image} accessibilityLabel="Tick-IT"/>
-                <Text style={styles.login}>Log In</Text>
+                <Text style={styles.login} allowFontScaling={true}>Log In</Text>
                 <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.inputs} accessibilityLabel="Enter email"/>
                 <TextInput label="Password" secureTextEntry={true} value={password} onChangeText={setPassword} style={styles.inputs} accessibilityLabel="Enter password"/>
                     {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
                 <Button onPress={signIn} textColor='#fff' style={styles.signIn} accessibilityLabel="Sign In">
-                    <Text style={styles.signInText}>Sign In</Text>
+                    <Text style={styles.signInText} allowFontScaling={true}>Sign In</Text>
                 </Button>
                 <Button onPress={() => navigation.navigate('Register')} textColor='#fff' accessibilityLabel="Register">
-                    <Text style={styles.noAccount}>No account? Sign Up</Text>
+                    <Text style={styles.noAccount} allowFontScaling={true}>No account? Sign Up</Text>
                 </Button>
             </View>
         </KeyboardAwareScrollView>

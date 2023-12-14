@@ -50,7 +50,7 @@ const EventCard = ({ event, imageURL }) => {
             />
           )}
           <View style={styles.textContainer}>
-            <Text style={styles.eventName}>{event?.name}</Text>
+            <Text style={styles.eventName} allowFontScaling={true}>{event?.name}</Text>
             <View style={styles.infoContainer}>
               <IconButton
                 icon="map-marker"
@@ -59,7 +59,7 @@ const EventCard = ({ event, imageURL }) => {
                 iconColor={MD3Colors.neutral100}
                 accessibilityLabel="Event location"
               />
-              <Text style={styles.infoText}>{event?.location_name}</Text>
+              <Text style={styles.infoText} allowFontScaling={true}>{event?.location_name}</Text>
             </View>
             <View style={styles.infoContainer}>
               <IconButton
@@ -73,7 +73,7 @@ const EventCard = ({ event, imageURL }) => {
                 onPress={goToEventCreator}
                 accessibilityRole="link"
                 accessibilityLabel={`View details for ${event.eventCreator.name}`}>
-                <Text style={styles.infoText}>{event?.eventCreator?.name}</Text>
+                <Text style={styles.infoText} allowFontScaling={true}>{event?.eventCreator?.name}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.infoContainer}>
@@ -84,7 +84,7 @@ const EventCard = ({ event, imageURL }) => {
                 iconColor={MD3Colors.neutral100}
                 accessibilityLabel="Event price range"
               />
-              <Text style={styles.infoText}>{getPriceRange()}</Text>
+              <Text style={styles.infoText} allowFontScaling={true}>{getPriceRange()}</Text>
             </View>
           </View>
         </Card.Content>

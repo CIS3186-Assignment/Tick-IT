@@ -35,7 +35,10 @@ const EventCard = ({ event, imageURL }) => {
   };
 
   return (
-    <TouchableOpacity onPress={handleCardPress}>
+    <TouchableOpacity 
+      onPress={handleCardPress}
+      accessibilityRole="button"
+      accessibilityLabel={`View details for ${event.name}`}>
       <Card style={styles.cardContent}>
         <Card.Content style={styles.content}>
           {imageURL && (
@@ -43,6 +46,7 @@ const EventCard = ({ event, imageURL }) => {
               style={styles.image}
               source={{ uri: imageURL }}
               resizeMode="contain"
+              accessibilityLabel="Event Image"
             />
           )}
           <View style={styles.textContainer}>
@@ -53,6 +57,7 @@ const EventCard = ({ event, imageURL }) => {
                 size={18}
                 style={styles.iconButton}
                 iconColor={MD3Colors.neutral100}
+                accessibilityLabel="Event location"
               />
               <Text style={styles.infoText}>{event?.location_name}</Text>
             </View>
@@ -62,8 +67,12 @@ const EventCard = ({ event, imageURL }) => {
                 size={18}
                 style={styles.iconButton}
                 iconColor={MD3Colors.neutral100}
+                accessibilityLabel="Event creator"
               />
-              <TouchableOpacity onPress={goToEventCreator}>
+              <TouchableOpacity 
+                onPress={goToEventCreator}
+                accessibilityRole="link"
+                accessibilityLabel={`View details for ${event.eventCreator.name}`}>
                 <Text style={styles.infoText}>{event?.eventCreator?.name}</Text>
               </TouchableOpacity>
             </View>
@@ -73,6 +82,7 @@ const EventCard = ({ event, imageURL }) => {
                 size={18}
                 style={styles.iconButton}
                 iconColor={MD3Colors.neutral100}
+                accessibilityLabel="Event price range"
               />
               <Text style={styles.infoText}>{getPriceRange()}</Text>
             </View>

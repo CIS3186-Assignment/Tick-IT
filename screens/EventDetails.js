@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -6,6 +6,7 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
+  Linking
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
@@ -15,6 +16,10 @@ const EventDetails = ({ route }) => {
   const { event } = route.params;
   const navigation = useNavigation();
   const details = event.details || {};
+
+  useEffect(() => {
+    console.log(event);
+  }, []);
 
   const [ticketCounts, setTicketCounts] = useState({});
 
@@ -27,6 +32,13 @@ const EventDetails = ({ route }) => {
       [ticketType]: newCount,
     }));
   };
+
+  const openGoogleMaps = () => {
+    const latitude = event.location_geopoint.latitude;
+    const longitude = event.location_geopoint.longitude;
+    const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+    Linking.openURL(url);
+  }
 
   const handlePurchasePress = () => {
     const isAnyTicketSelected = Object.values(ticketCounts).some(
@@ -126,7 +138,7 @@ const EventDetails = ({ route }) => {
                       size={35}
                       iconColor={MD3Colors.error60}
                       style={styles.iconButton}
-                      onPress={handlePurchasePress} // Update the onPress handler
+                      onPress={openGoogleMaps}
                     />
                   )}
                 </View>

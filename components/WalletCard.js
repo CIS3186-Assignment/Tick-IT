@@ -3,11 +3,15 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Card, IconButton, MD3Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
-const WalletCard = ({ event, imageURL }) => {
+const WalletCard = ({ event, imageURL, ticket }) => {
   const navigation = useNavigation();
 
   const handleCardPress = () => {
-    navigation.navigate("TicketDetails", { event, imageURL });
+    navigation.navigate("TicketQRCode", {
+      ticket,
+      event,
+      imageURL,
+    });
   };
 
   const goToEventCreator = () => {

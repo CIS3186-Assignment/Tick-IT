@@ -10,11 +10,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
-import QRCode from 'react-native-qrcode-svg';
+import QRCode from "react-native-qrcode-svg";
 
-
-const TicketDetails = ({ route }) => {
-  const { event, imageURL } = route.params;
+const TicketQRCode = ({ route }) => {
+  const { ticket, event, imageURL } = route.params;
   const navigation = useNavigation();
 
   return (
@@ -72,7 +71,7 @@ const TicketDetails = ({ route }) => {
         }}
       />
       <QRCode
-        value={event.id}
+        value={ticket.id}
         size={200}
         color="black"
         backgroundColor="white"
@@ -183,4 +182,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TicketDetails;
+export default TicketQRCode;

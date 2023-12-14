@@ -3,16 +3,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StripeProvider } from "@stripe/stripe-react-native"; // Import StripeProvider
+import { StripeProvider } from "@stripe/stripe-react-native";
 
 import EventDetails from "./screens/EventDetails";
 import EventCatalog from "./screens/EventCatalog";
 import Profile from "./screens/Profile";
 import Wallet from "./screens/Wallet";
 import EventCreator from "./screens/EventCreator";
-import Checkout from "./screens/Checkout"; // Import the Checkout component
+import Checkout from "./screens/Checkout";
 import Receipt from "./screens/Receipt";
-import TicketDetails from "./screens/TicketQRCode";
+import TicketQRCode from "./screens/TicketQRCode";
 
 const Stack = createStackNavigator();
 
@@ -44,8 +44,8 @@ const App = () => {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
-                name="TicketDetails"
-                component={TicketDetails}
+                name="TicketQRCode"
+                component={TicketQRCode}
                 options={{ headerShown: false }}
               />
               <Stack.Screen

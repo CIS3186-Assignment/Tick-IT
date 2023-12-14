@@ -86,6 +86,7 @@ const Wallet = () => {
                     price: ticket.price || "Event Price",
                   }}
                   imageURL={imageURL}
+                  ticket={ticket}
                 />
               );
             })}

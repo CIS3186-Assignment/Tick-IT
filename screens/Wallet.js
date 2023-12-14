@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, Text } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { getUserBookedEvents } from "../services/WalletService";
 import { fetchImagesForEvents } from "../services/WalletService";
 import BottomNavBar from "../components/BottomNavBar";
@@ -8,6 +9,7 @@ import WalletCard from "../components/WalletCard";
 const Wallet = () => {
   const [bookedEvents, setBookedEvents] = useState([]);
   const [lastRenderedDate, setLastRenderedDate] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBookedEvents = async () => {
@@ -20,11 +22,21 @@ const Wallet = () => {
         setBookedEvents(eventsWithImages);
       } catch (error) {
         console.error("Error fetching booked events:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchBookedEvents();
   }, []);
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating={true} size="large" color="#FFFFFF" />
+      </View>
+    );
+  }
 
   return (
     <View style={{ ...styles.container, backgroundColor: "#141414" }}>
@@ -74,6 +86,7 @@ const Wallet = () => {
                     price: ticket.price || "Event Price",
                   }}
                   imageURL={imageURL}
+                  ticket={ticket}
                 />
               );
             })}
@@ -99,6 +112,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "800",
     marginBottom: 15,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#141414",
   },
 });
 

@@ -68,8 +68,6 @@ const App = () => {
               <Stack.Screen
                 name="Register"
                 component={Register}
-                name="Receipt"
-                component={Receipt}
                 options={{ headerShown: false }}
               />
             </Stack.Navigator>

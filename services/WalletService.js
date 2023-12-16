@@ -139,7 +139,7 @@ export const getUserBookedEvents = async (userId) => {
   }
 };
 
-export const addBookingToUser = async (userId,event,ticketCounts,totalAmount)=>{
+export const addBookingToUser = async (userId,event,ticketCounts)=>{
   const userDocRef = doc(FIRESTORE, "Users", userId);
   const userDoc = await getDoc(userDocRef);
 
@@ -160,25 +160,19 @@ export const addBookingToUser = async (userId,event,ticketCounts,totalAmount)=>{
   };
 
 
-  const newBookingRef = addDoc(bookingsCollectionRef, bookingData);
-
-  console.log("new booking ref",(await newBookingRef).id)
+  const newBookingRef = await addDoc(bookingsCollectionRef, bookingData);
 
   const bookingTicketCollectionRef = collection(
     FIRESTORE,
     "Users",
     userId,
     "Bookings",
-    await(newBookingRef).id,
-    "BookingTickets"
+    newBookingRef.id,
+    "BookingTicket"
   );
 
-  console.log("booking ticket collection ref",bookingTicketCollectionRef)
 
   bookingTickets = [];
-
-  console.log("ticket counts",ticketCounts)
-  console.log("ticket count keys",Object.keys(ticketCounts))
 
   for (const ticketKey of Object.keys(ticketCounts)) {
     const ticketData = {
@@ -190,11 +184,9 @@ export const addBookingToUser = async (userId,event,ticketCounts,totalAmount)=>{
     }
   }
 
-  console.log("booking tickets",bookingTickets)
 
   for (const ticket of bookingTickets) {
     await addDoc(bookingTicketCollectionRef, ticket);
-    console.log("booking ticket added")
   }
 
   

@@ -1,5 +1,5 @@
 import { ref as storageRef, getDownloadURL } from "firebase/storage";
-import { getDoc, doc, getDocs, collection } from "firebase/firestore";
+import { getDoc, doc, getDocs, collection, addDoc } from "firebase/firestore";
 import { FIRESTORE, STORAGE } from "../FirebaseConfig";
 
 export const fetchImagesForEvents = async (events) => {
@@ -138,5 +138,67 @@ export const getUserBookedEvents = async (userId) => {
     throw error;
   }
 };
+
+export const addBookingToUser = async (userId,event,ticketCounts,totalAmount)=>{
+  const userDocRef = doc(FIRESTORE, "Users", userId);
+  const userDoc = await getDoc(userDocRef);
+
+  if (!userDoc.exists) {
+    await userDocRef.set({});
+  }
+
+  const bookingsCollectionRef = collection(
+    FIRESTORE,
+    "Users",
+    userId,
+    "Bookings"
+  );
+
+  const bookingData = {
+    bookingDate: new Date(),
+    event: doc(FIRESTORE, "Events", event.id),
+  };
+
+
+  const newBookingRef = addDoc(bookingsCollectionRef, bookingData);
+
+  console.log("new booking ref",(await newBookingRef).id)
+
+  const bookingTicketCollectionRef = collection(
+    FIRESTORE,
+    "Users",
+    userId,
+    "Bookings",
+    await(newBookingRef).id,
+    "BookingTickets"
+  );
+
+  console.log("booking ticket collection ref",bookingTicketCollectionRef)
+
+  bookingTickets = [];
+
+  console.log("ticket counts",ticketCounts)
+  console.log("ticket count keys",Object.keys(ticketCounts))
+
+  for (const ticketKey of Object.keys(ticketCounts)) {
+    const ticketData = {
+      eventTicket: event.tickets.find(ticket => ticket.name === ticketKey)
+    };
+
+    for (let i = 0; i < ticketCounts[ticketKey]; i++) {
+      bookingTickets.push(ticketData);
+    }
+  }
+
+  console.log("booking tickets",bookingTickets)
+
+  for (const ticket of bookingTickets) {
+    await addDoc(bookingTicketCollectionRef, ticket);
+    console.log("booking ticket added")
+  }
+
+  
+  
+}
 
 export default { fetchImagesForEvents, getUserBookedEvents };

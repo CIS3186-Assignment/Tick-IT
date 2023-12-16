@@ -70,6 +70,11 @@ const App = () => {
                 component={Register}
                 options={{ headerShown: false }}
               />
+              <Stack.Screen
+                name="Receipt"
+                component={Receipt}
+                options={{ headerShown: false }}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </StripeProvider>

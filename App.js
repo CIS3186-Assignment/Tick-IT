@@ -11,8 +11,8 @@ import Profile from "./screens/Profile";
 import Wallet from "./screens/Wallet";
 import EventCreator from "./screens/EventCreator";
 import Checkout from "./screens/Checkout"; // Import the Checkout component
-import Login from './screens/Login';
-import Register from './screens/Register';
+import Login from "./screens/Login";
+import Register from "./screens/Register";
 import Receipt from "./screens/Receipt";
 import TicketQRCode from "./screens/TicketQRCode";
 
@@ -58,6 +58,11 @@ const App = () => {
               <Stack.Screen
                 name="Checkout"
                 component={Checkout}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Receipt"
+                component={Receipt}
                 options={{ headerShown: false }}
               />
               <Stack.Screen

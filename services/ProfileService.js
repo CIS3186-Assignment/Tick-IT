@@ -2,36 +2,39 @@ import { ref as storageRef, getDownloadURL } from "firebase/storage";
 import { getDoc, doc, getDocs, collection } from "firebase/firestore";
 import { FIRESTORE, STORAGE } from "../FirebaseConfig";
 
-export const fetchImagesForEvents = async (events) => {
+export const fetchImagesForEvents = async (bookingTickets) => {
   try {
-    const eventsWithImages = await Promise.all(
-      events.map(async (event) => {
+    const bookingTicketsWithImages = await Promise.all(
+      bookingTickets.map(async (ticket) => {
         try {
-          if (!event.eventDetails || !event.eventDetails.image_id) {
-            console.log("No image_id for event:", event.id);
-            return { ...event, imageURL: null };
+          if (!ticket.eventTicket || !ticket.eventTicket.image_id) {
+            return { ...ticket, imageURL: null };
           }
 
           const imageRef = storageRef(
             STORAGE,
-            `images/${event.eventDetails.image_id}.png`
+            `images/${ticket.eventTicket.image_id}.png`
           );
           const imageURL = await getDownloadURL(imageRef);
 
-          console.log("Image URL retrieved for event:", event.id);
-          event.imageURL = imageURL;
+          console.log("Image URL retrieved for ticket:", ticket.id);
+          ticket.imageURL = imageURL;
 
-          return event;
+          return ticket;
         } catch (error) {
-          console.error("Error fetching image URL for event:", event.id, error);
-          return { ...event, imageURL: null };
+          console.error(
+            "Error fetching image URL for ticket:",
+            ticket.id,
+            error
+          );
+          return { ...ticket, imageURL: null };
         }
       })
     );
 
-    return eventsWithImages;
+    return bookingTicketsWithImages;
   } catch (error) {
-    console.error("Error fetching images for events:", error);
+    console.error("Error fetching images for booking tickets:", error);
     throw error;
   }
 };
@@ -57,13 +60,33 @@ export const getUserBookedEvents = async (userId) => {
     const bookedEvents = [];
 
     for (const bookingDoc of bookingsSnapshot.docs) {
-      console.log("Fetching details for booking:", bookingDoc.id);
       const booking = bookingDoc.data();
-      const bookingEvents = await fetchBookingEventsDetails(booking);
+
+      const bookingTicketCollectionRef = collection(
+        FIRESTORE,
+        "Users",
+        userId,
+        "Bookings",
+        bookingDoc.id,
+        "BookingTicket"
+      );
+      const bookingTicketSnapshot = await getDocs(bookingTicketCollectionRef);
+
+      if (bookingTicketSnapshot.empty) {
+        console.error("BookingTicket not found for bookingId:", bookingDoc.id);
+        continue;
+      }
+
+      const bookingTickets = await fetchImagesForEvents(
+        bookingTicketSnapshot.docs.map((ticketDoc) => ({
+          id: ticketDoc.id,
+          ...ticketDoc.data(),
+        }))
+      );
 
       bookedEvents.push({
         id: bookingDoc.id,
-        eventDetails: bookingEvents,
+        eventDetails: bookingTickets,
       });
     }
 
@@ -73,48 +96,6 @@ export const getUserBookedEvents = async (userId) => {
     console.error("Error fetching booked events:", error);
     throw error;
   }
-};
-
-const fetchBookingEventsDetails = async (booking) => {
-  const bookingEvents = [];
-
-  for (const eventDetails of booking.eventDetails || []) {
-    console.log("Fetching details for event:", eventDetails.eventId);
-
-    try {
-      const eventRef = doc(FIRESTORE, "Events", eventDetails.eventId);
-      const eventDoc = await getDoc(eventRef);
-
-      if (eventDoc.exists()) {
-        console.log("Event found for eventId:", eventDetails.eventId);
-        const eventCreatorRef = eventDoc.data().EventCreator;
-        const eventCreatorDoc = await getDoc(eventCreatorRef);
-        const eventCreator = eventCreatorDoc.exists()
-          ? eventCreatorDoc.data()
-          : null;
-
-        const eventWithImage = await fetchImagesForEvents([
-          {
-            id: booking.id,
-            eventId: eventDetails.eventId,
-            eventDetails: {
-              ...eventDoc.data(),
-              eventCreator,
-            },
-            ...eventDetails,
-          },
-        ]);
-
-        bookingEvents.push(eventWithImage[0]);
-      } else {
-        console.error("Event not found for eventId:", eventDetails.eventId);
-      }
-    } catch (error) {
-      console.error("Error fetching event details:", error);
-    }
-  }
-
-  return bookingEvents;
 };
 
 export default { fetchImagesForEvents, getUserBookedEvents };

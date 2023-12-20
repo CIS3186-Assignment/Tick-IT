@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import BottomNavBar from "../components/BottomNavBar";
+import { View, Text, StyleSheet, FlatList, Image } from "react-native";
 import { Icon } from "react-native-paper";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
+import BottomNavBar from "../components/BottomNavBar";
 import {
   getUserBookedEvents,
   fetchImagesForEvents,
@@ -14,41 +14,45 @@ const Profile = () => {
   const [bookedEvents, setBookedEvents] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (authUser) => {
       if (authUser) {
         setUser(authUser);
 
-        getUserBookedEvents("T08aFSTUuGoc5yUdh9Sy") //ToDo replace with real ID
-          .then(async (events) => {
-            const eventsWithImages = await fetchImagesForEvents(events);
-            setBookedEvents(eventsWithImages);
-          })
-          .catch((error) => {
-            console.error("Error fetching booked events:", error);
-          });
+        try {
+          const events = await getUserBookedEvents("T08aFSTUuGoc5yUdh9Sy"); // ToDo: Replace with real ID
+          const eventsWithImages = await fetchImagesForEvents(events);
+          setBookedEvents(eventsWithImages);
+        } catch (error) {
+          console.error("Error fetching booked events:", error);
+        }
       }
     });
 
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
   return (
-    <View style={{ flex: 1, position: "relative", backgroundColor: "#141414" }}>
+    <View style={styles.container}>
       <Icon name="account" color="#fff" size={128} />
-      <Text style={styles.test}>{user?.displayName}</Text>
-      <Text style={styles.test}>User ID: {user?.uid}</Text>
+      <Text style={styles.text}>{user?.displayName}</Text>
+      <Text style={styles.text}>User ID: {user?.uid}</Text>
       <FlatList
         data={bookedEvents}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View>
             <Text>{item.id}</Text>
-            {item.imageURL && (
-              <Image
-                source={{ uri: item.imageURL }}
-                style={{ width: 100, height: 100 }}
-              />
-            )}
+            {item.eventDetails.map((eventDetail) => (
+              <View key={eventDetail.id}>
+                <Text>{eventDetail.eventDetails?.name}</Text>
+                {eventDetail.imageURL && (
+                  <Image
+                    source={{ uri: eventDetail.imageURL }}
+                    style={{ width: 100, height: 100 }}
+                  />
+                )}
+              </View>
+            ))}
           </View>
         )}
       />
@@ -58,7 +62,12 @@ const Profile = () => {
 };
 
 const styles = StyleSheet.create({
-  test: {
+  container: {
+    flex: 1,
+    position: "relative",
+    backgroundColor: "#141414",
+  },
+  text: {
     color: "#fff",
     textAlign: "center",
     marginTop: "2%",

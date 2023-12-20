@@ -38,10 +38,10 @@ const EventCreator = ({ route }) => {
 
         <View style={{ flex: 1 }}>
             <TopAppBar title={creator.name}/>
-            <Text style={styles.test}>Name: {creator.name}</Text>
+            {/* <Text style={styles.test}>Name: {creator.name}</Text>
             <Text style={styles.test}>Address: {creator.address}</Text>
             <Text style={styles.test}>Phone Number: {creator.phone}</Text>
-            <Text style={styles.test}>Email Address: {creator.email}</Text>
+            <Text style={styles.test}>Email Address: {creator.email}</Text> */}
             <View>
                 <Button mode="contained" icon="phone" onPress={callPhone}>Call</Button>
                 <Button mode="contained" icon="email" onPress={openEmail}>Send an Email</Button>

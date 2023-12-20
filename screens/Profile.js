@@ -4,6 +4,8 @@ import { Icon } from "react-native-paper";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import BottomNavBar from "../components/BottomNavBar";
+import TransactionEntry from "../components/TransactionEntry";
+
 import {
   getUserBookedEvents,
   fetchImagesForEvents,
@@ -35,26 +37,11 @@ const Profile = () => {
     <View style={styles.container}>
       <Icon name="account" color="#fff" size={128} />
       <Text style={styles.text}>{user?.displayName}</Text>
-      <Text style={styles.text}>User ID: {user?.uid}</Text>
+      <Text style={styles.text}>User ID: {user?.uid}</Text> 
       <FlatList
         data={bookedEvents}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View>
-            <Text>{item.id}</Text>
-            {item.eventDetails.map((eventDetail) => (
-              <View key={eventDetail.id}>
-                <Text>{eventDetail.eventDetails?.name}</Text>
-                {eventDetail.imageURL && (
-                  <Image
-                    source={{ uri: eventDetail.imageURL }}
-                    style={{ width: 100, height: 100 }}
-                  />
-                )}
-              </View>
-            ))}
-          </View>
-        )}
+        renderItem={({ item }) => <TransactionEntry item={item} />}
       />
       <BottomNavBar currentScreen="Profile" />
     </View>

@@ -5,6 +5,7 @@ import { getUserBookedEvents } from "../services/WalletService";
 import { fetchImagesForEvents } from "../services/WalletService";
 import BottomNavBar from "../components/BottomNavBar";
 import WalletCard from "../components/WalletCard";
+import { FIREBASE_AUTH } from "../FirebaseConfig";
 
 const Wallet = () => {
   const [bookedEvents, setBookedEvents] = useState([]);
@@ -14,7 +15,7 @@ const Wallet = () => {
   useEffect(() => {
     const fetchBookedEvents = async () => {
       try {
-        const userId = "T08aFSTUuGoc5yUdh9Sy"; // ToDo: Replace with the actual user ID
+        const userId = FIREBASE_AUTH.currentUser.uid; // ToDo: Replace with the actual user ID
         const events = await getUserBookedEvents(userId);
 
         const eventsWithImages = await fetchImagesForEvents(events);

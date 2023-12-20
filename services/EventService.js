@@ -7,6 +7,7 @@ const fetchEventTickets = async (eventTicketsCollection) => {
   return Promise.all(
     eventTicketsCollectionDocs.docs.map(async (eventTicketsDoc) => {
       const ticket = {
+        id: eventTicketsDoc.id, 
         ...eventTicketsDoc.data(),
       };
 

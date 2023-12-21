@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Tick-IT",
-    "slug": "Tick-IT",
+    "slug": "tick-it",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -34,6 +34,12 @@
           "enableGooglePay": true
         }
       ]
-]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "bcfb07df-edda-45bf-8f8e-81a91539ac7b"
+      }
+    },
+    "owner": "davidbriffa"
   }
 }

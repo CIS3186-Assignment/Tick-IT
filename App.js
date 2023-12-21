@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import messaging from "@react-native-firebase/messaging"; // Import Firebase messaging
 
 import EventDetails from "./screens/EventDetails";
 import EventCatalog from "./screens/EventCatalog";
@@ -11,14 +12,47 @@ import Profile from "./screens/Profile";
 import Wallet from "./screens/Wallet";
 import EventCreator from "./screens/EventCreator";
 import Checkout from "./screens/Checkout"; // Import the Checkout component
-import Login from './screens/Login';
-import Register from './screens/Register';
+import Login from "./screens/Login";
+import Register from "./screens/Register";
 import Receipt from "./screens/Receipt";
 import TicketQRCode from "./screens/TicketQRCode";
+import * as Notifications from "expo-notifications";
+import { registerForPushNotificationsAsync } from "../services/UtilitiesService";
 
-const Stack = createStackNavigator();
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 const App = () => {
+  const [notification, setNotification] = useState(false);
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>
+    if (Platform.OS === "android") {
+      await Notifications.setNotificationChannelAsync("default", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
+      });
+    }
+      setExpoPushToken(token)
+    );
+
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification);
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
     <SafeAreaProvider>
       <PaperProvider>

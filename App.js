@@ -5,13 +5,6 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import * as Notifications from "expo-notifications";
-import { registerForPushNotificationsAsync } from "./services/UtilitiesService";
-import {
-  FIREBASE_APP,
-  FIREBASE_AUTH,
-  STORAGE,
-  imagesRef,
-} from "./FirebaseConfig";
 
 import EventDetails from "./screens/EventDetails";
 import EventCatalog from "./screens/EventCatalog";
@@ -53,6 +46,19 @@ const App = () => {
       subscription.remove();
     };
   }, []);
+
+  const registerForPushNotificationsAsync = async () => {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== "granted") {
+      console.error("Permission to receive push notifications was denied");
+      return;
+    }
+
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log("Expo Push Token:", token);
+
+    return token;
+  };
 
   return (
     <SafeAreaProvider>

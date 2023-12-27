@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
@@ -42,7 +42,7 @@ const EventCard = ({ event, imageURL }) => {
             <Image
               style={styles.image}
               source={{ uri: imageURL }}
-              resizeMode="contain"
+              resizeMode={Platform.OS === 'ios' ? 'cover' : 'contain'}
             />
           )}
           <View style={styles.textContainer}>

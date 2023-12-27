@@ -5,6 +5,8 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import * as Notifications from "expo-notifications";
+import { registerForPushNotificationsAsync } from "./services/NotificationService";
+
 
 import EventDetails from "./screens/EventDetails";
 import EventCatalog from "./screens/EventCatalog";
@@ -28,37 +30,17 @@ Notifications.setNotificationHandler({
 const Stack = createStackNavigator();
 
 const App = () => {
-  const [expoPushToken, setExpoPushToken] = useState("");
-  const [notification, setNotification] = useState(false);
+  useEffect(async () => {
+    await registerForPushNotificationsAsync()
 
-  useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-
-    const subscription = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        setNotification(notification);
-      }
-    );
+    const subscription = Notifications.addNotificationReceivedListener((notification) => {
+      console.log("showed notification",notification);
+    });
 
     return () => {
       subscription.remove();
     };
   }, []);
-
-  const registerForPushNotificationsAsync = async () => {
-    const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== "granted") {
-      console.error("Permission to receive push notifications was denied");
-      return;
-    }
-
-    const token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log("Expo Push Token:", token);
-
-    return token;
-  };
 
   return (
     <SafeAreaProvider>

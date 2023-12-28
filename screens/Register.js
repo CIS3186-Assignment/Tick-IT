@@ -12,7 +12,8 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    
+    const [showPassword, setShowPassword] = useState(false)
+
     const navigation = useNavigation();
 
     const signUp = async () => {
@@ -55,8 +56,15 @@ const Register = () => {
                 <Text style={styles.register}>Register</Text>
                 <TextInput label="Name" value={name} onChangeText={setName} style={styles.input}/>
                 <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input}/>
-                <TextInput label="Password" secureTextEntry={true} value={password} onChangeText={setPassword} style={styles.input}/>
-                    {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+                <TextInput 
+                label="Password" 
+                secureTextEntry={!showPassword} 
+                value={password} 
+                onChangeText={setPassword} 
+                style={styles.input}
+                right={<TextInput.Icon icon={showPassword ? "eye" : "eye-off"} onPress = {() => setShowPassword(!showPassword)}/>}
+                />
+                {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
                 <Button onPress={signUp} textColor='#fff' style={styles.signUp}>Sign Up</Button>    
             </View>
         </KeyboardAwareScrollView>

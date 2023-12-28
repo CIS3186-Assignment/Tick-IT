@@ -11,6 +11,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false)
 
     const navigation = useNavigation();
 
@@ -45,7 +46,14 @@ const Login = () => {
                 <Image source={require('../assets/logo.png')}style={styles.Image}/>
                 <Text style={styles.login}>Log In</Text>
                 <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.inputs} />
-                <TextInput label="Password" secureTextEntry={true} value={password} onChangeText={setPassword} style={styles.inputs} />
+                <TextInput 
+                label="Password" 
+                secureTextEntry={!showPassword} 
+                value={password} 
+                onChangeText={setPassword} 
+                style={styles.inputs} 
+                right={<TextInput.Icon icon={showPassword ? "eye" : "eye-off"} onPress = {() => setShowPassword(!showPassword)}/>}
+                />
                     {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
                 <Button onPress={signIn} textColor='#fff' style={styles.signIn}>
                     <Text style={styles.signInText}>Sign In</Text>

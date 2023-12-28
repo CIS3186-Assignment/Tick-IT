@@ -99,7 +99,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   imageGrid: {
-    marginHorizontal: 10,
+    margin: 10,
+    marginBottom: 60,
   },
   loadingContainer: {
     flex: 1,

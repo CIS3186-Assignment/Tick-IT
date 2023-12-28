@@ -47,8 +47,13 @@ const Wallet = () => {
   
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator animating={true} size="large" color="#FFFFFF" />
+      <View style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator animating={true} size="large" color="#FFFFFF" />
+        </View>
+        <View style={styles.bottomNavBarContainer}>
+          <BottomNavBar currentScreen="Wallet"/>
+        </View>
       </View>
     );
   }
@@ -56,15 +61,21 @@ const Wallet = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Your Tickets</Text>
-      <FlatList
-        data={bookedEvents.flatMap(event => event.eventDetails)}
-        style={styles.imageGrid}
-        renderItem={renderWalletCard}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2}
-      />
+      {bookedEvents.length === 0 ? (
+        <Text style={styles.messageText}>You have no tickets in your wallet.</Text>
+      ) : (
+        <FlatList
+          data={bookedEvents.flatMap(event => event.eventDetails)}
+          style={styles.imageGrid}
+          renderItem={renderWalletCard}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={2}
+        />
+      )}
+      <View style={styles.bottomNavBarContainer}>
       <BottomNavBar currentScreen="Wallet"/>
     </View>
+  </View>
   );
 };
 
@@ -109,6 +120,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#253354",
     borderRadius: 15,
     right: 10,
+  },
+  messageText: {
+    display: "flex",
+    alignContent: "center",
+    alignSelf: "center",
+    marginVertical: '50%',
+    color: "#FFFFFF",
+    fontSize: 20,
+  },
+  bottomNavBarContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
 });
 

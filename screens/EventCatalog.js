@@ -174,7 +174,9 @@ const EventCatalog = () => {
         />
       )}
 
-      <BottomNavBar currentScreen="EventCatalog" />
+      <View style={styles.bottomNavBarContainer}>
+        <BottomNavBar currentScreen="EventCatalog"/>
+      </View>
     </View>
   );
 };
@@ -213,6 +215,11 @@ const styles = StyleSheet.create({
   chips: {
     marginRight: 20,
     paddingRight: 10,
+  },
+  bottomNavBarContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
 });
 

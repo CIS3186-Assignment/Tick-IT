@@ -73,8 +73,8 @@ const Wallet = () => {
         />
       )}
       <View style={styles.bottomNavBarContainer}>
-      <BottomNavBar currentScreen="Wallet"/>
-    </View>
+        <BottomNavBar currentScreen="Wallet"/>
+      </View>
   </View>
   );
 };

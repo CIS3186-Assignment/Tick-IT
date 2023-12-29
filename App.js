@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import * as Notifications from "expo-notifications";
-import { registerForPushNotificationsAsync } from "./services/NotificationService";
+
 
 
 import EventDetails from "./screens/EventDetails";
@@ -18,6 +18,7 @@ import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Receipt from "./screens/Receipt";
 import TicketQRCode from "./screens/TicketQRCode";
+import NotificationHandler from "./components/NotificationHandler";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -30,23 +31,12 @@ Notifications.setNotificationHandler({
 const Stack = createStackNavigator();
 
 const App = () => {
-  useEffect(async () => {
-    await registerForPushNotificationsAsync()
-
-    const subscription = Notifications.addNotificationReceivedListener((notification) => {
-      console.log("showed notification",notification);
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
   return (
     <SafeAreaProvider>
       <PaperProvider>
         <StripeProvider publishableKey="pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC">
           <NavigationContainer>
+            <NotificationHandler />
             <Stack.Navigator initialRouteName="Login">
               <Stack.Screen
                 name="EventCatalog"

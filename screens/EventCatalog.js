@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   eventCard: {
-    marginBottom: 0,
+    marginBottom: 60,
   },
   filter: {
     marginVertical: 0,

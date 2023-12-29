@@ -98,7 +98,7 @@ export default function App() {
                   cardStyle={{
                     textColor: "#1c1c1c",
                   }}
-                  accessibilityRole="textbox"
+                  accessibilityRole="text"
                   accessibilityLabel="Credit Card Information"
                 />
               </KeyboardAvoidingView>

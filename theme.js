@@ -29,7 +29,7 @@ const customTheme = {
     errorContainer: "rgb(255, 218, 214)",
     onErrorContainer: "rgb(65, 0, 2)",
     
-    background: "rgb(254, 251, 255)",
+    background: "rgb(20, 20, 20)",
     onBackground: "rgb(27, 27, 31)",
     
     surface: "rgb(254, 251, 255)",

@@ -6,6 +6,7 @@ import { FIREBASE_AUTH } from '../FirebaseConfig';
 import { signInWithEmailAndPassword, AuthError } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import customTheme from '../theme';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -37,7 +38,7 @@ const Login = () => {
 
     return (
         <KeyboardAwareScrollView
-            style={{ flex: 0, backgroundColor: '#141414' }}
+            style={{ flex: 0, backgroundColor: customTheme.colors.background }}
             contentContainerStyle={{ flex: 1 }}
             resetScrollToCoords={{ x: 0, y: 0 }}
             scrollEnabled={false}
@@ -55,10 +56,10 @@ const Login = () => {
                 right={<TextInput.Icon icon={showPassword ? "eye" : "eye-off"} onPress = {() => setShowPassword(!showPassword)}/>}
                 />
                     {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
-                <Button onPress={signIn} textColor='#fff' style={styles.signIn}>
+                <Button onPress={signIn} style={styles.signIn}>
                     <Text style={styles.signInText}>Sign In</Text>
                 </Button>
-                <Button onPress={() => navigation.navigate('Register')} textColor='#fff'>
+                <Button onPress={() => navigation.navigate('Register')}>
                     <Text style={styles.noAccount}>No account? Sign Up</Text>
                 </Button>
             </View>
@@ -68,7 +69,7 @@ const Login = () => {
 
 const styles = StyleSheet.create({
     errorText: {
-        color: 'red',
+        color: customTheme.colors.error,
         marginTop: 10,
         paddingHorizontal: 20,
         textAlign: 'center',
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
     },
     signIn: {
-        backgroundColor: '#253354',
+        backgroundColor: customTheme.colors.primary,
         marginHorizontal: '10%',  
         marginTop: 20, 
         paddingVertical: 10, 
@@ -98,25 +99,26 @@ const styles = StyleSheet.create({
         borderRadius: 30, 
         justifyContent: 'center', 
         alignItems: 'center', 
+        textColor: customTheme.colors.onPrimary,
     },
     signInText: {
-        color: '#fff', 
+        color: customTheme.colors.onPrimary, 
         fontSize: 20, 
         fontWeight: 'bold',
     },
     noAccount: {
-        color: '#fff', 
+        color: customTheme.colors.onPrimary, 
         fontSize: 15, 
         fontWeight: 'bold',
         textDecorationLine: 'underline',
-        textDecorationColor: '#fff',
+        textDecorationColor: customTheme.colors.onPrimary,
         marginTop: 20,
         justifyContent: 'center', 
         alignItems: 'center', 
         },
 
     login:{
-        color: '#fff',
+        color: customTheme.colors.onPrimary,
         fontSize: 25,
         alignContent: 'center',
         paddingHorizontal: '25%',

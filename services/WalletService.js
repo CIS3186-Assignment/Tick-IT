@@ -1,5 +1,12 @@
 import { ref as storageRef, getDownloadURL } from "firebase/storage";
-import { getDoc, doc, getDocs, collection, addDoc ,setDoc} from "firebase/firestore";
+import {
+  getDoc,
+  doc,
+  getDocs,
+  collection,
+  addDoc,
+  setDoc,
+} from "firebase/firestore";
 import { FIRESTORE, STORAGE } from "../FirebaseConfig";
 
 export const fetchImagesForEvents = async (events) => {
@@ -35,15 +42,14 @@ export const fetchImagesForEvents = async (events) => {
 };
 
 export const getUserBookedEvents = async (userId) => {
-  try {    
+  try {
     const userDocRef = doc(FIRESTORE, "Users", userId);
     const userDoc = await getDoc(userDocRef);
 
     console.log("userId", userId);
-    console.log("userDoc", userDoc);    
+    console.log("userDoc", userDoc);
     console.log("userDoc exists", userDoc.exists());
     console.log("userDoc data", userDoc.data());
-
 
     if (!userDoc.exists()) {
       console.error("User not found");
@@ -61,7 +67,6 @@ export const getUserBookedEvents = async (userId) => {
     const bookedEvents = [];
 
     for (const bookingDoc of bookingsSnapshot.docs) {
-      
       const booking = bookingDoc.data();
 
       console.log("booking", booking);
@@ -150,7 +155,7 @@ export const getUserBookedEvents = async (userId) => {
   }
 };
 
-export const addBookingToUser = async (userId,event,ticketCounts)=>{
+export const addBookingToUser = async (userId, event, ticketCounts) => {
   const userDocRef = doc(FIRESTORE, "Users", userId);
   const userDoc = await getDoc(userDocRef);
 
@@ -170,7 +175,6 @@ export const addBookingToUser = async (userId,event,ticketCounts)=>{
     event: doc(FIRESTORE, "Events", event.id),
   };
 
-
   const newBookingRef = await addDoc(bookingsCollectionRef, bookingData);
 
   const bookingTicketCollectionRef = collection(
@@ -182,20 +186,25 @@ export const addBookingToUser = async (userId,event,ticketCounts)=>{
     "BookingTicket"
   );
 
-
   bookingTickets = [];
 
   for (const ticketKey of Object.keys(ticketCounts)) {
+    console.log(event.tickets);
 
-    console.log(event.tickets)
+    eventTicketId = event.tickets.find(
+      (ticket) => ticket.name === ticketKey
+    ).id;
 
-    eventTicketId = event.tickets.find(ticket => ticket.name === ticketKey).id
-
-    eventTicketRef = doc(FIRESTORE, "Events", event.id, "EventTickets", eventTicketId);
-
+    eventTicketRef = doc(
+      FIRESTORE,
+      "Events",
+      event.id,
+      "EventTickets",
+      eventTicketId
+    );
 
     const ticketData = {
-      eventTicket: eventTicketRef
+      eventTicket: eventTicketRef,
     };
 
     for (let i = 0; i < ticketCounts[ticketKey]; i++) {
@@ -203,13 +212,9 @@ export const addBookingToUser = async (userId,event,ticketCounts)=>{
     }
   }
 
-
   for (const ticket of bookingTickets) {
     await addDoc(bookingTicketCollectionRef, ticket);
   }
+};
 
-  
-  
-}
-
-export default { fetchImagesForEvents, getUserBookedEvents,addBookingToUser };
+export default { fetchImagesForEvents, getUserBookedEvents, addBookingToUser };

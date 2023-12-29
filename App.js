@@ -21,6 +21,7 @@ import Receipt from "./screens/Receipt";
 import TicketQRCode from "./screens/TicketQRCode";
 import NotificationHandler from "./components/NotificationHandler";
 
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,

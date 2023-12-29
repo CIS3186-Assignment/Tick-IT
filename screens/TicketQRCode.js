@@ -10,21 +10,31 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { IconButton, MD3Colors } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
+import QRCode from "react-native-qrcode-svg";
 
-const TicketDetails = ({ route }) => {
-  const { event, imageURL } = route.params;
+const TicketQRCode = ({ route }) => {
+  const { ticket, event, imageURL } = route.params;
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <TopAppBar title={event.name} />
-
       <FlatList
         ListHeaderComponent={
           <View style={styles.imageContainer}>
             {imageURL && (
               <Image style={styles.image} source={{ uri: imageURL }} />
             )}
+            <Text style={styles.header}>Your Ticket:</Text>
+            <View style={styles.qrRow}>
+              <QRCode
+              value={ticket.id}
+              style={styles.QRCode}
+              size={200}
+              color="#253354"
+              backgroundColor="white"
+            />
+            </View>
           </View>
         }
         data={[
@@ -174,6 +184,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#fff",
   },
+  header: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 25,
+    marginBottom: 20,
+    color: "#fff",
+  }, 
+  qrRow: {
+    backgroundColor: "#fff",
+  },
 });
 
-export default TicketDetails;
+export default TicketQRCode;

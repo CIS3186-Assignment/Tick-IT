@@ -3,27 +3,42 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StripeProvider } from "@stripe/stripe-react-native"; // Import StripeProvider
+import { StripeProvider } from "@stripe/stripe-react-native";
+import * as Notifications from "expo-notifications";
 
+
+
+import customTheme from "./theme";
 import EventDetails from "./screens/EventDetails";
 import EventCatalog from "./screens/EventCatalog";
 import Profile from "./screens/Profile";
 import Wallet from "./screens/Wallet";
 import EventCreator from "./screens/EventCreator";
-import Checkout from "./screens/Checkout"; // Import the Checkout component
-import Login from './screens/Login';
-import Register from './screens/Register';
+import Checkout from "./screens/Checkout";
+import Login from "./screens/Login";
+import Register from "./screens/Register";
 import Receipt from "./screens/Receipt";
-import TicketDetails from "./screens/TicketQRCode";
+import TicketQRCode from "./screens/TicketQRCode";
+import NotificationHandler from "./components/NotificationHandler";
+
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <SafeAreaProvider>
-      <PaperProvider>
+      <PaperProvider theme={customTheme}>
         <StripeProvider publishableKey="pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC">
           <NavigationContainer>
+            <NotificationHandler />
             <Stack.Navigator initialRouteName="Login">
               <Stack.Screen
                 name="EventCatalog"
@@ -46,8 +61,8 @@ const App = () => {
                 options={{ headerShown: false }}
               />
               <Stack.Screen
-                name="TicketDetails"
-                component={TicketDetails}
+                name="TicketQRCode"
+                component={TicketQRCode}
                 options={{ headerShown: false }}
               />
               <Stack.Screen
@@ -68,6 +83,11 @@ const App = () => {
               <Stack.Screen
                 name="Register"
                 component={Register}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Receipt"
+                component={Receipt}
                 options={{ headerShown: false }}
               />
             </Stack.Navigator>

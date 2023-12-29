@@ -7,6 +7,9 @@ import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from "../components/PurchaseSummary";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { addDoc } from "firebase/firestore";
+import { addBookingToUser } from "../services/WalletService";
+import { FIREBASE_AUTH } from "../FirebaseConfig";
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
 export const PUBLISHABLE_KEY = "pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC";
@@ -58,6 +61,9 @@ export default function App() {
     } else if (paymentIntent) {
       console.log("Success from promise", paymentIntent);
       setSuccess(true);
+      
+      addBookingToUser(FIREBASE_AUTH.currentUser.uid,event,ticketCounts,totalAmount);
+
       navigation.navigate("Receipt", {
         event,
         ticketCounts,

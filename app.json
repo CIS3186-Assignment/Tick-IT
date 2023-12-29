@@ -1,27 +1,29 @@
 {
   "expo": {
     "name": "Tick-IT",
-    "slug": "Tick-IT",
+    "slug": "tick-it",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#141414"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.CIS3186.TickIT"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.CIS3186.TickIT"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,6 +36,11 @@
           "enableGooglePay": true
         }
       ]
-]
-  }
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "bcfb07df-edda-45bf-8f8e-81a91539ac7b"
+      }
+    },
+    "owner": "tick-it"  }
 }

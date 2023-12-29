@@ -33,6 +33,10 @@ const EventDetails = ({ route }) => {
     }));
   };
 
+  const isAnyTicketSelected = Object.values(ticketCounts).some(
+    (count) => count > 0
+  );
+  
   const openGoogleMaps = () => {
     const latitude = event.location_geopoint.latitude;
     const longitude = event.location_geopoint.longitude;
@@ -101,8 +105,11 @@ const EventDetails = ({ route }) => {
               )}`}
             </Text>
             <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={handlePurchasePress}
+              style={[
+                styles.buttonContainer,
+                !isAnyTicketSelected && styles.buttonDisabled
+              ]}
+              onPress={isAnyTicketSelected ? handlePurchasePress : null}
             >
               <Text style={styles.buttonText} allowFontScaling={true}>Purchase</Text>
             </TouchableOpacity>
@@ -267,6 +274,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 45,
     marginBottom: 30,
     alignItems: "center",
+  },
+  buttonDisabled: {
+    backgroundColor: 'gray',
+    display: 'none',
   },
   buttonText: {
     color: "#FFFFFF",

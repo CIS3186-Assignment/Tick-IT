@@ -20,7 +20,10 @@ const WalletCard = ({ event, imageURL, ticket }) => {
   };
 
   return (
-    <TouchableOpacity onPress={handleCardPress}>
+    <TouchableOpacity 
+      onPress={handleCardPress}
+      accessibilityRole="button"
+      accessibilityLabel={`View details for ${event.name}`}>
       <View style={styles.cardContainer}>
         <Card style={styles.cardContent}>
           <Image

@@ -15,11 +15,12 @@ const Receipt = () => {
     return (
         <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414'}}>
         <View style={{ flex: 1 }}>
-            <Text>Purchase completed successfully!</Text>
+            <Text> allowFontScaling={true}Purchase completed successfully!</Text>
             <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts}/>
             <Button
             onPress={() => navigation.navigate("EventCatalog")}
             title="Go back to Catalog"
+            accessibilityLabel="Go back to Catalog"
             />
             </View>
         </View>

@@ -61,15 +61,16 @@ const TicketQRCode = ({ route }) => {
           if (item.type === "grid") {
             return (
               <View style={styles.gridRow}>
-                <Text style={styles.gridLabel}>{item.label}:</Text>
+                <Text style={styles.gridLabel} allowFontScaling={true}>{item.label}:</Text>
                 <View style={styles.gridValueContainer}>
-                  <Text style={styles.gridValue}>{item.value}</Text>
+                  <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
                   {item.withIcon && (
                     <IconButton
                       icon="map-marker"
                       size={35}
                       iconColor={MD3Colors.error60}
                       style={styles.iconButton}
+                      accessibilityLabel="Location"
                     />
                   )}
                 </View>

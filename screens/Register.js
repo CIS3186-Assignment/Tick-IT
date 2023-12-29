@@ -51,21 +51,21 @@ const Register = () => {
             scrollEnabled={false}
         >
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                
-                <Image source={require('../assets/logo.png')}style={styles.Image}/>
+                <Image source={require('../assets/logo.png')}style={styles.Image} accessibilityLabel="Tick-IT"/>
                 <Text style={styles.register}>Register</Text>
-                <TextInput label="Name" value={name} onChangeText={setName} style={styles.input}/>
-                <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input}/>
+                <TextInput label="Name" value={name} onChangeText={setName} style={styles.input} accessibilityLabel="Enter your name"/>
+                <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.input} accessibilityLabel="Enter your email"/>
                 <TextInput 
                 label="Password" 
                 secureTextEntry={!showPassword} 
                 value={password} 
                 onChangeText={setPassword} 
                 style={styles.input}
+                accessibilityLabel="Enter your password"
                 right={<TextInput.Icon icon={showPassword ? "eye" : "eye-off"} onPress = {() => setShowPassword(!showPassword)}/>}
                 />
                 {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
-                <Button onPress={signUp} textColor='#fff' style={styles.signUp}>Sign Up</Button>    
+                <Button onPress={signUp} textColor='#fff' style={styles.signUp} accessibilityLabel="Sign up">Sign Up</Button>    
             </View>
         </KeyboardAwareScrollView>
     );

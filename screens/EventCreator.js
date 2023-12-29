@@ -32,38 +32,38 @@ const EventCreator = ({ route }) => {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <TopAppBar title={creator.name} />
-      <View style={styles.centerContent}>
-        <Image
-          style={styles.largeImage}
-          resizeMode="cover"
+return (
+  <View style={styles.container}>
+    <TopAppBar title={creator.name} />
+    <View style={styles.centerContent}>
+      <Image
+        style={styles.largeImage}
+        resizeMode="cover"
+      />
+      <IconButton
+          style={{position: 'absolute', top: 20, right: 20, backgroundColor: '#253354'}}
+          iconColor={MD3Colors.error100}
+          icon="account-supervisor-circle"
+          color="#FFFFFF"
+          size={50}
         />
-        <IconButton
-            style={{position: 'absolute', top: 20, right: 20, backgroundColor: '#253354'}}
-            iconColor={MD3Colors.error100}
-            icon="account-supervisor-circle"
-            color="#FFFFFF"
-            size={50}
-          />
-        <View style={styles.gridContainer}>
-          <View style={styles.gridItem}>
-            <Text style={styles.label}>Name:</Text>
-            <Text style={styles.text}>{creator.name}</Text>
-          </View>
-          <View style={styles.gridItem}>
-            <Text style={styles.label}>Address:</Text>
-            <Text style={styles.textAd}>{creator.address}</Text>
-          </View>
-          <View style={styles.gridItem}>
-            <Text style={styles.label}>Phone Number:</Text>
-            <Text style={styles.text}>{creator.phone}</Text>
-          </View>
-          <View style={styles.gridItem}>
-            <Text style={styles.label}>Email Address:</Text>
-            <Text style={styles.text}>{creator.email}</Text>
-          </View>
+      <View style={styles.gridContainer}>
+        <View style={styles.gridItem}>
+          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.text}>{creator.name}</Text>
+        </View>
+        <View style={styles.gridItem}>
+          <Text style={styles.label}>Address:</Text>
+          <Text style={styles.textAd}>{creator.address}</Text>
+        </View>
+        <View style={styles.gridItem}>
+          <Text style={styles.label}>Phone Number:</Text>
+          <Text style={styles.text}>{creator.phone}</Text>
+        </View>
+        <View style={styles.gridItem}>
+          <Text style={styles.label}>Email Address:</Text>
+          <Text style={styles.text}>{creator.email}</Text>
+        </View>
         </View>
         <View style={styles.buttonContainer}>
           <Button
@@ -71,6 +71,9 @@ const EventCreator = ({ route }) => {
             icon="phone"
             onPress={callPhone}
             style={styles.button}
+            accessibilityLabel={`Call ${creator.name}`}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: false }}
           >
             Call
           </Button>
@@ -79,6 +82,9 @@ const EventCreator = ({ route }) => {
             icon="email"
             onPress={openEmail}
             style={styles.button}
+            accessibilityLabel={`Send an Email to ${creator.name}`}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: false }}
           >
             Send an Email
           </Button>

@@ -133,6 +133,7 @@ const EventCatalog = () => {
         placeholder="Search"
         onChangeText={setQuery}
         value={query}
+        accessibilityLabel="Search events"
         style={styles.search_bar}
       />
 
@@ -149,6 +150,7 @@ const EventCatalog = () => {
                 style={styles.category_chips}
                 selected={filters.includes(item.id)}
                 onPress={() => handleChipPress(item.id)}
+                accessibilityLabel={`Filter by ${item.name} category`}
               >
                 {item.name}
               </Chip>
@@ -166,7 +168,7 @@ const EventCatalog = () => {
           style={styles.eventCard}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
-            <EventCard event={item} imageURL={item.imageURL} />
+            <EventCard event={item} imageURL={item.imageURL} accessibilityLabel={`Event: ${item.name}`}/>
           )}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

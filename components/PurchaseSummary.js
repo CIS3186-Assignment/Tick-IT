@@ -7,7 +7,7 @@ const TicketCost = ({ticketKey, event, ticketCounts}) => {
     const price = event.tickets.find(ticket => ticket.name === ticketKey).price;
 
     return (
-      <Text style={styles.ticketSum}>
+      <Text style={styles.ticketSum} allowFontScaling={true}>
         {ticketKey} (${price}) x {quantity} = ${price * quantity}
       </Text>
     );
@@ -17,15 +17,15 @@ const PurchaseSummary = ({ totalAmount, event, ticketCounts }) => {
     return (
       <View>
         <View style={styles.imageSection}>
-          <Image style={styles.image} source={{ uri: event.imageURL }} />
+          <Image style={styles.image} source={{ uri: event.imageURL }} accessibilityLabel={`Event Image: ${event.name}`}/>
         </View>
         <View style={styles.ticketTotals}>
-        <Text style={styles.order}>Your Order:</Text>
+        <Text style={styles.order} accessibilityLabel="Your Order" allowFontScaling={true}>Your Order:</Text>
         {Object.keys(ticketCounts).map((ticketKey) => (
           <TicketCost key={ticketKey} ticketKey={ticketKey} event={event} ticketCounts={ticketCounts} />
         ))}
         <View style={styles.divider}></View>
-        <Text style={styles.totalAmount}>
+        <Text style={styles.totalAmount} accessibilityLabel={`Total Amount: $${totalAmount.toFixed(2)}`} allowFontScaling={true}>
           Total Amount: ${totalAmount.toFixed(2)}
         </Text>
         </View>

@@ -15,24 +15,33 @@ const BottomNavBar = ({ currentScreen }) => {
     return (
         <Appbar style={styles.container} safeAreaInsets={{bottom}}>
             <Appbar.Action
+                accessibilityLabel="Navigate to Event Catalog"
                 icon="home"
                 iconColor={getIconColor('EventCatalog')}
                 size={40}
                 onPress={() => navigation.navigate('EventCatalog')}
+                focusable={true}
+                tabIndex={1}
             />
 
             <Appbar.Action
+                accessibilityLabel="Navigate to Wallet"
                 icon="wallet"
                 iconColor={getIconColor('Wallet')}
                 size={40}
                 onPress={() => navigation.navigate('Wallet')}
+                focusable={true}
+                tabIndex={2}
             />
 
             <Appbar.Action
+                accessibilityLabel="Navigate to Profile"
                 icon="account"
                 iconColor={getIconColor('Profile')}
                 size={40}
                 onPress={() => navigation.navigate('Profile')}
+                focusable={true}
+                tabIndex={3}
             />
         </Appbar>
     );

@@ -25,6 +25,7 @@ const Profile = () => {
   }, []);
 
   return (
+
     <View style={styles.container}>
       <View style={styles.centerContent}>
         <View style={styles.gridContainer}>

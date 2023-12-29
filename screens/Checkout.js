@@ -98,6 +98,8 @@ export default function App() {
                   cardStyle={{
                     textColor: "#1c1c1c",
                   }}
+                  accessibilityRole="textbox"
+                  accessibilityLabel="Credit Card Information"
                 />
               </KeyboardAvoidingView>
               <TouchableOpacity
@@ -108,7 +110,7 @@ export default function App() {
                   { backgroundColor: loading || success ? "gray" : "#253354" },
                 ]}
               >
-                <Text style={styles.buttonText}>Pay</Text>
+                <Text style={styles.buttonText} allowFontScaling={true}>Pay</Text>
               </TouchableOpacity>
             </View>
           </View>

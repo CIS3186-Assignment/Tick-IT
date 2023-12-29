@@ -41,7 +41,7 @@ const Wallet = () => {
       onPress={() => handleCardPress(item)}
       style={styles.cardContainer}
     >
-      <WalletCard event={{}} imageURL={item.imageURL || ""} ticket={item} />
+      <WalletCard accessibilityLabel={`Event Card for ${item.name}`} event={{}} imageURL={item.imageURL || ""} ticket={item} />
     </TouchableOpacity>
   );
   

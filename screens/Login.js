@@ -22,6 +22,7 @@ const Login = () => {
             const user = userCredential.user;
             console.log(user);
             navigation.navigate("EventCatalog")
+            setErrorMessage(null);
         } catch (error) {
             // Handle different authentication errors
             switch (error.code) {

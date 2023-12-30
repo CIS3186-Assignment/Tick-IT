@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { Icon } from 'react-native-paper';
+import { Icon, IconButton } from 'react-native-paper';
 import BottomNavBar from '../components/BottomNavBar';
+import { useNavigation } from '@react-navigation/native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -14,6 +15,19 @@ const Profile = () => {
     { date: '2023-01-05', description: 'Chill & Grill', amount: 15.0 },
     { date: '2023-01-10', description: 'ICTSA Ball', amount: 40.0 },
   ];
+
+  const navigation = useNavigation();
+
+  const handleLogoutPress = () => {
+    FIREBASE_AUTH.signOut()
+      .then(() => {
+        setUser(null);
+        navigation.navigate('Login');
+      })
+      .catch((error) => {
+        console.error('Error signing out: ', error);
+      });
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
@@ -29,6 +43,15 @@ const Profile = () => {
 
     <View style={styles.container}>
       <View style={styles.centerContent}>
+      <View style={styles.logoutContainer}>
+        <IconButton
+          icon="logout"
+          size={40}
+          iconColor={customTheme.colors.onPrimary}
+          onPress={handleLogoutPress}
+        />
+        <Text style={styles.logoutText} onPress={handleLogoutPress} >Logout</Text>
+      </View>
         <View style={styles.gridContainer}>
           <Icon style={styles.icon} source="account" color={customTheme.colors.onPrimary} size={128} />
           <View style={styles.gridItem}>
@@ -128,6 +151,15 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'right',
     paddingHorizontal: 15,
+  },
+  logoutContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoutText: {
+    fontSize: 16,
+    right: 10,
+    color: customTheme.colors.onPrimary,
   },
 });
 

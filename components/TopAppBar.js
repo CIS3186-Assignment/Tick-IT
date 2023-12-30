@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import customTheme from '../theme';
 
 const TopAppBar = ({ title }) => {
   const navigation = useNavigation();
@@ -16,7 +17,7 @@ const TopAppBar = ({ title }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#253354",
+    backgroundColor: customTheme.colors.tertiary,
     flexDirection: 'row',
     justifyContent: 'center', 
     alignItems: 'center', 
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     position: 'relative', 
   },
   title: {
-    color: "#FFFF",
+    color: customTheme.colors.onPrimary,
     fontSize: 25,
     marginLeft: 15,
     textAlign: 'center'

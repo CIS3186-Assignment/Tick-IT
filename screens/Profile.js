@@ -5,6 +5,7 @@ import BottomNavBar from '../components/BottomNavBar';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
 import { ScrollView } from 'react-native-gesture-handler';
+import customTheme from '../theme';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -29,7 +30,7 @@ const Profile = () => {
     <View style={styles.container}>
       <View style={styles.centerContent}>
         <View style={styles.gridContainer}>
-          <Icon style={styles.icon} source="account" color="#fff" size={128} />
+          <Icon style={styles.icon} source="account" color={customTheme.colors.onPrimary} size={128} />
           <View style={styles.gridItem}>
             <Text style={styles.text}>{user?.displayName}</Text>
           </View>
@@ -60,14 +61,14 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#141414',
+    backgroundColor: customTheme.colors.background,
     alignItems: 'center',
     justifyContent: 'flex-start', 
   },
   icon: {
     position: 'absolute',
     top: 20,
-    backgroundColor: '#253354',
+    backgroundColor: customTheme.colors.primary,
   },
   centerContent: {
     width: '90%',
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
   gridContainer: {
     marginBottom: 10,
-    backgroundColor: '#253354',
+    backgroundColor: customTheme.colors.tertiary,
     padding: 20,
     alignItems: 'center',
     borderRadius: 30,
@@ -86,12 +87,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    color: '#fff',
+    color: customTheme.colors.onPrimary,
     paddingRight: 5,
     fontWeight: 'bold',
   },
   text: {
-    color: '#fff',
+    color: customTheme.colors.onPrimary,
   },
   bottomNavBarContainer: {
     position: 'absolute',
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   transactionHistoryText:{
-    color: '#fff',
+    color: customTheme.colors.onPrimary,
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -110,20 +111,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: '#253354',
+    borderBottomColor: customTheme.colors.primary,
     paddingVertical: 8,
   },
   transactionDate: {
-    color: '#fff',
+    color: customTheme.colors.onPrimary,
     flex: 1,
   },
   transactionDescription: {
-    color: '#fff',
+    color: customTheme.colors.onPrimary,
     flex: 2,
     paddingHorizontal: 15,
   },
   transactionAmount: {
-    color: '#fff',
+    color: customTheme.colors.onPrimary,
     flex: 1,
     textAlign: 'right',
     paddingHorizontal: 15,

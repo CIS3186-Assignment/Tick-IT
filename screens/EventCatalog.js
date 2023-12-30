@@ -19,6 +19,7 @@ import { STORAGE } from "../FirebaseConfig.js";
 import EventCard from "../components/EventCard.js";
 import BottomNavBar from "../components/BottomNavBar.js";
 import { getCategories } from "../services/CategoriesService.js";
+import customTheme from "../theme.js";
 
 const EventCatalog = () => {
   const [categories, setCategories] = useState([]);
@@ -128,7 +129,7 @@ const EventCatalog = () => {
   };
 
   return (
-    <View style={{ ...styles.container, backgroundColor: "#141414" }}>
+    <View style={{ ...styles.container}}>
       <Searchbar
         placeholder="Search"
         onChangeText={setQuery}
@@ -160,7 +161,7 @@ const EventCatalog = () => {
       </View>
 
       {loading ? (
-        <ActivityIndicator animating={loading} color="#3700B3" size="large" />
+        <ActivityIndicator animating={loading} size="large" />
       ) : (
         <FlatList
           data={filteredEvents}
@@ -187,6 +188,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
+    backgroundColor: customTheme.colors.background,
   },
   search_bar: {
     marginTop: 55,
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderRadius: 20,
-    backgroundColor: "#FFFFFF",
+    
   },
   eventCard: {
     marginBottom: 60,
@@ -202,7 +204,7 @@ const styles = StyleSheet.create({
   filter: {
     marginVertical: 0,
     borderBottomWidth: 0.7,
-    borderColor: "white",
+    borderColor: customTheme.colors.onPrimary,
   },
   filter_items: {
     marginVertical: 15,
@@ -211,7 +213,7 @@ const styles = StyleSheet.create({
   },
   category_chips: {
     marginRight: 5,
-    backgroundColor: "#ffff",
+    backgroundColor: customTheme.colors.primaryContainer,
     borderRadius: 20,
   },
   chips: {

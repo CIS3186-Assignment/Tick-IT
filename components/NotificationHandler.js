@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import { getEventById } from '../services/EventService.js';

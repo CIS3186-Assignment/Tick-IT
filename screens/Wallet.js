@@ -6,12 +6,13 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { ActivityIndicator, IconButton, MD3Colors } from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 import { getUserBookedEvents } from "../services/WalletService";
 import { fetchImagesForEvents } from "../services/WalletService";
 import BottomNavBar from "../components/BottomNavBar";
 import WalletCard from "../components/WalletCard";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
+import customTheme from "../theme";
 
 const Wallet = () => {
   const [bookedEvents, setBookedEvents] = useState([]);
@@ -49,7 +50,7 @@ const Wallet = () => {
     return (
       <View style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator animating={true} size="large" color="#FFFFFF" />
+          <ActivityIndicator animating={true} size="large" color={customTheme.colors.onPrimary} />
         </View>
         <View style={styles.bottomNavBarContainer}>
           <BottomNavBar currentScreen="Wallet"/>
@@ -82,7 +83,7 @@ const Wallet = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#141414",
+    backgroundColor: customTheme.colors.background,
     paddingTop: 30,
   },
   header: {
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   headerText: {
-    color: "#FFFFFF",
+    color: customTheme.colors.onPrimary,
     fontSize: 34,
     fontWeight: "bold",
     textAlign: "center",
@@ -117,17 +118,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "50%", 
   },
-  toggleButton: {
-    backgroundColor: "#253354",
-    borderRadius: 15,
-    right: 10,
-  },
   messageText: {
     display: "flex",
     alignContent: "center",
     alignSelf: "center",
     marginVertical: '50%',
-    color: "#FFFFFF",
+    color: customTheme.colors.onPrimary,
     fontSize: 20,
   },
   bottomNavBarContainer: {

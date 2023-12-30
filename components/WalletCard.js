@@ -2,6 +2,7 @@ import React from "react";
 import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import customTheme from "../theme";
 
 const WalletCard = ({ event, imageURL, ticket }) => {
   const navigation = useNavigation();
@@ -12,11 +13,6 @@ const WalletCard = ({ event, imageURL, ticket }) => {
       event,
       imageURL,
     });
-  };
-
-  const goToEventCreator = () => {
-    const creator = event.eventCreator;
-    navigation.navigate("EventCreator", { creator });
   };
 
   return (
@@ -44,7 +40,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cardContent: {
-    backgroundColor: "#141414",
+    backgroundColor: customTheme.colors.background,
     borderRadius: 10,
     overflow: "hidden",
     width: "90%", 
@@ -54,6 +50,8 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+    borderRadius: 10,
+    resizeMode: "contain",
   },
 });
 

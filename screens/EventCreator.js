@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Linking, Image } from 'react-native';
-import { Text, Button, IconButton, MD3Colors } from "react-native-paper";
+import { Text, Button, IconButton } from "react-native-paper";
 import TopAppBar from '../components/TopAppBar';
+import customTheme from '../theme';
 
 const EventCreator = ({ route }) => {
   const { creator } = route.params;
@@ -41,10 +42,9 @@ return (
         resizeMode="cover"
       />
       <IconButton
-          style={{position: 'absolute', top: 20, right: 20, backgroundColor: '#253354'}}
-          iconColor={MD3Colors.error100}
+          style={{position: 'absolute', top: 20, right: 20, backgroundColor: customTheme.colors.tertiary}}
+          iconColor={customTheme.colors.onTertiary}
           icon="account-supervisor-circle"
-          color="#FFFFFF"
           size={50}
         />
       <View style={styles.gridContainer}>
@@ -97,7 +97,7 @@ return (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#141414',
+    backgroundColor: customTheme.colors.background,
   },
   centerContent: {
     alignItems: 'center',
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     width: '80%',
     height: '50%',
     borderRadius: 10,
-    backgroundColor: '#253354',
+    backgroundColor: customTheme.colors.tertiary,
     margin: 20,
   },
   gridContainer: {
@@ -121,23 +121,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    color: '#fff',
+    color: customTheme.colors.onTertiary,
     fontWeight: 'bold',
   },
   text: {
-    color: '#fff',
+    color: customTheme.colors.onTertiary,
   },
   buttonContainer: {
     marginVertical: 16,
     marginHorizontal: 20,
+    bottom: 20,
   },
   button: {
-    backgroundColor: '#253354',
+    backgroundColor: customTheme.colors.tertiary,
     marginTop: 8,
     width: 200,
   },
   textAd: {
-    color: '#fff',
+    color: customTheme.colors.onTertiary,
     width: '60%',
     textAlign: 'right',
   },

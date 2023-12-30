@@ -8,9 +8,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { IconButton, MD3Colors } from "react-native-paper";
+import { IconButton} from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
 import QRCode from "react-native-qrcode-svg";
+import customTheme from "../theme";
 
 const TicketQRCode = ({ route }) => {
   const { ticket, event, imageURL } = route.params;
@@ -31,8 +32,7 @@ const TicketQRCode = ({ route }) => {
               value={ticket.id}
               style={styles.QRCode}
               size={200}
-              color="#253354"
-              backgroundColor="white"
+              color={customTheme.colors.tertiary}
             />
             </View>
           </View>
@@ -68,7 +68,7 @@ const TicketQRCode = ({ route }) => {
                     <IconButton
                       icon="map-marker"
                       size={35}
-                      iconColor={MD3Colors.error60}
+                      iconColor={customTheme.colors.error}
                       style={styles.iconButton}
                       accessibilityLabel="Location"
                     />
@@ -87,7 +87,7 @@ const TicketQRCode = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#141414",
+    backgroundColor: customTheme.colors.background,
   },
   imageContainer: {
     alignItems: "center",
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 25,
     marginVertical: 20,
-    backgroundColor: "#bbe",
+    backgroundColor: customTheme.colors.tertiary,
     alignSelf: "center",
   },
   gridRow: {
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   gridLabel: {
     fontSize: 25,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: customTheme.colors.onPrimary,
     marginBottom: 5,
   },
   gridValueContainer: {
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   gridValue: {
     fontSize: 16,
-    color: "#FFFFFF",
+    color: customTheme.colors.onPrimary,
     marginRight: 5,
     flexWrap: "wrap",
   },
@@ -133,16 +133,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
-    color: "#FFFFFF",
-  },
-  ticketContainer: {
-    borderColor: "#253354",
-    borderTopWidth: 1.5,
-    marginVertical: 0,
-    marginBottom: 0,
-    backgroundColor: "#fff",
-    marginTop: 30,
-    marginBottom: -30,
+    color: customTheme.colors.onPrimary,
   },
   ticketRow: {
     flexDirection: "row",
@@ -163,37 +154,13 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginHorizontal: 20,
   },
-  buttonContainer: {
-    backgroundColor: "#253354",
-    padding: 20,
-    borderRadius: 5,
-    marginHorizontal: 45,
-    marginBottom: 30,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  total: {
-    textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 25,
-    marginTop: 60,
-    marginBottom: 20,
-    color: "#fff",
-  },
   header: {
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 25,
     marginBottom: 20,
-    color: "#fff",
+    color: customTheme.colors.onPrimary,
   }, 
-  qrRow: {
-    backgroundColor: "#fff",
-  },
 });
 
 export default TicketQRCode;

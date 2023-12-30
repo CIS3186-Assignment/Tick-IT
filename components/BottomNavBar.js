@@ -1,15 +1,16 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Appbar, MD3Colors } from 'react-native-paper';
+import { Appbar } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import customTheme from '../theme';
 
 const BottomNavBar = ({ currentScreen }) => {
     const navigation = useNavigation();
     const {bottom} = useSafeAreaInsets;
 
     const getIconColor = (screenName) => {
-        return currentScreen === screenName ? "#5581b9" : '#FFFFFF';
+        return currentScreen === screenName ? customTheme.colors.primary : customTheme.colors.onPrimary;
     };
 
     return (
@@ -50,7 +51,7 @@ const BottomNavBar = ({ currentScreen }) => {
 const styles = StyleSheet.create({
     container: {
         position: 'relative',
-        backgroundColor: "#253354",
+        backgroundColor: customTheme.colors.tertiary,
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 10,

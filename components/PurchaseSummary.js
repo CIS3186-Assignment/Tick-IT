@@ -1,6 +1,6 @@
 import React from "react";
 import {Text, View, StyleSheet, FlatList, Image, KeyboardAvoidingView } from "react-native";
-import TopAppBar from "../components/TopAppBar";
+import customTheme from "../theme";
 
 const TicketCost = ({ticketKey, event, ticketCounts}) => {
     const quantity = ticketCounts[ticketKey];
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: "center",
       padding: 8,
-      backgroundColor: "#141414",
+      backgroundColor: customTheme.colors.background,
     },
     cardField: {
       height: 40,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
       fontSize: 22,
       fontWeight: "bold",
       marginBottom: 10,
-      color: "white",
+      color: customTheme.colors.onPrimary,
       textAlign: "left"
     },
     image: {
@@ -57,38 +57,38 @@ const styles = StyleSheet.create({
       resizeMode: "cover",
       borderRadius: 25,
       marginVertical: 20,
-      backgroundColor: "#141414",
+      backgroundColor: customTheme.colors.tertiary,
       alignSelf: "center",
     },
     imageSection: {
-      backgroundColor: '#141414',
+      backgroundColor: customTheme.colors.background,
       borderBottomWidth: 2.5,
-      borderColor: '#fff',
+      borderColor: customTheme.colors.onPrimary,
     },
     ticketSum:{
       fontSize: 16,
       marginBottom: 20,
-      color: "white",
+      color: customTheme.colors.onPrimary,
       textAlign: "left"
     },
     ticketTotals:{
       paddingTop: 20,
       paddingLeft: 35,
-      backgroundColor: '#141414'
+      backgroundColor: customTheme.colors.background,
     },
     order:{
-      color: '#fff',
+      color: customTheme.colors.onPrimary,
       textAlign: "left",
       marginBottom: 20,
       fontSize: 16,
       textDecorationLine: 'underline',
-      textDecorationColor: '#fff',
+      textDecorationColor: customTheme.colors.onPrimary,
       textDecorationStyle: 'solid'
     },
     divider:{
       borderBottomWidth: 2,
       marginBottom: 10,
-      borderBlockColor: '#fff',
+      borderBlockColor: customTheme.colors.onPrimary,
       marginRight: 125
     } 
   });

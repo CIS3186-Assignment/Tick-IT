@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { IconButton, MD3Colors } from "react-native-paper";
+import { IconButton } from "react-native-paper";
+import customTheme from "../theme";
 
 const EventCard = ({ event, imageURL }) => {
   const navigation = useNavigation();
@@ -56,7 +57,7 @@ const EventCard = ({ event, imageURL }) => {
                 icon="map-marker"
                 size={18}
                 style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
+                iconColor={customTheme.colors.onPrimary}
                 accessibilityLabel="Event location"
               />
               <Text style={styles.infoText} allowFontScaling={true}>{event?.location_name}</Text>
@@ -66,7 +67,7 @@ const EventCard = ({ event, imageURL }) => {
                 icon="account"
                 size={18}
                 style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
+                iconColor={customTheme.colors.onPrimary}
                 accessibilityLabel="Event creator"
               />
               <TouchableOpacity 
@@ -81,7 +82,7 @@ const EventCard = ({ event, imageURL }) => {
                 icon="currency-eur"
                 size={18}
                 style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
+                iconColor={customTheme.colors.onPrimary}
                 accessibilityLabel="Event price range"
               />
               <Text style={styles.infoText} allowFontScaling={true}>{getPriceRange()}</Text>
@@ -99,9 +100,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     borderTopWidth: 0.3,
     borderBottomWidth: 0.4,
-    borderColor: "white",
+    borderColor: customTheme.colors.onPrimary,
     borderRadius: 0,
-    backgroundColor: "#253354",
+    backgroundColor: customTheme.colors.tertiary,
   },
   content: {
     flexDirection: "row",

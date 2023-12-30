@@ -19,10 +19,10 @@ const customTheme = {
     secondaryContainer: "rgb(220, 226, 249)",
     onSecondaryContainer: "rgb(21, 27, 44)",
     
-    tertiary: "rgb(114, 85, 114)",
+    tertiary: "rgb(37, 51, 84)",
     onTertiary: "rgb(255, 255, 255)",
-    tertiaryContainer: "rgb(253, 215, 250)",
-    onTertiaryContainer: "rgb(42, 18, 44)",
+    tertiaryContainer: "rgbrgb(37, 51, 84)",
+    onTertiaryContainer: "rgb(255, 255, 255)",
     
     error: "rgb(186, 26, 26)",
     onError: "rgb(255, 255, 255)",

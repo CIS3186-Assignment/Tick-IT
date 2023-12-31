@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
 import customTheme from "../theme.js";
+import { FIREBASE_AUTH } from "../FirebaseConfig.js";
 
 const EventDetails = ({ route }) => {
   const { event } = route.params;
@@ -46,11 +47,16 @@ const EventDetails = ({ route }) => {
   }
 
   const handlePurchasePress = () => {
+    
     const isAnyTicketSelected = Object.values(ticketCounts).some(
       (count) => count > 0
     );
 
-    if (isAnyTicketSelected) {
+    const isLoggedin = FIREBASE_AUTH.currentUser != null;
+
+    if (!isLoggedin) {
+      navigation.push("Login",{required: true});
+    } else if (isAnyTicketSelected) {
       const totalAmount = event.tickets.reduce(
         (total, ticket) =>
           total + (ticketCounts[ticket.name] || 0) * ticket.price,

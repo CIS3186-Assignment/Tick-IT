@@ -7,7 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import customTheme from '../theme';
 
-const Login = () => {
+const Login = ({route}) => {
+
+
+    const required = route.params?.required ?? false;
+    console.log("rendering Login with required:", required);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -21,7 +26,10 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
             const user = userCredential.user;
             console.log(user);
-            navigation.navigate("EventCatalog")
+            if (!required)
+                navigation.navigate("EventCatalog")
+            else
+                navigation.goBack();
             setErrorMessage(null);
         } catch (error) {
             // Handle different authentication errors
@@ -63,6 +71,11 @@ const Login = () => {
                 <Button onPress={() => navigation.navigate('Register')} accessibilityLabel="Register">
                     <Text style={styles.noAccount}>No account? Sign Up</Text>
                 </Button>
+                {!required && (
+                    <Button onPress={() => navigation.navigate("EventCatalog")} accessibilityLabel="Continue without logging in">
+                        <Text style={styles.noAccount}>Continue without logging in</Text>
+                    </Button>
+                )}
             </View>
         </KeyboardAwareScrollView>
     );

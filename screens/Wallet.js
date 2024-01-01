@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { ActivityIndicator,Button} from "react-native-paper";
 import { getUserBookedEvents } from "../services/WalletService";
 import { fetchImagesForEvents } from "../services/WalletService";
 import BottomNavBar from "../components/BottomNavBar";
@@ -14,13 +14,23 @@ import WalletCard from "../components/WalletCard";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import customTheme from "../theme";
 
-const Wallet = () => {
+const Wallet = ({navigation}) => {
   const [bookedEvents, setBookedEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [numColumns, setNumColumns] = useState(2);
+  const [isLoggedin, setIsLoggedin] = useState(FIREBASE_AUTH.currentUser != null);
+
+  FIREBASE_AUTH.onAuthStateChanged((user) => {
+    if (user) {
+      setIsLoggedin(true);
+    } else {
+      setIsLoggedin(false);
+    }
+  });
 
   useEffect(() => {
     const fetchBookedEvents = async () => {
+      setIsLoading(true);
       try {
         const userId = FIREBASE_AUTH.currentUser.uid;
         const events = await getUserBookedEvents(userId);
@@ -33,8 +43,9 @@ const Wallet = () => {
       }
     };
   
-    fetchBookedEvents();
-  }, []);
+    if (isLoggedin)
+      fetchBookedEvents();
+  }, [isLoggedin]);
   
   const renderWalletCard = ({ item }) => (
     <TouchableOpacity
@@ -62,7 +73,13 @@ const Wallet = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Your Tickets</Text>
-      {bookedEvents.length === 0 ? (
+      { !isLoggedin ? (
+        <>
+          <Text style={styles.messageText}>Please login to view your tickets.</Text>
+          <Button onPress={() => navigation.push("Login",{required:true})}><Text>Login</Text></Button>
+        </>
+      ) :      
+      bookedEvents.length === 0 ? (
         <Text style={styles.messageText}>You have no tickets in your wallet.</Text>
       ) : (
         <FlatList

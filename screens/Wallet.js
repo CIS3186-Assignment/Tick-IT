@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { ActivityIndicator,Button} from "react-native-paper";
+import { ActivityIndicator, Button } from "react-native-paper";
 import { getUserBookedEvents } from "../services/WalletService";
 import { fetchImagesForEvents } from "../services/WalletService";
 import BottomNavBar from "../components/BottomNavBar";
@@ -14,11 +14,13 @@ import WalletCard from "../components/WalletCard";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import customTheme from "../theme";
 
-const Wallet = ({navigation}) => {
+const Wallet = ({ navigation }) => {
   const [bookedEvents, setBookedEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [numColumns, setNumColumns] = useState(2);
-  const [isLoggedin, setIsLoggedin] = useState(FIREBASE_AUTH.currentUser != null);
+  const [isLoggedin, setIsLoggedin] = useState(
+    FIREBASE_AUTH.currentUser != null
+  );
 
   FIREBASE_AUTH.onAuthStateChanged((user) => {
     if (user) {
@@ -42,48 +44,69 @@ const Wallet = ({navigation}) => {
         setIsLoading(false);
       }
     };
-  
-    if (isLoggedin)
-      fetchBookedEvents();
+
+    if (isLoggedin) fetchBookedEvents();
   }, [isLoggedin]);
-  
+
+  const handleCardPress = (item) => {
+    navigation.navigate("TicketQRCode", {
+      ticket: item,
+      event: item.eventDetails, // Assuming eventDetails contains the necessary event information
+      imageURL: item.imageURL || "",
+    });
+  };
+
   const renderWalletCard = ({ item }) => (
     <TouchableOpacity
       key={item.id}
       onPress={() => handleCardPress(item)}
       style={styles.cardContainer}
     >
-      <WalletCard accessibilityLabel={`Event Card for ${item.name}`} event={{}} imageURL={item.imageURL || ""} ticket={item} />
+      <WalletCard
+        accessibilityLabel={`Event Card for ${item.name}`}
+        event={item.eventDetails} // Assuming eventDetails contains the necessary event information
+        imageURL={item.imageURL || ""}
+        ticket={item}
+      />
     </TouchableOpacity>
   );
-  
+
   if (isLoading) {
     return (
       <View style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator animating={true} size="large" color={customTheme.colors.onPrimary} />
+          <ActivityIndicator
+            animating={true}
+            size="large"
+            color={customTheme.colors.onPrimary}
+          />
         </View>
         <View style={styles.bottomNavBarContainer}>
-          <BottomNavBar currentScreen="Wallet"/>
+          <BottomNavBar currentScreen="Wallet" />
         </View>
       </View>
     );
   }
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Your Tickets</Text>
-      { !isLoggedin ? (
+      {!isLoggedin ? (
         <>
-          <Text style={styles.messageText}>Please login to view your tickets.</Text>
-          <Button onPress={() => navigation.push("Login",{required:true})}><Text>Login</Text></Button>
+          <Text style={styles.messageText}>
+            Please login to view your tickets.
+          </Text>
+          <Button onPress={() => navigation.push("Login", { required: true })}>
+            <Text>Login</Text>
+          </Button>
         </>
-      ) :      
-      bookedEvents.length === 0 ? (
-        <Text style={styles.messageText}>You have no tickets in your wallet.</Text>
+      ) : bookedEvents.length === 0 ? (
+        <Text style={styles.messageText}>
+          You have no tickets in your wallet.
+        </Text>
       ) : (
         <FlatList
-          data={bookedEvents.flatMap(event => event.eventDetails)}
+          data={bookedEvents.flatMap((event) => event.eventDetails)}
           style={styles.imageGrid}
           renderItem={renderWalletCard}
           keyExtractor={(item) => item.id.toString()}
@@ -91,9 +114,9 @@ const Wallet = ({navigation}) => {
         />
       )}
       <View style={styles.bottomNavBarContainer}>
-        <BottomNavBar currentScreen="Wallet"/>
+        <BottomNavBar currentScreen="Wallet" />
       </View>
-  </View>
+    </View>
   );
 };
 
@@ -102,12 +125,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: customTheme.colors.background,
     paddingTop: 30,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginHorizontal: 10,
   },
   headerText: {
     color: customTheme.colors.onPrimary,
@@ -126,27 +143,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#141414",
   },
-  rowContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 5,
-  },
   cardContainer: {
     flex: 1,
-    width: "50%", 
+    width: "50%",
   },
   messageText: {
     display: "flex",
     alignContent: "center",
     alignSelf: "center",
-    marginVertical: '50%',
+    marginVertical: "50%",
     color: customTheme.colors.onPrimary,
     fontSize: 20,
   },
   bottomNavBarContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    width: '100%',
+    width: "100%",
   },
 });
 

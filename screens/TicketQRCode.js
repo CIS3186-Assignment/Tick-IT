@@ -8,14 +8,32 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { IconButton} from "react-native-paper";
+import { IconButton } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
 import QRCode from "react-native-qrcode-svg";
 import customTheme from "../theme";
 
 const TicketQRCode = ({ route }) => {
   const { ticket, event, imageURL } = route.params;
+
   const navigation = useNavigation();
+
+  const formatDate = (timestamp) => {
+    if (!timestamp) {
+      return "N/A";
+    }
+
+    const date = new Date(timestamp.toDate());
+    const options = {
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+
+    return new Intl.DateTimeFormat("en-GB", options).format(date);
+  };
 
   return (
     <View style={styles.container}>
@@ -29,11 +47,11 @@ const TicketQRCode = ({ route }) => {
             <Text style={styles.header}>Your Ticket:</Text>
             <View style={styles.qrRow}>
               <QRCode
-              value={ticket.id}
-              style={styles.QRCode}
-              size={200}
-              color={customTheme.colors.tertiary}
-            />
+                value={ticket.id}
+                style={styles.QRCode}
+                size={200}
+                color={customTheme.colors.tertiary}
+              />
             </View>
           </View>
         }
@@ -41,18 +59,18 @@ const TicketQRCode = ({ route }) => {
           {
             type: "grid",
             label: "Creator",
-            value: event?.eventDetails?.eventCreator?.name || "N/A",
+            value: event?.eventCreator?.name || "N/A",
           },
           {
             type: "grid",
             label: "Location",
-            value: event.location,
+            value: event?.eventCreator?.address,
             withIcon: true,
           },
           {
             type: "grid",
             label: "Date and Time",
-            value: event.datetime,
+            value: formatDate(event.date),
           },
           { type: "grid", label: "Description", value: event.description },
           { type: "button" },
@@ -61,9 +79,13 @@ const TicketQRCode = ({ route }) => {
           if (item.type === "grid") {
             return (
               <View style={styles.gridRow}>
-                <Text style={styles.gridLabel} allowFontScaling={true}>{item.label}:</Text>
+                <Text style={styles.gridLabel} allowFontScaling={true}>
+                  {item.label}:
+                </Text>
                 <View style={styles.gridValueContainer}>
-                  <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
+                  <Text style={styles.gridValue} allowFontScaling={true}>
+                    {item.value}
+                  </Text>
                   {item.withIcon && (
                     <IconButton
                       icon="map-marker"
@@ -160,7 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginBottom: 20,
     color: customTheme.colors.onPrimary,
-  }, 
+  },
 });
 
 export default TicketQRCode;

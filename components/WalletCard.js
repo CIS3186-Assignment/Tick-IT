@@ -16,10 +16,11 @@ const WalletCard = ({ event, imageURL, ticket }) => {
   };
 
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       onPress={handleCardPress}
       accessibilityRole="button"
-      accessibilityLabel={`View details for ${event.name}`}>
+      accessibilityLabel={`View details for ${event.name}`}
+    >
       <View style={styles.cardContainer}>
         <Card style={styles.cardContent}>
           <Image
@@ -43,8 +44,8 @@ const styles = StyleSheet.create({
     backgroundColor: customTheme.colors.background,
     borderRadius: 10,
     overflow: "hidden",
-    width: "90%", 
-    aspectRatio: 1, 
+    width: "90%",
+    aspectRatio: 1,
     margin: 10,
   },
   image: {

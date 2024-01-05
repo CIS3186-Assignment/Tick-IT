@@ -54,16 +54,25 @@ const Login = ({route}) => {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Image source={require('../assets/logo.png')}style={styles.Image} accessibilityLabel="Tick-IT"/>
                 <Text style={styles.login}>Log In</Text>
-                <TextInput label="Email" value={email} onChangeText={setEmail} style={styles.inputs} accessibilityLabel="Enter email" />
                 <TextInput 
-                accessibilityLabel="Enter password"
-                label="Password" 
-                secureTextEntry={!showPassword} 
-                value={password} 
-                onChangeText={setPassword} 
-                style={styles.inputs} 
-                right={<TextInput.Icon icon={showPassword ? "eye" : "eye-off"} onPress = {() => setShowPassword(!showPassword)}/>}
-                />
+                    theme={{ colors: { primary: customTheme.colors.background } }}
+                    label="Email" 
+                    value={email} 
+                    onChangeText={setEmail} 
+                    style={styles.inputs} 
+                    accessibilityLabel="Enter email" 
+                    />
+
+                    <TextInput 
+                    theme={{ colors: { primary: customTheme.colors.background } }}
+                    accessibilityLabel="Enter password"
+                    label="Password" 
+                    secureTextEntry={!showPassword} 
+                    value={password} 
+                    onChangeText={setPassword} 
+                    style={styles.inputs} 
+                    right={<TextInput.Icon icon={showPassword ? "eye" : "eye-off"} onPress = {() => setShowPassword(!showPassword)}/>}
+                    />
                     {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
                 <Button onPress={signIn} style={styles.signIn} accessibilityLabel="Sign In">
                     <Text style={styles.signInText}>Sign In</Text>

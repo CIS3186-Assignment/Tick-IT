@@ -132,6 +132,7 @@ const EventCatalog = () => {
     <View style={{ ...styles.container}}>
       <Searchbar
         placeholder="Search"
+        theme={{ colors: { primary: customTheme.colors.background } }}
         onChangeText={setQuery}
         value={query}
         accessibilityLabel="Search events"

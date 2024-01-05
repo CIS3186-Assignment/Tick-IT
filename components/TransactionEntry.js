@@ -1,31 +1,22 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
 const TransactionEntry = ({ item }) => {
-  console.log('Rendering TransactionEntry for item: ', item);
-
+  console.log(item.eventDetails);
   return (
     <View style={styles.entryContainer}>
-      <Text style={styles.text}>{item.id}</Text>
-      {item.eventDetails.map((eventDetail, index) => {
-        console.log(`Rendering eventDetail ${index}: `, eventDetail);
+      <Text style={styles.text}>Booking ID: {item.id}</Text>
 
+      {item.eventDetails.map((eventDetail, index) => {
         return (
           <View key={eventDetail.id} style={styles.detailContainer}>
-            {eventDetail.imageURL ? (
-              <Image
-                source={{ uri: eventDetail.imageURL }}
-                style={styles.image}
-                onError={(error) => console.log('Error loading image: ', error)}
-              />
-            ) : (
-              <Text style={styles.text}>No imageURL</Text>
-            )}
-            {eventDetail.name ? (
-              <Text style={styles.text}>{eventDetail.name}</Text>
-            ) : (
-              <Text style={styles.text}>No name</Text>
-            )}
+            <Text style={styles.text}>Booking Ticket ID: {eventDetail.id}</Text>
+            <Text style={styles.text}>
+              Event Name: {eventDetail.eventDetails.name}
+            </Text>
+            <Text style={styles.text}>
+              Event Description: {eventDetail.eventDetails.description}
+            </Text>
           </View>
         );
       })}
@@ -35,15 +26,15 @@ const TransactionEntry = ({ item }) => {
 
 const styles = StyleSheet.create({
   entryContainer: {
-    flexDirection: 'column', // Change to 'column'
-    alignItems: 'center',
+    flexDirection: "column",
+    alignItems: "center",
     marginBottom: 10,
   },
   detailContainer: {
-    flexDirection: 'column', // Change to 'column'
-    justifyContent: 'center',
-    alignItems: 'center', 
-    marginLeft: 10, 
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
   },
   text: {
     color: "#fff",
@@ -51,7 +42,7 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 100,
-    marginLeft: 10, 
+    marginLeft: 10,
   },
 });
 

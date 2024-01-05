@@ -77,12 +77,59 @@ export const getUserBookedEvents = async (userId) => {
         continue;
       }
 
-      const bookingTickets = await fetchImagesForEvents(
-        bookingTicketSnapshot.docs.map((ticketDoc) => ({
-          id: ticketDoc.id,
-          ...ticketDoc.data(),
-        }))
-      );
+      const bookingTickets = [];
+
+      for (const ticketDoc of bookingTicketSnapshot.docs) {
+        const ticket = ticketDoc.data();
+
+        if (
+          !ticket ||
+          !ticket.eventTicket ||
+          !ticket.eventTicket._key ||
+          !ticket.eventTicket._key.path
+        ) {
+          console.error("Incomplete or undefined ticket details:", ticket);
+          continue;
+        }
+
+        const eventSegmentsIndex =
+          ticket.eventTicket._key.path.segments.indexOf("Events");
+        if (
+          eventSegmentsIndex !== -1 &&
+          eventSegmentsIndex + 2 < ticket.eventTicket._key.path.segments.length
+        ) {
+          const eventId =
+            ticket.eventTicket._key.path.segments[eventSegmentsIndex + 1];
+
+          const eventRef = doc(FIRESTORE, "Events", eventId);
+          const eventDoc = await getDoc(eventRef);
+
+          if (eventDoc.exists()) {
+            const eventCreatorRef = eventDoc.data().EventCreator;
+            const eventCreatorDoc = await getDoc(eventCreatorRef);
+            const eventCreator = eventCreatorDoc.exists()
+              ? eventCreatorDoc.data()
+              : null;
+
+            const eventDetails = {
+              id: ticketDoc.id,
+              eventId,
+              eventDetails: {
+                ...eventDoc.data(),
+                eventCreator,
+              },
+              ...ticket,
+            };
+
+            const eventWithImage = await fetchImagesForEvents([eventDetails]);
+            bookingTickets.push(eventWithImage[0]);
+          } else {
+            console.error("Event not found for eventId:", eventId);
+          }
+        } else {
+          console.error("EventId is undefined in ticket details:", ticket);
+        }
+      }
 
       bookedEvents.push({
         id: bookingDoc.id,
@@ -90,7 +137,6 @@ export const getUserBookedEvents = async (userId) => {
       });
     }
 
-    console.log("Booked events retrieved:", bookedEvents);
     return bookedEvents;
   } catch (error) {
     console.error("Error fetching booked events:", error);

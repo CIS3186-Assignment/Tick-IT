@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
-import { Icon, IconButton } from 'react-native-paper';
-import BottomNavBar from '../components/BottomNavBar';
-import { useNavigation } from '@react-navigation/native';
-import { onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../FirebaseConfig';
-import { ScrollView } from 'react-native-gesture-handler';
-import customTheme from '../theme';
-import { getUserBookedEvents, fetchImagesForEvents } from '../services/ProfileService';
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import { Icon, IconButton } from "react-native-paper";
+import BottomNavBar from "../components/BottomNavBar";
+import { useNavigation } from "@react-navigation/native";
+import { onAuthStateChanged } from "firebase/auth";
+import { FIREBASE_AUTH } from "../FirebaseConfig";
+import customTheme from "../theme";
+import {
+  getUserBookedEvents,
+  fetchImagesForEvents,
+} from "../services/ProfileService";
+
 import TransactionEntry from "../components/TransactionEntry";
 
 const Profile = () => {
@@ -19,10 +22,10 @@ const Profile = () => {
     FIREBASE_AUTH.signOut()
       .then(() => {
         setUser(null);
-        navigation.navigate('Login');
+        navigation.navigate("Login");
       })
       .catch((error) => {
-        console.error('Error signing out: ', error);
+        console.error("Error signing out: ", error);
       });
   };
 
@@ -32,7 +35,8 @@ const Profile = () => {
         setUser(authUser);
 
         try {
-          const events = await getUserBookedEvents("T08aFSTUuGoc5yUdh9Sy"); 
+          const events = await getUserBookedEvents("T08aFSTUuGoc5yUdh9Sy");
+
           const eventsWithImages = await fetchImagesForEvents(events);
           setBookedEvents(eventsWithImages);
         } catch (error) {
@@ -45,20 +49,26 @@ const Profile = () => {
   }, []);
 
   return (
-
     <View style={styles.container}>
       <View style={styles.centerContent}>
-      <View style={styles.logoutContainer}>
-        <IconButton
-          icon="logout"
-          size={40}
-          iconColor={customTheme.colors.onPrimary}
-          onPress={handleLogoutPress}
-        />
-        <Text style={styles.logoutText} onPress={handleLogoutPress} >Logout</Text>
-      </View>
+        <View style={styles.logoutContainer}>
+          <IconButton
+            icon="logout"
+            size={40}
+            iconColor={customTheme.colors.onPrimary}
+            onPress={handleLogoutPress}
+          />
+          <Text style={styles.logoutText} onPress={handleLogoutPress}>
+            Logout
+          </Text>
+        </View>
         <View style={styles.gridContainer}>
-          <Icon style={styles.icon} source="account" color={customTheme.colors.onPrimary} size={128} />
+          <Icon
+            style={styles.icon}
+            source="account"
+            color={customTheme.colors.onPrimary}
+            size={128}
+          />
           <View style={styles.gridItem}>
             <Text style={styles.text}>{user?.displayName}</Text>
           </View>
@@ -67,7 +77,9 @@ const Profile = () => {
           </View>
         </View>
         <View>
-          <Text style={styles.transactionHistoryText}>Transaction History:</Text>
+          <Text style={styles.transactionHistoryText}>
+            Transaction History:
+          </Text>
           <FlatList
             data={bookedEvents}
             keyExtractor={(item) => item.id}
@@ -81,59 +93,58 @@ const Profile = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: customTheme.colors.background,
-    alignItems: 'center',
-    justifyContent: 'flex-start', 
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   icon: {
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     backgroundColor: customTheme.colors.primary,
   },
   centerContent: {
-    width: '90%',
+    width: "90%",
     marginTop: 40,
   },
   gridContainer: {
     marginBottom: 10,
     backgroundColor: customTheme.colors.tertiary,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 30,
   },
   gridItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
   label: {
     color: customTheme.colors.onPrimary,
     paddingRight: 5,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   text: {
     color: customTheme.colors.onPrimary,
   },
   bottomNavBarContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    width: '100%',
+    width: "100%",
   },
-  transactionHistoryText:{
+  transactionHistoryText: {
     color: customTheme.colors.onPrimary,
     fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginTop: 10,
     marginBottom: 20,
   },
   transactionItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     borderBottomWidth: 1,
     borderBottomColor: customTheme.colors.primary,
     paddingVertical: 8,
@@ -150,12 +161,12 @@ const styles = StyleSheet.create({
   transactionAmount: {
     color: customTheme.colors.onPrimary,
     flex: 1,
-    textAlign: 'right',
+    textAlign: "right",
     paddingHorizontal: 15,
   },
   logoutContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   logoutText: {
     fontSize: 16,

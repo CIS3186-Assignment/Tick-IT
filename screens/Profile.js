@@ -14,9 +14,10 @@ import {
 import TransactionEntry from "../components/TransactionEntry";
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(FIREBASE_AUTH.user)
   const [bookedEvents, setBookedEvents] = useState([]);
   const navigation = useNavigation();
+  
 
   const handleLogoutPress = () => {
     FIREBASE_AUTH.signOut()
@@ -33,20 +34,24 @@ const Profile = () => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (authUser) => {
       if (authUser) {
         setUser(authUser);
-
-        try {
-          const events = await getUserBookedEvents("T08aFSTUuGoc5yUdh9Sy");
-
-          const eventsWithImages = await fetchImagesForEvents(events);
-          setBookedEvents(eventsWithImages);
-        } catch (error) {
-          console.error("Error fetching booked events:", error);
-        }
       }
     });
 
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    getUserBookedEvents(FIREBASE_AUTH.currentUser.uid)
+      .then(events => {
+        return fetchImagesForEvents(events);
+      })
+      .then(eventsWithImages => {
+        setBookedEvents(eventsWithImages);
+      })
+      .catch(error => {
+        console.error("Error fetching booked events:", error);
+      });
+  }, [user]);
 
   return (
     <View style={styles.container}>

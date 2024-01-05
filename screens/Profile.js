@@ -18,6 +18,7 @@ const Profile = () => {
   const [bookedEvents, setBookedEvents] = useState([]);
   const navigation = useNavigation();
   
+  
 
   const handleLogoutPress = () => {
     FIREBASE_AUTH.signOut()

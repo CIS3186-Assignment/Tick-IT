@@ -1,22 +1,29 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
+import customTheme from "../theme";
 
 const TransactionEntry = ({ item }) => {
   console.log(item.eventDetails);
+
+  // Group tickets by event name
+  const groupedEventDetails = item.eventDetails.reduce((acc, curr) => {
+    acc[curr.eventDetails.name] = (acc[curr.eventDetails.name] || 0) + 1;
+    return acc;
+  }, {});
+
   return (
     <View style={styles.entryContainer}>
-      <Text style={styles.text}>Booking ID: {item.id}</Text>
-
-      {item.eventDetails.map((eventDetail, index) => {
+      {Object.entries(groupedEventDetails).map(([eventName, count], index) => {
         return (
-          <View key={eventDetail.id} style={styles.detailContainer}>
-            <Text style={styles.text}>Booking Ticket ID: {eventDetail.id}</Text>
+          <View key={index} style={styles.detailContainer}>
+            <Image
+              style={styles.image}
+              source={{ uri: item.eventDetails[0].eventDetails.image }}
+            />
             <Text style={styles.text}>
-              Event Name: {eventDetail.eventDetails.name}
+              {eventName} (x{count})
             </Text>
-            <Text style={styles.text}>
-              Event Description: {eventDetail.eventDetails.description}
-            </Text>
+            
           </View>
         );
       })}
@@ -26,23 +33,31 @@ const TransactionEntry = ({ item }) => {
 
 const styles = StyleSheet.create({
   entryContainer: {
-    flexDirection: "column",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    paddingVertical: 20,
+    paddingLeft: 10,
+    backgroundColor: customTheme.colors.background,
+    borderTopWidth: 1,
+    borderColor: customTheme.colors.primary,
   },
   detailContainer: {
-    flexDirection: "column",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 10,
   },
   text: {
-    color: "#fff",
+    color: customTheme.colors.onPrimary,
+    paddingHorizontal: 5,
+    marginLeft: 10, 
   },
   image: {
-    width: 100,
-    height: 100,
-    marginLeft: 10,
+    backgroundColor: customTheme.colors.primary,
+    width: 50, 
+    height: 50, 
+    borderRadius: 10, 
   },
 });
 

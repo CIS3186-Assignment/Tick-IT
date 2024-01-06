@@ -43,19 +43,21 @@ const Profile = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getUserBookedEvents(FIREBASE_AUTH.currentUser.uid)
-      .then(events => {
-        return fetchImagesForEvents(events);
-      })
-      .then(eventsWithImages => {
-        setBookedEvents(eventsWithImages);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error("Error fetching booked events:", error);
-        setIsLoading(false);
-      });
-  }, [user]);
+    if (FIREBASE_AUTH.currentUser) {
+      getUserBookedEvents(FIREBASE_AUTH.currentUser.uid)
+        .then((bookedEvents) => {
+          setBookedEvents(bookedEvents);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching booked events: ", error);
+          setIsLoading(false);
+        });
+    } else {
+      console.log("No user is signed in");
+      setIsLoading(false);
+    }
+  }, []);
 
   return (
     <View style={styles.container}>

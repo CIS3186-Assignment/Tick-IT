@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     color: customTheme.colors.onPrimary,
   },
   transactions:{
-    height: Dimensions.get('window').width * 1.1,
+    height: Dimensions.get('window').width * 1.1, // 100% of screen width
   }
 });
 

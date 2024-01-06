@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, View, StyleSheet} from "react-native";
+import { Button, Text, View, StyleSheet, TouchableOpacity} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from '../components/PurchaseSummary';
@@ -19,18 +19,14 @@ const Receipt = () => {
             <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts}/>
             <Text allowFontScaling={true} style={styles.receiptText}>Purchase completed successfully!</Text>
             <View style={styles.buttonarea}>
-              <Button
-                style={styles.goBack}
-                onPress={() => navigation.navigate("EventCatalog")}
-                title="Go back to Catalog"
-                accessibilityLabel="Go back to Catalog"
-              />
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("EventCatalog")}>
+              <Text style={styles.buttonText}>Go back to Catalog</Text>
+            </TouchableOpacity>
             </View>
             </View>
         </View>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {
@@ -57,6 +53,8 @@ const styles = StyleSheet.create({
     },
     goBack: {
       padding: 10,
+      textDecorationLine: "underline",
+      textDecorationColor: customTheme.colors.onPrimary,
       borderRadius: 35,
       alignItems: "center",
       justifyContent: "center",
@@ -68,14 +66,26 @@ const styles = StyleSheet.create({
         marginTop: '10%',
         marginBottom: 20,
         textAlign: "center",
-        color: customTheme.colors.primary,
+        color: 'green',
     },
     buttonarea: {
       marginHorizontal: 50,
       marginBottom: 20,
       textAlign: "center",
       color: customTheme.colors.primary,
-    }
+    },
+    button: {
+      backgroundColor: '#007BFF', // Change this to your preferred button color
+      padding: 10,
+      borderRadius: 5,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 10,
+    },
+    buttonText: {
+      color: '#FFFFFF', // Change this to your preferred button text color
+      fontSize: 16,
+    },
   });
 
 export default Receipt;

@@ -109,6 +109,7 @@ const Wallet = ({ navigation }) => {
           data={bookedEvents.flatMap((event) => event.eventDetails)}
           style={styles.imageGrid}
           renderItem={renderWalletCard}
+          showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id.toString()}
           numColumns={2}
         />

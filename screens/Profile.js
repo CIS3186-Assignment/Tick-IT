@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import { Icon, IconButton } from "react-native-paper";
 import BottomNavBar from "../components/BottomNavBar";
 import { useNavigation } from "@react-navigation/native";
@@ -17,7 +17,7 @@ const Profile = () => {
   const [user, setUser] = useState(FIREBASE_AUTH.user)
   const [bookedEvents, setBookedEvents] = useState([]);
   const navigation = useNavigation();
-  
+  const [isLoading, setIsLoading] = useState(false);
   
 
   const handleLogoutPress = () => {
@@ -42,15 +42,18 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     getUserBookedEvents(FIREBASE_AUTH.currentUser.uid)
       .then(events => {
         return fetchImagesForEvents(events);
       })
       .then(eventsWithImages => {
         setBookedEvents(eventsWithImages);
+        setIsLoading(false);
       })
       .catch(error => {
         console.error("Error fetching booked events:", error);
+        setIsLoading(false);
       });
   }, [user]);
 
@@ -86,11 +89,15 @@ const Profile = () => {
           <Text style={styles.transactionHistoryText}>
             Transaction History:
           </Text>
-          <FlatList
-            data={bookedEvents}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <TransactionEntry item={item} />}
-          />
+          {isLoading ? (
+            <ActivityIndicator size="large" color={customTheme.colors.primary} />
+          ) : (
+            <FlatList
+              data={bookedEvents}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <TransactionEntry item={item} />}
+            />
+          )}
         </View>
       </View>
       <View style={styles.bottomNavBarContainer}>

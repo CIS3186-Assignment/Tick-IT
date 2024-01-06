@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
+import { IconButton } from "react-native-paper";
 import customTheme from "../theme";
 
 const TransactionEntry = ({ item }) => {
@@ -16,14 +17,33 @@ const TransactionEntry = ({ item }) => {
       {Object.entries(groupedEventDetails).map(([eventName, count], index) => {
         return (
           <View key={index} style={styles.detailContainer}>
-            <Image
-              style={styles.image}
-              source={{ uri: item.eventDetails[0].eventDetails.image }}
-            />
-            <Text style={styles.text}>
+            <View style={styles.iconContainer}>
+              {count === 1 && (
+                <IconButton
+                  icon="ticket"
+                  size={40}
+                  color={customTheme.colors.onPrimary}
+                  style={styles.icon}
+                />
+              )}
+              {count > 1 && (
+                <>
+                  <IconButton
+                    icon="ticket"
+                    size={40}
+                    style={styles.icon}
+                  />
+                  <IconButton
+                    icon="ticket"
+                    size={40}
+                    style={[styles.icon, styles.iconOverlap]}
+                  />
+                </>
+              )}
+            </View>
+            <Text style={[styles.text, styles.textWrap]}>
               {eventName} (x{count})
             </Text>
-            
           </View>
         );
       })}
@@ -52,13 +72,23 @@ const styles = StyleSheet.create({
     color: customTheme.colors.onPrimary,
     paddingHorizontal: 5,
     marginLeft: 10, 
+    paddingRight: 10,
   },
-  image: {
-    backgroundColor: customTheme.colors.primary,
-    width: 50, 
-    height: 50, 
-    borderRadius: 10, 
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
+  icon: {
+    width: 40, 
+    height: 40, 
+    color: customTheme.colors.onPrimary,
+  },
+  iconOverlap: {
+    marginLeft: -20, 
+  },
+  textWrap: {
+  flexShrink: 1,
+},
 });
 
 export default TransactionEntry;

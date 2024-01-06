@@ -22,7 +22,7 @@ const TransactionEntry = ({ item }) => {
                 <IconButton
                   icon="ticket"
                   size={40}
-                  color={customTheme.colors.onPrimary}
+                  iconColor={customTheme.colors.primary}
                   style={styles.icon}
                 />
               )}
@@ -32,10 +32,12 @@ const TransactionEntry = ({ item }) => {
                     icon="ticket"
                     size={40}
                     style={styles.icon}
+                    iconColor={customTheme.colors.primary}
                   />
                   <IconButton
                     icon="ticket"
                     size={40}
+                    iconColor={customTheme.colors.primary}
                     style={[styles.icon, styles.iconOverlap]}
                   />
                 </>
@@ -61,6 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: customTheme.colors.background,
     borderTopWidth: 1,
     borderColor: customTheme.colors.primary,
+    width: "100%",
   },
   detailContainer: {
     flexDirection: "row",

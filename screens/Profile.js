@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, Dimensions } from "react-native";
 import { Icon, IconButton } from "react-native-paper";
 import BottomNavBar from "../components/BottomNavBar";
 import { useNavigation } from "@react-navigation/native";
@@ -85,7 +85,7 @@ const Profile = () => {
             <Text style={styles.text}>{user?.email}</Text>
           </View>
         </View>
-        <View>
+        <View style={styles.transactions}>
           <Text style={styles.transactionHistoryText}>
             Transaction History:
           </Text>
@@ -94,6 +94,7 @@ const Profile = () => {
           ) : (
             <FlatList
               data={bookedEvents}
+              showsVerticalScrollIndicator={false}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => <TransactionEntry item={item} />}
             />
@@ -186,6 +187,9 @@ const styles = StyleSheet.create({
     right: 10,
     color: customTheme.colors.onPrimary,
   },
+  transactions:{
+    height: Dimensions.get('window').width * 1.1,
+  }
 });
 
 export default Profile;

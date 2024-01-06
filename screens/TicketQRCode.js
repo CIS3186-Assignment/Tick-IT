@@ -5,18 +5,26 @@ import {
   StyleSheet,
   FlatList,
   Text,
-  TouchableOpacity,
+  Linking,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
 import QRCode from "react-native-qrcode-svg";
 import customTheme from "../theme";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const TicketQRCode = ({ route }) => {
   const { ticket, event, imageURL } = route.params;
 
   const navigation = useNavigation();
+  
+  const openGoogleMaps = () => {
+    const latitude = event.location_geopoint.latitude;
+    const longitude = event.location_geopoint.longitude;
+    const url = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+    Linking.openURL(url);
+  }
 
   const formatDate = (timestamp) => {
     if (!timestamp) {
@@ -93,13 +101,14 @@ const TicketQRCode = ({ route }) => {
                       iconColor={customTheme.colors.error}
                       style={styles.iconButton}
                       accessibilityLabel="Location"
+                      onPress={openGoogleMaps}
                     />
                   )}
                 </View>
               </View>
             );
           }
-          return null;
+          return null
         }}
       />
     </View>

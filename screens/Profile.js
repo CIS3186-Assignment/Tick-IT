@@ -1,59 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { Icon, IconButton } from 'react-native-paper';
-import BottomNavBar from '../components/BottomNavBar';
-import { useNavigation } from '@react-navigation/native';
-import { onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../FirebaseConfig';
-import { ScrollView } from 'react-native-gesture-handler';
-import customTheme from '../theme';
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, Dimensions } from "react-native";
+import { Icon, IconButton } from "react-native-paper";
+import BottomNavBar from "../components/BottomNavBar";
+import { useNavigation } from "@react-navigation/native";
+import { onAuthStateChanged } from "firebase/auth";
+import { FIREBASE_AUTH } from "../FirebaseConfig";
+import customTheme from "../theme";
+import {
+  getUserBookedEvents,
+  fetchImagesForEvents,
+} from "../services/ProfileService";
+
+import TransactionEntry from "../components/TransactionEntry";
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
-  const transactions = [
-    { date: '2023-01-01', description: 'Reload: The Classics', amount: 50},
-    { date: '2023-01-05', description: 'Chill & Grill', amount: 15.0 },
-    { date: '2023-01-10', description: 'ICTSA Ball', amount: 40.0 },
-  ];
-
+  const [user, setUser] = useState(FIREBASE_AUTH.user)
+  const [bookedEvents, setBookedEvents] = useState([]);
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  
 
   const handleLogoutPress = () => {
     FIREBASE_AUTH.signOut()
       .then(() => {
         setUser(null);
-        navigation.navigate('Login');
+        navigation.navigate("Login");
       })
       .catch((error) => {
-        console.error('Error signing out: ', error);
+        console.error("Error signing out: ", error);
       });
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (authUser) => {
       if (authUser) {
         setUser(authUser);
       }
     });
 
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
-  return (
+  useEffect(() => {
+    setIsLoading(true);
+    getUserBookedEvents(FIREBASE_AUTH.currentUser.uid)
+      .then(events => {
+        return fetchImagesForEvents(events);
+      })
+      .then(eventsWithImages => {
+        setBookedEvents(eventsWithImages);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.error("Error fetching booked events:", error);
+        setIsLoading(false);
+      });
+  }, [user]);
 
+  return (
     <View style={styles.container}>
       <View style={styles.centerContent}>
-      <View style={styles.logoutContainer}>
-        <IconButton
-          icon="logout"
-          size={40}
-          iconColor={customTheme.colors.onPrimary}
-          onPress={handleLogoutPress}
-        />
-        <Text style={styles.logoutText} onPress={handleLogoutPress} >Logout</Text>
-      </View>
+        <View style={styles.logoutContainer}>
+          <IconButton
+            icon="logout"
+            size={40}
+            iconColor={customTheme.colors.onPrimary}
+            onPress={handleLogoutPress}
+          />
+          <Text style={styles.logoutText} onPress={handleLogoutPress}>
+            Logout
+          </Text>
+        </View>
         <View style={styles.gridContainer}>
-          <Icon style={styles.icon} source="account" color={customTheme.colors.onPrimary} size={128} />
+          <Icon
+            style={styles.icon}
+            source="account"
+            color={customTheme.colors.onPrimary}
+            size={128}
+          />
           <View style={styles.gridItem}>
             <Text style={styles.text}>{user?.displayName}</Text>
           </View>
@@ -61,17 +85,20 @@ const Profile = () => {
             <Text style={styles.text}>{user?.email}</Text>
           </View>
         </View>
-        <View>
-          <Text style={styles.transactionHistoryText}>Transaction History:</Text>
-          <ScrollView>
-            {transactions.map((transaction, index) => (
-              <View key={index} style={styles.transactionItem}>
-                <Text style={styles.transactionDate}>{transaction.date}</Text>
-                <Text style={styles.transactionDescription}>{transaction.description}</Text>
-                <Text style={styles.transactionAmount}>€{transaction.amount}</Text>
-              </View>
-            ))}
-          </ScrollView>
+        <View style={styles.transactions}>
+          <Text style={styles.transactionHistoryText}>
+            Transaction History:
+          </Text>
+          {isLoading ? (
+            <ActivityIndicator size="large" color={customTheme.colors.primary} />
+          ) : (
+            <FlatList
+              data={bookedEvents}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <TransactionEntry item={item} />}
+            />
+          )}
         </View>
       </View>
       <View style={styles.bottomNavBarContainer}>
@@ -80,59 +107,58 @@ const Profile = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: customTheme.colors.background,
-    alignItems: 'center',
-    justifyContent: 'flex-start', 
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   icon: {
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     backgroundColor: customTheme.colors.primary,
   },
   centerContent: {
-    width: '90%',
+    width: "90%",
     marginTop: 40,
   },
   gridContainer: {
     marginBottom: 10,
     backgroundColor: customTheme.colors.tertiary,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 30,
   },
   gridItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
   label: {
     color: customTheme.colors.onPrimary,
     paddingRight: 5,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   text: {
     color: customTheme.colors.onPrimary,
   },
   bottomNavBarContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    width: '100%',
+    width: "100%",
   },
-  transactionHistoryText:{
+  transactionHistoryText: {
     color: customTheme.colors.onPrimary,
     fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginTop: 10,
     marginBottom: 20,
   },
   transactionItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     borderBottomWidth: 1,
     borderBottomColor: customTheme.colors.primary,
     paddingVertical: 8,
@@ -149,18 +175,21 @@ const styles = StyleSheet.create({
   transactionAmount: {
     color: customTheme.colors.onPrimary,
     flex: 1,
-    textAlign: 'right',
+    textAlign: "right",
     paddingHorizontal: 15,
   },
   logoutContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   logoutText: {
     fontSize: 16,
     right: 10,
     color: customTheme.colors.onPrimary,
   },
+  transactions:{
+    height: Dimensions.get('window').width * 1.1, 
+  }
 });
 
 export default Profile;

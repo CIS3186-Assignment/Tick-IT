@@ -6,8 +6,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import * as Notifications from "expo-notifications";
 
-
-
 import customTheme from "./theme";
 import EventDetails from "./screens/EventDetails";
 import EventCatalog from "./screens/EventCatalog";
@@ -73,6 +71,11 @@ const App = () => {
               <Stack.Screen
                 name="Checkout"
                 component={Checkout}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Receipt"
+                component={Receipt}
                 options={{ headerShown: false }}
               />
               <Stack.Screen

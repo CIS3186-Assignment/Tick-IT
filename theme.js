@@ -66,28 +66,28 @@ const customTheme = {
 
   fonts: {
     labelMedium: {
-      fontFamily: 'System', // Use 'System' for the system font
+      fontFamily: 'System', 
       letterSpacing: 0.5,
       fontWeight: '500',
       lineHeight: 18,
       fontSize: 16,
     },
     bodySmall: {
-      fontFamily: 'System', // Use 'System' for the system font
+      fontFamily: 'System', 
       letterSpacing: 0.3,
       fontWeight: '400',
       lineHeight: 18,
       fontSize: 14,
     },
     labelLarge: {
-      fontFamily: 'System', // Use 'System' for the system font
+      fontFamily: 'System', 
       letterSpacing: 0.3,
       fontWeight: '400',
       lineHeight: 25,
       fontSize: 18,
     },
     bodyLarge: {
-      fontFamily: 'System', // Use 'System' for the system font
+      fontFamily: 'System', 
       letterSpacing: 0.3,
       fontWeight: '400',
       lineHeight: 25,

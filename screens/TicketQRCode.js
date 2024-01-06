@@ -6,19 +6,24 @@ import {
   FlatList,
   Text,
   Linking,
+  TouchableOpacity
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
 import QRCode from "react-native-qrcode-svg";
 import customTheme from "../theme";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const TicketQRCode = ({ route }) => {
   const { ticket, event, imageURL } = route.params;
 
   const navigation = useNavigation();
-  
+
+  const goToEventCreator = () => {
+    creator = event.eventCreator
+    navigation.navigate("EventCreator", { creator });
+  }
+
   const openGoogleMaps = () => {
     const latitude = event.location_geopoint.latitude;
     const longitude = event.location_geopoint.longitude;
@@ -91,9 +96,14 @@ const TicketQRCode = ({ route }) => {
                   {item.label}:
                 </Text>
                 <View style={styles.gridValueContainer}>
-                  <Text style={styles.gridValue} allowFontScaling={true}>
-                    {item.value}
-                  </Text>
+                  {item.label === 'Creator' && (
+                      <TouchableOpacity onPress={goToEventCreator}>
+                      <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
+                      </TouchableOpacity>
+                  )}
+                  {item.label !== 'Creator' && (
+                    <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
+                  )}
                   {item.withIcon && (
                     <IconButton
                       icon="map-marker"

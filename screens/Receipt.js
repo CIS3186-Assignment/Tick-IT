@@ -3,6 +3,7 @@ import { Button, Text, View, StyleSheet} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from '../components/PurchaseSummary';
+import customTheme from '../theme';
 
 
 const Receipt = () => {
@@ -13,14 +14,18 @@ const Receipt = () => {
     
 
     return (
-        <View style={{ flex: 1, position: 'relative', backgroundColor: '#141414'}}>
+        <View style={{ flex: 1, position: 'relative', backgroundColor: customTheme.colors.background, paddingTop: 50}}>
         <View style={{ flex: 1 }}>
-            <Text>Purchase completed successfully!</Text>
             <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts}/>
-            <Button
-            onPress={() => navigation.navigate("EventCatalog")}
-            title="Go back to Catalog"
-            />
+            <Text allowFontScaling={true} style={styles.receiptText}>Purchase completed successfully!</Text>
+            <View style={styles.buttonarea}>
+              <Button
+                style={styles.goBack}
+                onPress={() => navigation.navigate("EventCatalog")}
+                title="Go back to Catalog"
+                accessibilityLabel="Go back to Catalog"
+              />
+            </View>
             </View>
         </View>
     );
@@ -50,6 +55,27 @@ const styles = StyleSheet.create({
       backgroundColor: "#bbe",
       alignSelf: "center",
     },
+    goBack: {
+      padding: 10,
+      borderRadius: 35,
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 10,
+      marginHorizontal: 20,
+    },
+    receiptText: {
+        fontSize: 20,
+        marginTop: '10%',
+        marginBottom: 20,
+        textAlign: "center",
+        color: customTheme.colors.primary,
+    },
+    buttonarea: {
+      marginHorizontal: 50,
+      marginBottom: 20,
+      textAlign: "center",
+      color: customTheme.colors.primary,
+    }
   });
 
 export default Receipt;

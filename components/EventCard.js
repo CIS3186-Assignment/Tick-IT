@@ -1,8 +1,9 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { IconButton, MD3Colors } from "react-native-paper";
+import { IconButton } from "react-native-paper";
+import customTheme from "../theme";
 
 const EventCard = ({ event, imageURL }) => {
   const navigation = useNavigation();
@@ -35,36 +36,45 @@ const EventCard = ({ event, imageURL }) => {
   };
 
   return (
-    <TouchableOpacity onPress={handleCardPress}>
+    <TouchableOpacity 
+      onPress={handleCardPress}
+      accessibilityRole="button"
+      accessibilityLabel={`View details for ${event.name}`}>
       <Card style={styles.cardContent}>
         <Card.Content style={styles.content}>
           {imageURL && (
             <Image
               style={styles.image}
               source={{ uri: imageURL }}
-              resizeMode="contain"
+              accessibilityLabel="Event Image"
+              resizeMode={Platform.OS === 'ios' ? 'cover' : 'contain'}
             />
           )}
           <View style={styles.textContainer}>
-            <Text style={styles.eventName}>{event?.name}</Text>
+            <Text style={styles.eventName} allowFontScaling={true}>{event?.name}</Text>
             <View style={styles.infoContainer}>
               <IconButton
                 icon="map-marker"
                 size={18}
                 style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
+                iconColor={customTheme.colors.onPrimary}
+                accessibilityLabel="Event location"
               />
-              <Text style={styles.infoText}>{event?.location_name}</Text>
+              <Text style={styles.infoText} allowFontScaling={true}>{event?.location_name}</Text>
             </View>
             <View style={styles.infoContainer}>
               <IconButton
                 icon="account"
                 size={18}
                 style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
+                iconColor={customTheme.colors.onPrimary}
+                accessibilityLabel="Event creator"
               />
-              <TouchableOpacity onPress={goToEventCreator}>
-                <Text style={styles.infoText}>{event?.eventCreator?.name}</Text>
+              <TouchableOpacity 
+                onPress={goToEventCreator}
+                accessibilityRole="link"
+                accessibilityLabel={`View details for ${event.eventCreator.name}`}>
+                <Text style={styles.infoText} allowFontScaling={true}>{event?.eventCreator?.name}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.infoContainer}>
@@ -72,9 +82,10 @@ const EventCard = ({ event, imageURL }) => {
                 icon="currency-eur"
                 size={18}
                 style={styles.iconButton}
-                iconColor={MD3Colors.neutral100}
+                iconColor={customTheme.colors.onPrimary}
+                accessibilityLabel="Event price range"
               />
-              <Text style={styles.infoText}>{getPriceRange()}</Text>
+              <Text style={styles.infoText} allowFontScaling={true}>{getPriceRange()}</Text>
             </View>
           </View>
         </Card.Content>
@@ -89,9 +100,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     borderTopWidth: 0.3,
     borderBottomWidth: 0.4,
-    borderColor: "white",
+    borderColor: customTheme.colors.onPrimary,
     borderRadius: 0,
-    backgroundColor: "#253354",
+    backgroundColor: customTheme.colors.tertiary,
   },
   content: {
     flexDirection: "row",

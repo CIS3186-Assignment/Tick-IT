@@ -7,6 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from "../components/PurchaseSummary";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { addDoc } from "firebase/firestore";
+import { addBookingToUser } from "../services/WalletService";
+import { FIREBASE_AUTH } from "../FirebaseConfig";
+import customTheme from "../theme";
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
 export const PUBLISHABLE_KEY = "pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC";
@@ -58,6 +62,9 @@ export default function App() {
     } else if (paymentIntent) {
       console.log("Success from promise", paymentIntent);
       setSuccess(true);
+      
+      addBookingToUser(FIREBASE_AUTH.currentUser.uid,event,ticketCounts,totalAmount);
+
       navigation.navigate("Receipt", {
         event,
         ticketCounts,
@@ -89,9 +96,8 @@ export default function App() {
                   postalCodeEnabled={false}
                   autofocus
                   style={[styles.cardField, styles.cardFieldContainer]}
-                  cardStyle={{
-                    textColor: "#1c1c1c",
-                  }}
+                  accessibilityRole="text"
+                  accessibilityLabel="Credit Card Information"
                 />
               </KeyboardAvoidingView>
               <TouchableOpacity
@@ -99,10 +105,10 @@ export default function App() {
                 disabled={loading || success}
                 style={[
                   styles.button,
-                  { backgroundColor: loading || success ? "gray" : "#253354" },
+                  { backgroundColor: loading || success ? customTheme.colors.tertiary : customTheme.colors.primary },
                 ]}
               >
-                <Text style={styles.buttonText}>Pay</Text>
+                <Text style={styles.buttonText} allowFontScaling={true}>Pay</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -120,7 +126,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 0,
-    backgroundColor: "#141414",
   },
   cardField: {
     height: 60,
@@ -137,7 +142,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 25,
     marginVertical: 20,
-    backgroundColor: "#bbe",
+    backgroundColor: customTheme.colors.tertiary,
     alignSelf: "center",
   },
   paymentSection: {
@@ -146,7 +151,6 @@ const styles = StyleSheet.create({
     paddingBottom: 70,
   },
   button: {
-    backgroundColor: "#2ecc71",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -154,10 +158,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonText: {
-    color: "#fff",
     fontSize: 18,
+    color: customTheme.colors.onPrimary,
   },
   keyboardScroll: {
-    backgroundColor: '#141414',
+    backgroundColor: customTheme.colors.background,
   }
 });

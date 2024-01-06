@@ -19,6 +19,7 @@ import { STORAGE } from "../FirebaseConfig.js";
 import EventCard from "../components/EventCard.js";
 import BottomNavBar from "../components/BottomNavBar.js";
 import { getCategories } from "../services/CategoriesService.js";
+import customTheme from "../theme.js";
 
 const EventCatalog = () => {
   const [categories, setCategories] = useState([]);
@@ -128,11 +129,13 @@ const EventCatalog = () => {
   };
 
   return (
-    <View style={{ ...styles.container, backgroundColor: "#141414" }}>
+    <View style={{ ...styles.container}}>
       <Searchbar
         placeholder="Search"
+        theme={{ colors: { primary: customTheme.colors.background } }}
         onChangeText={setQuery}
         value={query}
+        accessibilityLabel="Search events"
         style={styles.search_bar}
       />
 
@@ -149,6 +152,7 @@ const EventCatalog = () => {
                 style={styles.category_chips}
                 selected={filters.includes(item.id)}
                 onPress={() => handleChipPress(item.id)}
+                accessibilityLabel={`Filter by ${item.name} category`}
               >
                 {item.name}
               </Chip>
@@ -158,7 +162,7 @@ const EventCatalog = () => {
       </View>
 
       {loading ? (
-        <ActivityIndicator animating={loading} color="#3700B3" size="large" />
+        <ActivityIndicator animating={loading} size="large" />
       ) : (
         <FlatList
           data={filteredEvents}
@@ -166,7 +170,7 @@ const EventCatalog = () => {
           style={styles.eventCard}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
-            <EventCard event={item} imageURL={item.imageURL} />
+            <EventCard event={item} imageURL={item.imageURL} accessibilityLabel={`Event: ${item.name}`}/>
           )}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -174,7 +178,9 @@ const EventCatalog = () => {
         />
       )}
 
-      <BottomNavBar currentScreen="EventCatalog" />
+      <View style={styles.bottomNavBarContainer}>
+        <BottomNavBar currentScreen="EventCatalog"/>
+      </View>
     </View>
   );
 };
@@ -183,6 +189,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
+    backgroundColor: customTheme.colors.background,
   },
   search_bar: {
     marginTop: 55,
@@ -190,15 +197,15 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderRadius: 20,
-    backgroundColor: "#FFFFFF",
+    
   },
   eventCard: {
-    marginBottom: 0,
+    marginBottom: 60,
   },
   filter: {
     marginVertical: 0,
     borderBottomWidth: 0.7,
-    borderColor: "white",
+    borderColor: customTheme.colors.onPrimary,
   },
   filter_items: {
     marginVertical: 15,
@@ -207,12 +214,17 @@ const styles = StyleSheet.create({
   },
   category_chips: {
     marginRight: 5,
-    backgroundColor: "#ffff",
+    backgroundColor: customTheme.colors.primaryContainer,
     borderRadius: 20,
   },
   chips: {
     marginRight: 20,
     paddingRight: 10,
+  },
+  bottomNavBarContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
 });
 

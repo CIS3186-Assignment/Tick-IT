@@ -9,8 +9,10 @@ import {
   Linking
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { IconButton, MD3Colors } from "react-native-paper";
+import { IconButton } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
+import customTheme from "../theme.js";
+import { FIREBASE_AUTH } from "../FirebaseConfig.js";
 
 const EventDetails = ({ route }) => {
   const { event } = route.params;
@@ -33,6 +35,10 @@ const EventDetails = ({ route }) => {
     }));
   };
 
+  const isAnyTicketSelected = Object.values(ticketCounts).some(
+    (count) => count > 0
+  );
+  
   const openGoogleMaps = () => {
     const latitude = event.location_geopoint.latitude;
     const longitude = event.location_geopoint.longitude;
@@ -41,11 +47,16 @@ const EventDetails = ({ route }) => {
   }
 
   const handlePurchasePress = () => {
+    
     const isAnyTicketSelected = Object.values(ticketCounts).some(
       (count) => count > 0
     );
 
-    if (isAnyTicketSelected) {
+    const isLoggedin = FIREBASE_AUTH.currentUser != null;
+
+    if (!isLoggedin) {
+      navigation.push("Login",{required: true});
+    } else if (isAnyTicketSelected) {
       const totalAmount = event.tickets.reduce(
         (total, ticket) =>
           total + (ticketCounts[ticket.name] || 0) * ticket.price,
@@ -93,7 +104,7 @@ const EventDetails = ({ route }) => {
         }
         ListFooterComponent={
           <View>
-            <Text style={styles.total}>
+            <Text style={styles.total} allowFontScaling={true}>
               {`Total: €${event.tickets.reduce(
                 (total, ticket) =>
                   total + (ticketCounts[ticket.name] || 0) * ticket.price,
@@ -101,10 +112,13 @@ const EventDetails = ({ route }) => {
               )}`}
             </Text>
             <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={handlePurchasePress}
+              style={[
+                styles.buttonContainer,
+                !isAnyTicketSelected && styles.buttonDisabled
+              ]}
+              onPress={isAnyTicketSelected ? handlePurchasePress : null}
             >
-              <Text style={styles.buttonText}>Purchase</Text>
+              <Text style={styles.buttonText} allowFontScaling={true}>Purchase</Text>
             </TouchableOpacity>
           </View>
         }
@@ -129,16 +143,17 @@ const EventDetails = ({ route }) => {
           if (item.type === "grid") {
             return (
               <View style={styles.gridRow}>
-                <Text style={styles.gridLabel}>{item.label}:</Text>
+                <Text style={styles.gridLabel} allowFontScaling={true}>{item.label}:</Text>
                 <View style={styles.gridValueContainer}>
-                  <Text style={styles.gridValue}>{item.value}</Text>
+                  <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
                   {item.withIcon && (
                     <IconButton
                       icon="map-marker"
                       size={35}
-                      iconColor={MD3Colors.error60}
                       style={styles.iconButton}
+                      iconColor={customTheme.colors.error}
                       onPress={openGoogleMaps}
+                      accessibilityLabel="Open Google Maps"
                     />
                   )}
                 </View>
@@ -148,7 +163,7 @@ const EventDetails = ({ route }) => {
             return (
               <View style={styles.ticketContainer}>
                 <View style={styles.ticketRow}>
-                  <Text style={styles.ticketLabel}>
+                  <Text style={styles.ticketLabel} allowFontScaling={true}>
                     {item.name} (€{item.price})
                   </Text>
                   <View style={styles.ticketCountContainer}>
@@ -157,8 +172,9 @@ const EventDetails = ({ route }) => {
                       size={35}
                       style={styles.iconButton}
                       onPress={() => handleTicketCountChange(item.name, -1)}
+                      accessibilityLabel={`Decrease ${item.name} count`}
                     />
-                    <Text style={styles.ticketCount}>
+                    <Text style={styles.ticketCount} allowFontScaling={true}>
                       {ticketCounts[item.name] || 0}
                     </Text>
                     <IconButton
@@ -166,6 +182,7 @@ const EventDetails = ({ route }) => {
                       size={35}
                       style={styles.iconButton}
                       onPress={() => handleTicketCountChange(item.name, 1)}
+                      accessibilityLabel={`Increase ${item.name} count`}
                     />
                   </View>
                 </View>
@@ -181,7 +198,7 @@ const EventDetails = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#141414",
+    backgroundColor: customTheme.colors.background,
   },
   imageContainer: {
     alignItems: "center",
@@ -193,7 +210,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 25,
     marginVertical: 20,
-    backgroundColor: "#141414",
+    backgroundColor: customTheme.colors.tertiary,
     alignSelf: "center",
   },
   gridRow: {
@@ -206,7 +223,7 @@ const styles = StyleSheet.create({
   gridLabel: {
     fontSize: 25,
     fontWeight: "bold",
-    color: "#FFFFFF",
+    color: customTheme.colors.onPrimary,
     marginBottom: 5,
   },
   gridValueContainer: {
@@ -215,7 +232,7 @@ const styles = StyleSheet.create({
   },
   gridValue: {
     fontSize: 16,
-    color: "#FFFFFF",
+    color: customTheme.colors.onPrimary,
     marginRight: 5,
     flexWrap: "wrap",
   },
@@ -227,14 +244,14 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
-    color: "#FFFFFF",
+    color: customTheme.colors.onPrimary,
   },
   ticketContainer: {
-    borderColor: "#253354",
+    borderColor: customTheme.colors.background,
     borderTopWidth: 1.5,
     marginVertical: 0,
     marginBottom: 0,
-    backgroundColor: "#fff",
+    backgroundColor: customTheme.colors.onPrimary,
     marginTop: 30,
     marginBottom: -30,
   },
@@ -258,15 +275,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   buttonContainer: {
-    backgroundColor: "#253354",
+    backgroundColor: customTheme.colors.primary,
     padding: 20,
     borderRadius: 5,
     marginHorizontal: 45,
     marginBottom: 30,
     alignItems: "center",
   },
+  buttonDisabled: {
+    backgroundColor: customTheme.colors.disabled,
+    display: 'none',
+  },
   buttonText: {
-    color: "#FFFFFF",
+    color: customTheme.colors.onPrimary,
     fontSize: 16,
     fontWeight: "bold",
   },
@@ -276,7 +297,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginTop: 60,
     marginBottom: 20,
-    color: "#fff",
+    color: customTheme.colors.onPrimary,
   },
 });
 

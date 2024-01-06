@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
   cardContent: {
     backgroundColor: customTheme.colors.background,
     borderRadius: 10,
-    overflow: "hidden",
     width: "90%",
     aspectRatio: 1,
     margin: 10,

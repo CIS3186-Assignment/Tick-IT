@@ -24,7 +24,7 @@ const Register = () => {
             const user = userCredential.user;
             await updateProfile(user, { displayName: name });
             console.log(user);
-            navigation.navigate("Login")
+            navigation.navigate("EventCatalog")
         } catch (error) {
             // Handle different authentication errors
             switch (error.code) {

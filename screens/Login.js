@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { FIREBASE_AUTH } from '../FirebaseConfig';
@@ -19,6 +19,27 @@ const Login = ({route}) => {
     const [showPassword, setShowPassword] = useState(false)
 
     const navigation = useNavigation();
+
+    useEffect(() => {
+        if (FIREBASE_AUTH.currentUser) {
+            console.log("Already logged in, redirecting to EventCatalog");
+            navigation.navigate("EventCatalog");
+        }
+
+        const unsubscribe = FIREBASE_AUTH.onAuthStateChanged(user => {
+            if (user) {
+                // User is signed in.
+                console.log("Already logged in, redirecting to EventCatalog");
+                navigation.navigate("EventCatalog");
+            } else {
+                // No user is signed in.
+                console.log("Not logged in");
+            }
+        });
+    
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+    }, []);
 
     const signIn = async () => {
         try {

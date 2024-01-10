@@ -96,9 +96,14 @@ const Wallet = ({ navigation }) => {
           <Text style={styles.messageText}>
             Please login to view your tickets.
           </Text>
-          <Button onPress={() => navigation.push("Login", { required: true })}>
-            <Text>Login</Text>
-          </Button>
+          <View style={styles.loginButtonContainer}>
+            <Button
+              mode="contained"
+              onPress={() => navigation.navigate("Login")}
+            >
+              Login
+            </Button>
+          </View>
         </>
       ) : bookedEvents.length === 0 ? (
         <Text style={styles.messageText}>
@@ -133,6 +138,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 10,
+    marginTop: 40
   },
   imageGrid: {
     margin: 10,
@@ -161,6 +167,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
   },
+  loginButtonContainer:{
+    marginHorizontal: 100
+  }
 });
 
 export default Wallet;

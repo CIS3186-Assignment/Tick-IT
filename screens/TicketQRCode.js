@@ -96,23 +96,38 @@ const TicketQRCode = ({ route }) => {
                   {item.label}:
                 </Text>
                 <View style={styles.gridValueContainer}>
-                  {item.label === 'Creator' && (
-                      <TouchableOpacity onPress={goToEventCreator}>
-                      <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
-                      </TouchableOpacity>
+                {item.label === 'Creator' && (
+                    <TouchableOpacity onPress={goToEventCreator} style={styles.clickableRow}>
+                      <View style={styles.infoContainer}>
+                        <Text style={styles.gridValueB} allowFontScaling={true}>{item.value}</Text>
+                        <IconButton
+                          icon="account-supervisor-circle"
+                          size={35}
+                          style={[styles.iconButton, styles.iconOnRight]}
+                          iconColor={customTheme.colors.onPrimary}
+                          color={customTheme.colors.background}
+                          accessibilityLabel="Event creator"
+                        />
+                      </View>
+                    </TouchableOpacity>
                   )}
-                  {item.label !== 'Creator' && (
+                  {item.label === 'Location' && (
+                    <TouchableOpacity onPress={openGoogleMaps} style={styles.clickableRow}>
+                    <View style={styles.infoContainer}>
+                      <Text style={styles.gridValueB} allowFontScaling={true}>{item.value}</Text>
+                      <IconButton
+                        icon="map-marker-radius"
+                        size={30}
+                        style={[styles.iconButton, styles.iconOnRight]}
+                        iconColor={customTheme.colors.onPrimary}
+                        color={customTheme.colors.background}
+                        accessibilityLabel="Event creator"
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  )}
+                  {item.label !== 'Creator' && item.label !== 'Location' && (
                     <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
-                  )}
-                  {item.withIcon && (
-                    <IconButton
-                      icon="map-marker"
-                      size={35}
-                      iconColor={customTheme.colors.error}
-                      style={styles.iconButton}
-                      accessibilityLabel="Location"
-                      onPress={openGoogleMaps}
-                    />
                   )}
                 </View>
               </View>
@@ -166,6 +181,13 @@ const styles = StyleSheet.create({
     marginRight: 5,
     flexWrap: "wrap",
   },
+  gridValueB: {
+    fontSize: 16,
+    color: customTheme.colors.onPrimary,
+    marginRight: 5,
+    flexWrap: "wrap",
+    textDecorationLine: "underline",
+  },
   iconButton: {
     margin: -10,
   },
@@ -202,6 +224,36 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: customTheme.colors.onPrimary,
   },
+  mapButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10, 
+    paddingHorizontal: 5, 
+    borderRadius: 5, 
+    marginHorizontal: 20
+  },
+  
+  mapButtonText: {
+    fontSize: 16,
+    marginLeft: 10, 
+    color: customTheme.colors.primary,
+  },
+  underlinedText: {
+    textDecorationLine: 'underline',
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  clickableRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconOnRight: {
+    marginLeft: 10,
+    backgroundColor: customTheme.colors.tertiary,
+  },  
 });
 
 export default TicketQRCode;

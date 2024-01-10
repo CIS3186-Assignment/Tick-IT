@@ -70,11 +70,13 @@ const EventCard = ({ event, imageURL }) => {
                 iconColor={customTheme.colors.onPrimary}
                 accessibilityLabel="Event creator"
               />
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={goToEventCreator}
                 accessibilityRole="link"
-                accessibilityLabel={`View details for ${event.eventCreator.name}`}>
-                <Text style={styles.infoText} allowFontScaling={true}>{event?.eventCreator?.name}</Text>
+                accessibilityLabel={`View details for ${event.eventCreator.name}`}
+                style={styles.creatorTouchable} 
+              >
+                <Text style={styles.creator} allowFontScaling={true}>{event?.eventCreator?.name}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.infoContainer}>
@@ -143,6 +145,11 @@ const styles = StyleSheet.create({
   infoText: {
     color: "white",
     fontSize: 15,
+  },
+  creator: {
+    color: "white",
+    fontSize: 15,
+    textDecorationLine: "underline"
   },
 });
 

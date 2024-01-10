@@ -136,13 +136,17 @@ const EventDetails = ({ route }) => {
             withIcon: true,
           },
           {
+            type: "button",
+            label: "Go to Maps",
+            onPress: openGoogleMaps,
+          },
+          {
             type: "grid",
             label: "Date and Time",
             value: formatDate(event.date),
           },
           { type: "grid", label: "Description", value: event.description },
           ...event.tickets.map((ticket) => ({ type: "ticket", ...ticket })),
-          { type: "button" },
         ]}
         renderItem={({ item }) => {
           if (item.type === "grid") {
@@ -151,25 +155,52 @@ const EventDetails = ({ route }) => {
                 <Text style={styles.gridLabel} allowFontScaling={true}>{item.label}:</Text>
                 <View style={styles.gridValueContainer}>
                   {item.label === 'Creator' && (
-                      <TouchableOpacity onPress={goToEventCreator}>
+                    <TouchableOpacity onPress={goToEventCreator} style={styles.clickableRow}>
+                      <View style={styles.infoContainer}>
+                        <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
+                        <IconButton
+                          icon="account-supervisor-circle"
+                          size={35}
+                          style={[styles.iconButton, styles.iconOnRight]}
+                          iconColor={customTheme.colors.onPrimary}
+                          color={customTheme.colors.background}
+                          accessibilityLabel="Event creator"
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                  {item.label === 'Location' && (
+                    <TouchableOpacity onPress={openGoogleMaps} style={styles.clickableRow}>
+                    <View style={styles.infoContainer}>
                       <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
-                      </TouchableOpacity>
+                      <IconButton
+                        icon="map-marker-radius"
+                        size={35}
+                        style={[styles.iconButton, styles.iconOnRight]}
+                        iconColor={customTheme.colors.onPrimary}
+                        color={customTheme.colors.background}
+                        accessibilityLabel="Event creator"
+                      />
+                    </View>
+                  </TouchableOpacity>
                   )}
-                  {item.label !== 'Creator' && (
-                    <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
-                  )}
-                  {item.withIcon && (
-                    <IconButton
-                      icon="map-marker"
-                      size={35}
-                      style={styles.iconButton}
-                      iconColor={customTheme.colors.error}
-                      onPress={openGoogleMaps}
-                      accessibilityLabel="Open Google Maps"
-                    />
-                  )}
-                </View>
-              </View>
+                 {item.label !== 'Creator' && item.label !== 'Location' && (
+                <Text style={styles.gridValue} allowFontScaling={true}>{item.value}</Text>
+              )}
+              {item.withIcon && item.label !== 'Creator' && item.label !== 'Location' && (
+                <TouchableOpacity style={styles.mapButtonContainer} onPress={openGoogleMaps}>
+                  <IconButton
+                    icon="map-marker-radius"
+                    size={35}
+                    style={[styles.iconButton, { backgroundColor: customTheme.colors.tertiary }]}
+                    iconColor={customTheme.colors.onPrimary}
+                    onPress={openGoogleMaps}
+                    accessibilityLabel="Open Google Maps"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
             );
           } else if (item.type === "ticket") {
             return (
@@ -202,6 +233,7 @@ const EventDetails = ({ route }) => {
             );
           }
         }}
+        
       />
     </View>
   );
@@ -311,6 +343,36 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: customTheme.colors.onPrimary,
   },
+  mapButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10, 
+    paddingHorizontal: 5, 
+    borderRadius: 5, 
+    marginHorizontal: 20
+  },
+  
+  mapButtonText: {
+    fontSize: 16,
+    marginLeft: 10, 
+    color: customTheme.colors.primary,
+  },
+  underlinedText: {
+    textDecorationLine: 'underline',
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  clickableRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconOnRight: {
+    marginLeft: 10,
+    backgroundColor: customTheme.colors.tertiary,
+  },  
 });
 
 export default EventDetails;

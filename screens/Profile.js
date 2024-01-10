@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Dimensions } from "react-native";
-import { Icon, IconButton } from "react-native-paper";
+import { Icon, IconButton, Button } from "react-native-paper"; // Assuming Button is a login button component
 import BottomNavBar from "../components/BottomNavBar";
 import { useNavigation } from "@react-navigation/native";
 import { onAuthStateChanged } from "firebase/auth";
@@ -14,11 +14,10 @@ import {
 import TransactionEntry from "../components/TransactionEntry";
 
 const Profile = () => {
-  const [user, setUser] = useState(FIREBASE_AUTH.user)
+  const [user, setUser] = useState(FIREBASE_AUTH.user);
   const [bookedEvents, setBookedEvents] = useState([]);
-  const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  
+  const navigation = useNavigation();
 
   const handleLogoutPress = () => {
     FIREBASE_AUTH.signOut()
@@ -58,6 +57,28 @@ const Profile = () => {
       setIsLoading(false);
     }
   }, []);
+
+  if (!user) {
+    // User is not logged in
+    return (
+      <View style={styles.container}>
+        <View style={styles.notLoggedView}>
+          <Text style={styles.notLogged}>You are not logged in!</Text>
+          <View style={styles.loginButtonContainer}>
+            <Button
+              mode="contained"
+              onPress={() => navigation.navigate("Login")}
+            >
+              Login
+            </Button>
+          </View>
+        </View>
+        <View style={styles.bottomNavBarContainer}>
+          <BottomNavBar currentScreen="Profile" />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -190,8 +211,24 @@ const styles = StyleSheet.create({
     color: customTheme.colors.onPrimary,
   },
   transactions:{
-    height: Dimensions.get('window').width * 1.1, 
-  }
+    position: "space-between",
+    paddingbottom: 100, 
+  },
+  notLogged: {
+    textAlign: "center",
+    alignItems: "center",
+    color: customTheme.colors.onPrimary,
+    fontSize: 25,
+    marginBottom: 20,
+  },
+  notLoggedView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loginButtonContainer: {
+    marginTop: 20,
+  },
 });
 
 export default Profile;

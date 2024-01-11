@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { BottomNavigation, Text, IconButton } from "react-native-paper";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import * as Notifications from "expo-notifications";
 
+import BottomNavBar from "./components/Navbar";
 import customTheme from "./theme";
 import EventDetails from "./screens/EventDetails";
 import EventCatalog from "./screens/EventCatalog";
@@ -19,7 +20,6 @@ import Receipt from "./screens/Receipt";
 import TicketQRCode from "./screens/TicketQRCode";
 import NotificationHandler from "./components/NotificationHandler";
 
-
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -28,67 +28,40 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const Stack = createStackNavigator();
-
 const App = () => {
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: "eventCatalog", title: "Events", icon: "home", color: customTheme.colors.primary },
+    { key: "wallet", title: "Wallet", icon: "account-balance-wallet", color: "#795548" },
+    { key: "profile", title: "Profile", icon: "account-circle", color: "#673ab7" },
+  ]);
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case "eventCatalog":
+        return <EventCatalog />;
+      case "wallet":
+        return <Wallet />;
+      case "profile":
+        return <Profile />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <SafeAreaProvider>
       <PaperProvider theme={customTheme}>
-        <StripeProvider publishableKey="pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC">
+        <StripeProvider
+          publishableKey="pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC"
+        >
           <NavigationContainer>
             <NotificationHandler />
-            <Stack.Navigator initialRouteName="Login">
-              <Stack.Screen
-                name="EventCatalog"
-                component={EventCatalog}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="EventCreator"
-                component={EventCreator}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Profile"
-                component={Profile}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Wallet"
-                component={Wallet}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="TicketQRCode"
-                component={TicketQRCode}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="EventDetails"
-                component={EventDetails}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Checkout"
-                component={Checkout}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Register"
-                component={Register}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Receipt"
-                component={Receipt}
-                options={{ headerShown: false }}
-              />
-            </Stack.Navigator>
+            <BottomNavBar
+              navigationState={{ index, routes }}
+              onIndexChange={setIndex}
+              renderScene={renderScene}
+            />
           </NavigationContainer>
         </StripeProvider>
       </PaperProvider>

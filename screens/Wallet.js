@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { View, StyleSheet, FlatList, Text, TouchableOpacity } from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
+import { useNavigation } from '@react-navigation/native';  // Import useNavigation
 import { getUserBookedEvents } from "../services/WalletService";
 import { fetchImagesForEvents } from "../services/WalletService";
-import BottomNavBar from "../components/BottomNavBar";
+import BottomNavBar from "../components/Navbar";
 import WalletCard from "../components/WalletCard";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import customTheme from "../theme";
 
-const Wallet = ({ navigation }) => {
+const Wallet = () => {
   const [bookedEvents, setBookedEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [numColumns, setNumColumns] = useState(2);
-  const [isLoggedin, setIsLoggedin] = useState(
-    FIREBASE_AUTH.currentUser != null
-  );
+  const [isLoggedin, setIsLoggedin] = useState(FIREBASE_AUTH.currentUser != null);
+  const navigation = useNavigation();  // Get the navigation object
 
   FIREBASE_AUTH.onAuthStateChanged((user) => {
     if (user) {
@@ -51,7 +45,7 @@ const Wallet = ({ navigation }) => {
   const handleCardPress = (item) => {
     navigation.navigate("TicketQRCode", {
       ticket: item,
-      event: item.eventDetails, // Assuming eventDetails contains the necessary event information
+      event: item.eventDetails,
       imageURL: item.imageURL || "",
     });
   };
@@ -64,7 +58,7 @@ const Wallet = ({ navigation }) => {
     >
       <WalletCard
         accessibilityLabel={`Event Card for ${item.name}`}
-        event={item.eventDetails} // Assuming eventDetails contains the necessary event information
+        event={item.eventDetails}
         imageURL={item.imageURL || ""}
         ticket={item}
       />
@@ -119,9 +113,6 @@ const Wallet = ({ navigation }) => {
           numColumns={2}
         />
       )}
-      <View style={styles.bottomNavBarContainer}>
-        <BottomNavBar currentScreen="Wallet" />
-      </View>
     </View>
   );
 };

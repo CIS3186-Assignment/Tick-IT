@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, Dimensions } from "react-native";
 import { Icon, IconButton, Button } from "react-native-paper"; // Assuming Button is a login button component
-import BottomNavBar from "../components/BottomNavBar";
 import { useNavigation } from "@react-navigation/native";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
@@ -12,6 +11,7 @@ import {
 } from "../services/ProfileService";
 
 import TransactionEntry from "../components/TransactionEntry";
+import BottomNavBar from "../components/Navbar";
 
 const Profile = () => {
   const [user, setUser] = useState(FIREBASE_AUTH.user);
@@ -73,9 +73,6 @@ const Profile = () => {
             </Button>
           </View>
         </View>
-        <View style={styles.bottomNavBarContainer}>
-          <BottomNavBar currentScreen="Profile" />
-        </View>
       </View>
     );
   }
@@ -123,9 +120,6 @@ const Profile = () => {
             />
           )}
         </View>
-      </View>
-      <View style={styles.bottomNavBarContainer}>
-        <BottomNavBar currentScreen="Profile" />
       </View>
     </View>
   );

@@ -17,7 +17,6 @@ import { getAllEvents } from "../services/EventService.js";
 import { getDownloadURL, ref } from "firebase/storage";
 import { STORAGE } from "../FirebaseConfig.js";
 import EventCard from "../components/EventCard.js";
-import BottomNavBar from "../components/BottomNavBar.js";
 import { getCategories } from "../services/CategoriesService.js";
 import customTheme from "../theme.js";
 
@@ -177,10 +176,6 @@ const EventCatalog = () => {
           }
         />
       )}
-
-      <View style={styles.bottomNavBarContainer}>
-        <BottomNavBar currentScreen="EventCatalog"/>
-      </View>
     </View>
   );
 };

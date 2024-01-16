@@ -8,16 +8,16 @@ const EventCreator = ({ route }) => {
   const { creator } = route.params;
 
   const callPhone = async () => {
-    try {
-      const canOpen = await Linking.canOpenURL("tel:" + creator.phone);
-      if (canOpen) {
-        await Linking.openURL("tel:" + creator.phone);
+    url = "tel://" + creator.phone
+    Linking.canOpenURL(url)
+    .then((supported) => {
+      if (!supported) {
+        console.log('Can\'t handle url: ' + url);
       } else {
-        console.error("Cannot open phone app.");
+        return Linking.openURL(url);
       }
-    } catch (error) {
-      console.error("Error opening phone app:", error);
-    }
+    })
+  .catch((err) => console.error('An error occurred', err));
   };
 
   const openEmail = async () => {

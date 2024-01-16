@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import {View, Text, StyleSheet,FlatList,ActivityIndicator} from "react-native";
 import { Icon, IconButton, Button } from "react-native-paper";
 import BottomNavBar from "../components/BottomNavBar";
 import { useNavigation } from "@react-navigation/native";

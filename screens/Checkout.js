@@ -57,6 +57,8 @@ export default function App() {
   };
 
   const handlePayPress = async () => {
+    setLoading(true);
+    
     const billingDetails = {
       email: FIREBASE_AUTH.currentUser.email,
     };
@@ -69,6 +71,8 @@ export default function App() {
         billingDetails,
       },
     });
+
+    setLoading(false);
 
     if (error) {
       console.log("Payment confirmation error", error);
@@ -140,6 +144,16 @@ export default function App() {
                   Pay
                 </Text>
               </TouchableOpacity>
+
+              {loading && (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator
+                  animating={true}
+                  size="large"
+                  color={customTheme.colors.onPrimary}
+                />
+              </View>
+            )}
             </View>
           </View>
         </StripeProvider>
@@ -193,5 +207,11 @@ const styles = StyleSheet.create({
   },
   keyboardScroll: {
     backgroundColor: customTheme.colors.background,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#141414",
   },
 });

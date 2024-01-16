@@ -1,19 +1,7 @@
 import * as React from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Alert,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import {Text,View,StyleSheet,Alert,TouchableOpacity,KeyboardAvoidingView,Platform} from "react-native";
 import TopAppBar from "../components/TopAppBar";
-import {
-  StripeProvider,
-  CardField,
-  useConfirmPayment,
-} from "@stripe/stripe-react-native";
+import {StripeProvider,CardField,useConfirmPayment} from "@stripe/stripe-react-native";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from "../components/PurchaseSummary";

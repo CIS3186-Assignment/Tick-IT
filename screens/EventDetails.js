@@ -9,7 +9,6 @@ import { FIREBASE_AUTH } from "../FirebaseConfig.js";
 const EventDetails = ({ route }) => {
   const { event } = route.params;
   const navigation = useNavigation();
-  const details = event.details || {};
 
   useEffect(() => {
     console.log(event);

@@ -11,7 +11,6 @@ import customTheme from "../theme";
 const Wallet = ({ navigation }) => {
   const [bookedEvents, setBookedEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [numColumns, setNumColumns] = useState(2);
   const [isLoggedin, setIsLoggedin] = useState(
     FIREBASE_AUTH.currentUser != null
   );

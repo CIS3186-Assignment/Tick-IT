@@ -20,7 +20,6 @@ import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from "../components/PurchaseSummary";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { addDoc } from "firebase/firestore";
 import { addBookingToUser } from "../services/WalletService";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import customTheme from "../theme";

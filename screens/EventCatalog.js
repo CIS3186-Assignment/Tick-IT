@@ -1,18 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  FlatList,
-  RefreshControl,
-  StyleSheet,
-  Image,
-  Text,
-} from "react-native";
-import {
-  TextInput,
-  ActivityIndicator,
-  Chip,
-  Searchbar,
-} from "react-native-paper";
+import { View, FlatList, RefreshControl, StyleSheet } from "react-native";
+import { ActivityIndicator, Chip, Searchbar } from "react-native-paper";
 import { getAllEvents } from "../services/EventService.js";
 import { getDownloadURL, ref } from "firebase/storage";
 import { STORAGE } from "../FirebaseConfig.js";
@@ -61,7 +49,6 @@ const EventCatalog = () => {
       const events = await getAllEvents();
       setAllEvents(events);
       setFilteredEvents(events);
-      console.log("fetched");
 
       await fetchImagesForEvents(events);
     } catch (error) {
@@ -100,8 +87,6 @@ const EventCatalog = () => {
   };
 
   useEffect(() => {
-    console.log("filtering");
-
     let filteredEvents = allEvents;
 
     if (query) {
@@ -129,7 +114,7 @@ const EventCatalog = () => {
   };
 
   return (
-    <View style={{ ...styles.container}}>
+    <View style={{ ...styles.container }}>
       <Searchbar
         placeholder="Search"
         theme={{ colors: { primary: customTheme.colors.background } }}
@@ -170,7 +155,11 @@ const EventCatalog = () => {
           style={styles.eventCard}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
-            <EventCard event={item} imageURL={item.imageURL} accessibilityLabel={`Event: ${item.name}`}/>
+            <EventCard
+              event={item}
+              imageURL={item.imageURL}
+              accessibilityLabel={`Event: ${item.name}`}
+            />
           )}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -179,7 +168,7 @@ const EventCatalog = () => {
       )}
 
       <View style={styles.bottomNavBarContainer}>
-        <BottomNavBar currentScreen="EventCatalog"/>
+        <BottomNavBar currentScreen="EventCatalog" />
       </View>
     </View>
   );
@@ -197,7 +186,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderRadius: 20,
-    
   },
   eventCard: {
     marginBottom: 60,
@@ -222,9 +210,9 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   bottomNavBarContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    width: '100%',
+    width: "100%",
   },
 });
 

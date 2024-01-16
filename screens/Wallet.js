@@ -51,7 +51,7 @@ const Wallet = ({ navigation }) => {
   const handleCardPress = (item) => {
     navigation.navigate("TicketQRCode", {
       ticket: item,
-      event: item.eventDetails, // Assuming eventDetails contains the necessary event information
+      event: item.eventDetails,
       imageURL: item.imageURL || "",
     });
   };
@@ -64,7 +64,7 @@ const Wallet = ({ navigation }) => {
     >
       <WalletCard
         accessibilityLabel={`Event Card for ${item.name}`}
-        event={item.eventDetails} // Assuming eventDetails contains the necessary event information
+        event={item.eventDetails}
         imageURL={item.imageURL || ""}
         ticket={item}
       />
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 10,
-    marginTop: 40
+    marginTop: 40,
   },
   imageGrid: {
     margin: 10,
@@ -167,9 +167,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
   },
-  loginButtonContainer:{
-    marginHorizontal: 100
-  }
+  loginButtonContainer: {
+    marginHorizontal: 100,
+  },
 });
 
 export default Wallet;

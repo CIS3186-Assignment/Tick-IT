@@ -69,8 +69,6 @@ export const getUserBookedEvents = async (userId) => {
     for (const bookingDoc of bookingsSnapshot.docs) {
       const booking = bookingDoc.data();
 
-      console.log("booking", booking);
-
       const bookingTicketCollectionRef = collection(
         FIRESTORE,
         "Users",
@@ -90,8 +88,6 @@ export const getUserBookedEvents = async (userId) => {
 
       for (const ticketDoc of bookingTicketSnapshot.docs) {
         const ticket = ticketDoc.data();
-
-        console.log("ticket", ticket);
 
         if (
           !ticket ||
@@ -189,8 +185,6 @@ export const addBookingToUser = async (userId, event, ticketCounts) => {
   bookingTickets = [];
 
   for (const ticketKey of Object.keys(ticketCounts)) {
-    console.log(event.tickets);
-
     eventTicketId = event.tickets.find(
       (ticket) => ticket.name === ticketKey
     ).id;

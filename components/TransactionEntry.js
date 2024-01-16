@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { IconButton } from "react-native-paper";
 import customTheme from "../theme";
 
@@ -14,9 +14,11 @@ const TransactionEntry = ({ item }) => {
 
   return (
     <View style={styles.entryContainer}>
-      {Object.entries(groupedEventDetails).map(([eventName, count], index) => {
-        return (
-          <View key={index} style={styles.detailContainer}>
+      <FlatList
+        data={Object.entries(groupedEventDetails)}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item: [eventName, count] }) => (
+          <View style={styles.detailContainer}>
             <View style={styles.iconContainer}>
               {count === 1 && (
                 <IconButton
@@ -47,8 +49,9 @@ const TransactionEntry = ({ item }) => {
               {eventName} (x{count})
             </Text>
           </View>
-        );
-      })}
+        )}
+      />
+
     </View>
   );
 };

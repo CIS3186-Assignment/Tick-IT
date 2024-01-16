@@ -120,6 +120,7 @@ const Profile = () => {
               showsVerticalScrollIndicator={false}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => <TransactionEntry item={item} />}
+              style={styles.history}
             />
           )}
         </View>
@@ -136,6 +137,9 @@ const styles = StyleSheet.create({
     backgroundColor: customTheme.colors.background,
     alignItems: "center",
     justifyContent: "flex-start",
+  },
+  history:{
+    height: "55%",
   },
   icon: {
     position: "absolute",

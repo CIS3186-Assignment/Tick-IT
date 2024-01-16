@@ -1,7 +1,20 @@
 import * as React from "react";
-import { Button, Text, View, StyleSheet, Alert, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  Button,
+  Text,
+  View,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import TopAppBar from "../components/TopAppBar";
-import { StripeProvider, CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import {
+  StripeProvider,
+  CardField,
+  useConfirmPayment,
+} from "@stripe/stripe-react-native";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from "../components/PurchaseSummary";
@@ -13,7 +26,8 @@ import { FIREBASE_AUTH } from "../FirebaseConfig";
 import customTheme from "../theme";
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
-export const PUBLISHABLE_KEY = "pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC";
+export const PUBLISHABLE_KEY =
+  "pk_test_51OFjR5KpbrGf79n9xGCl9UmhH9Jw7UrNw4bfk6SwS7d4OlQp2AEwKM4jMfTMWksqYH1P4ITDdxYE6UbwKYpQiaCv00mMs543VC";
 
 export default function App() {
   const { confirmPayment, loading } = useConfirmPayment();
@@ -44,7 +58,7 @@ export default function App() {
 
   const handlePayPress = async () => {
     const billingDetails = {
-      email: "jenny.rosen@example.com",
+      email: FIREBASE_AUTH.currentUser.email,
     };
 
     const clientSecret = await fetchPaymentIntentClientSecret();
@@ -62,8 +76,13 @@ export default function App() {
     } else if (paymentIntent) {
       console.log("Success from promise", paymentIntent);
       setSuccess(true);
-      
-      addBookingToUser(FIREBASE_AUTH.currentUser.uid,event,ticketCounts,totalAmount);
+
+      addBookingToUser(
+        FIREBASE_AUTH.currentUser.uid,
+        event,
+        ticketCounts,
+        totalAmount
+      );
 
       navigation.navigate("Receipt", {
         event,
@@ -75,7 +94,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <TopAppBar title={event.name}/>
+      <TopAppBar title={event.name} />
       <KeyboardAwareScrollView
         contentContainerStyle={styles.scrollViewContent}
         enableOnAndroid
@@ -83,7 +102,11 @@ export default function App() {
         extraHeight={Platform.select({ android: 40 })}
       >
         <View>
-          <PurchaseSummary totalAmount={totalAmount} event={event} ticketCounts={ticketCounts} />
+          <PurchaseSummary
+            totalAmount={totalAmount}
+            event={event}
+            ticketCounts={ticketCounts}
+          />
         </View>
         <StripeProvider publishableKey={PUBLISHABLE_KEY}>
           <View style={styles.container}>
@@ -105,10 +128,17 @@ export default function App() {
                 disabled={loading || success}
                 style={[
                   styles.button,
-                  { backgroundColor: loading || success ? customTheme.colors.tertiary : customTheme.colors.primary },
+                  {
+                    backgroundColor:
+                      loading || success
+                        ? customTheme.colors.tertiary
+                        : customTheme.colors.primary,
+                  },
                 ]}
               >
-                <Text style={styles.buttonText} allowFontScaling={true}>Pay</Text>
+                <Text style={styles.buttonText} allowFontScaling={true}>
+                  Pay
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -129,7 +159,7 @@ const styles = StyleSheet.create({
   },
   cardField: {
     height: 60,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff",
   },
   totalAmount: {
     fontSize: 18,
@@ -163,5 +193,5 @@ const styles = StyleSheet.create({
   },
   keyboardScroll: {
     backgroundColor: customTheme.colors.background,
-  }
+  },
 });

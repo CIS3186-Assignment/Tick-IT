@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button,Text,View,StyleSheet,Alert,TouchableOpacity,KeyboardAvoidingView,Platform} from "react-native";
+import {Text,View,StyleSheet,Alert,TouchableOpacity,KeyboardAvoidingView,Platform} from "react-native";
 import TopAppBar from "../components/TopAppBar";
 import {StripeProvider,CardField,useConfirmPayment,} from "@stripe/stripe-react-native";
 import { useRoute } from "@react-navigation/native";
@@ -11,6 +11,7 @@ import { addDoc } from "firebase/firestore";
 import { addBookingToUser } from "../services/WalletService";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import customTheme from "../theme";
+import { ActivityIndicator } from "react-native-paper";
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
 export const PUBLISHABLE_KEY =
@@ -18,6 +19,7 @@ export const PUBLISHABLE_KEY =
 
 export default function App() {
   const { confirmPayment, loading } = useConfirmPayment();
+  const [paymentInProgress, setPaymentInProgress] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const route = useRoute();
   const navigation = useNavigation();
@@ -44,7 +46,7 @@ export default function App() {
   };
 
   const handlePayPress = async () => {
-    setLoading(true);
+    setPaymentInProgress(true);
     
     const billingDetails = {
       email: FIREBASE_AUTH.currentUser.email,
@@ -59,7 +61,7 @@ export default function App() {
       },
     });
 
-    setLoading(false);
+    setPaymentInProgress(false);
 
     if (error) {
       console.log("Payment confirmation error", error);
@@ -114,32 +116,33 @@ export default function App() {
                   accessibilityLabel="Credit Card Information"
                 />
               </KeyboardAvoidingView>
-              <TouchableOpacity
-                onPress={handlePayPress}
-                disabled={loading || success}
-                style={[
-                  styles.button,
-                  {
-                    backgroundColor:
-                      loading || success
-                        ? customTheme.colors.tertiary
-                        : customTheme.colors.primary,
-                  },
-                ]}
-              >
-                <Text style={styles.buttonText} allowFontScaling={true}>
-                  Pay
-                </Text>
-              </TouchableOpacity>
-
-              {loading && (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator
-                  animating={true}
-                  size="large"
-                  color={customTheme.colors.onPrimary}
-                />
-              </View>
+              {!paymentInProgress ? (
+                <TouchableOpacity
+                  onPress={handlePayPress}
+                  disabled={loading || success}
+                  style={[
+                    styles.button,
+                    {
+                      backgroundColor:
+                        loading || success
+                          ? customTheme.colors.tertiary
+                          : customTheme.colors.primary,
+                    },
+                  ]}
+                >
+                  <Text style={styles.buttonText} allowFontScaling={true}>
+                    Pay
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator
+                    animating={true}
+                    size="large"
+                    color={customTheme.colors.onPrimary}
+                    style={styles.spinner}
+                  />
+                </View>
             )}
             </View>
           </View>
@@ -201,4 +204,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#141414",
   },
+  spinner:{
+    paddingTop: 15,
+  }
 });

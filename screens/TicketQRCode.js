@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  FlatList,
-  Text,
-  Linking,
-  TouchableOpacity
-} from "react-native";
+import {View,Image,StyleSheet,FlatList,Text,Linking,TouchableOpacity} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";

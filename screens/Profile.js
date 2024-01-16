@@ -113,7 +113,13 @@ const Profile = () => {
             Transaction History:
           </Text>
           {isLoading ? (
-            <ActivityIndicator size="large" color={customTheme.colors.primary} />
+           <View style={styles.loadingContainer}>
+           <ActivityIndicator
+             animating={true}
+             size="large"
+             color={customTheme.colors.onPrimary}
+           />
+         </View>
           ) : (
             <FlatList
               data={bookedEvents}
@@ -232,6 +238,12 @@ const styles = StyleSheet.create({
   },
   loginButtonContainer: {
     marginTop: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#141414",
   },
 });
 

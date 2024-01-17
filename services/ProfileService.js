@@ -17,7 +17,6 @@ export const fetchImagesForEvents = async (bookingTickets) => {
           );
           const imageURL = await getDownloadURL(imageRef);
 
-          console.log("Image URL retrieved for ticket:", ticket.id);
           ticket.imageURL = imageURL;
 
           return ticket;

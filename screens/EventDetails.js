@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  Linking
-} from "react-native";
+import {View, Image, StyleSheet, FlatList, Text, TouchableOpacity, Linking} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
 import TopAppBar from "../components/TopAppBar";
@@ -17,7 +9,6 @@ import { FIREBASE_AUTH } from "../FirebaseConfig.js";
 const EventDetails = ({ route }) => {
   const { event } = route.params;
   const navigation = useNavigation();
-  const details = event.details || {};
 
   useEffect(() => {
     console.log(event);

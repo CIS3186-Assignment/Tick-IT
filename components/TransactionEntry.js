@@ -4,9 +4,6 @@ import { IconButton } from "react-native-paper";
 import customTheme from "../theme";
 
 const TransactionEntry = ({ item }) => {
-  console.log(item.eventDetails);
-
-  // Group tickets by event name
   const groupedEventDetails = item.eventDetails.reduce((acc, curr) => {
     acc[curr.eventDetails.name] = (acc[curr.eventDetails.name] || 0) + 1;
     return acc;
@@ -77,24 +74,24 @@ const styles = StyleSheet.create({
   text: {
     color: customTheme.colors.onPrimary,
     paddingHorizontal: 5,
-    marginLeft: 10, 
+    marginLeft: 10,
     paddingRight: 10,
   },
   iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   icon: {
-    width: 40, 
-    height: 40, 
+    width: 40,
+    height: 40,
     color: customTheme.colors.onPrimary,
   },
   iconOverlap: {
-    marginLeft: -20, 
+    marginLeft: -20,
   },
   textWrap: {
-  flexShrink: 1,
-},
+    flexShrink: 1,
+  },
 });
 
 export default TransactionEntry;

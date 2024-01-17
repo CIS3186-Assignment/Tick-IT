@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {View,StyleSheet,FlatList,Text,TouchableOpacity,} from "react-native";
+import {View,StyleSheet,FlatList,Text,TouchableOpacity} from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
 import { getUserBookedEvents } from "../services/WalletService";
 import { fetchImagesForEvents } from "../services/WalletService";
@@ -11,7 +11,6 @@ import customTheme from "../theme";
 const Wallet = ({ navigation }) => {
   const [bookedEvents, setBookedEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [numColumns, setNumColumns] = useState(2);
   const [isLoggedin, setIsLoggedin] = useState(
     FIREBASE_AUTH.currentUser != null
   );
@@ -45,7 +44,7 @@ const Wallet = ({ navigation }) => {
   const handleCardPress = (item) => {
     navigation.navigate("TicketQRCode", {
       ticket: item,
-      event: item.eventDetails, // Assuming eventDetails contains the necessary event information
+      event: item.eventDetails,
       imageURL: item.imageURL || "",
     });
   };
@@ -58,7 +57,7 @@ const Wallet = ({ navigation }) => {
     >
       <WalletCard
         accessibilityLabel={`Event Card for ${item.name}`}
-        event={item.eventDetails} // Assuming eventDetails contains the necessary event information
+        event={item.eventDetails}
         imageURL={item.imageURL || ""}
         ticket={item}
       />
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: 10,
-    marginTop: 40
+    marginTop: 40,
   },
   imageGrid: {
     margin: 10,
@@ -161,9 +160,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
   },
-  loginButtonContainer:{
-    marginHorizontal: 100
-  }
+  loginButtonContainer: {
+    marginHorizontal: 100,
+  },
 });
 
 export default Wallet;

@@ -1,7 +1,6 @@
 import { getDocs, collection, getDoc, doc } from "firebase/firestore";
-import { FIRESTORE , STORAGE} from "../FirebaseConfig";
+import { FIRESTORE, STORAGE } from "../FirebaseConfig";
 import { getDownloadURL, ref } from "firebase/storage";
-
 
 const fetchEventTickets = async (eventTicketsCollection) => {
   const eventTicketsCollectionDocs = await getDocs(eventTicketsCollection);
@@ -9,7 +8,7 @@ const fetchEventTickets = async (eventTicketsCollection) => {
   return Promise.all(
     eventTicketsCollectionDocs.docs.map(async (eventTicketsDoc) => {
       const ticket = {
-        id: eventTicketsDoc.id, 
+        id: eventTicketsDoc.id,
         ...eventTicketsDoc.data(),
       };
 
@@ -79,16 +78,12 @@ export const getAllEvents = async () => {
     console.error("Error fetching events:", error);
     throw error;
   }
-
-  
 };
 
 export const getEventById = async (eventId) => {
   try {
     const eventDocRef = doc(FIRESTORE, "Events", eventId);
     const eventDoc = await getDoc(eventDocRef);
-
-    console.log("eventDoc", eventDoc);
 
     const event = {
       id: eventDoc.id,
@@ -97,7 +92,7 @@ export const getEventById = async (eventId) => {
 
     const eventTicketsCollection = collection(
       FIRESTORE,
-      "Events", 
+      "Events",
       eventId,
       "EventTickets"
     );
@@ -138,11 +133,8 @@ export const getEventById = async (eventId) => {
     event.imageURL = imageURL;
 
     return event;
-
-
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error fetching event:", error);
     throw error;
   }
-}
+};

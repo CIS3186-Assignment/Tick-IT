@@ -8,8 +8,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import customTheme from '../theme';
 
 const Login = ({route}) => {
-
-
     const required = route.params?.required ?? false;
     console.log("rendering Login with required:", required);
 

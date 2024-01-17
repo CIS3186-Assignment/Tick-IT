@@ -1,13 +1,12 @@
 import * as React from "react";
 import {Text,View,StyleSheet,Alert,TouchableOpacity,KeyboardAvoidingView,Platform} from "react-native";
 import TopAppBar from "../components/TopAppBar";
-import {StripeProvider,CardField,useConfirmPayment,} from "@stripe/stripe-react-native";
+import {StripeProvider,CardField,useConfirmPayment} from "@stripe/stripe-react-native";
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import PurchaseSummary from "../components/PurchaseSummary";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { addDoc } from "firebase/firestore";
 import { addBookingToUser } from "../services/WalletService";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import customTheme from "../theme";

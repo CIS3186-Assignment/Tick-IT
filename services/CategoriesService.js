@@ -2,12 +2,11 @@ import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { FIRESTORE } from "../FirebaseConfig";
 import { getDocs, collection, getDoc } from "firebase/firestore";
 
-
 // Function to get the list of categories
-export const getCategories = async() =>{
+export const getCategories = async () => {
   try {
     // Get the 'Categories' collection
-    const categoriesRef = collection(FIRESTORE,'Categories');
+    const categoriesRef = collection(FIRESTORE, "Categories");
 
     // Get all documents from the collection
     const snapshot = await getDocs(categoriesRef);
@@ -18,17 +17,18 @@ export const getCategories = async() =>{
     snapshot.forEach((doc) => {
       categories.push({
         id: doc.id,
-        ...doc.data()});
+        ...doc.data(),
+      });
     });
 
     // Return the list of categories
     console.log(categories);
 
-    categories.sort((a,b) => a.order-b.order);
+    categories.sort((a, b) => a.order - b.order);
 
     return categories;
   } catch (error) {
-    console.error('Error getting categories:', error);
+    console.error("Error getting categories:", error);
     throw error;
   }
-}
+};

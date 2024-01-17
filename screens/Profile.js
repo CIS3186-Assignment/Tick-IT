@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, Dimensions } from "react-native";
-import { Icon, IconButton, Button } from "react-native-paper"; // Assuming Button is a login button component
+import {View, Text, StyleSheet,FlatList,ActivityIndicator} from "react-native";
+import { Icon, IconButton, Button } from "react-native-paper";
 import BottomNavBar from "../components/BottomNavBar";
 import { useNavigation } from "@react-navigation/native";
 import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import customTheme from "../theme";
-import {
-  getUserBookedEvents,
-  fetchImagesForEvents,
-} from "../services/ProfileService";
+import { getUserBookedEvents } from "../services/ProfileService";
 
 import TransactionEntry from "../components/TransactionEntry";
 
@@ -112,7 +109,7 @@ const Profile = () => {
           <Text style={styles.transactionHistoryText}>
             Transaction History:
           </Text>
-          {isLoading ? (
+          {isLoading ? (S
            <View style={styles.loadingContainer}>
            <ActivityIndicator
              animating={true}
@@ -220,9 +217,9 @@ const styles = StyleSheet.create({
     right: 10,
     color: customTheme.colors.onPrimary,
   },
-  transactions:{
+  transactions: {
     position: "space-between",
-    paddingbottom: 100, 
+    paddingbottom: 100,
   },
   notLogged: {
     textAlign: "center",

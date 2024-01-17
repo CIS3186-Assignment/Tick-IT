@@ -109,7 +109,7 @@ const Profile = () => {
           <Text style={styles.transactionHistoryText}>
             Transaction History:
           </Text>
-          {isLoading ? (S
+          {isLoading ? (
            <View style={styles.loadingContainer}>
            <ActivityIndicator
              animating={true}

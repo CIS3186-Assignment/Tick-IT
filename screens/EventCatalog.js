@@ -147,7 +147,13 @@ const EventCatalog = () => {
       </View>
 
       {loading ? (
-        <ActivityIndicator animating={loading} size="large" />
+         <View style={styles.loadingContainer}>
+         <ActivityIndicator
+           animating={loading}
+           size="large"
+           color={customTheme.colors.onPrimary}
+         />
+       </View>
       ) : (
         <FlatList
           data={filteredEvents}
@@ -213,6 +219,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: "100%",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#141414",
   },
 });
 

@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { addBookingToUser } from "../services/WalletService";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import customTheme from "../theme";
+import { ActivityIndicator } from "react-native-paper";
 
 export const API_URL = "https://us-central1-tick-it-6452c.cloudfunctions.net";
 export const PUBLISHABLE_KEY =
@@ -17,6 +18,7 @@ export const PUBLISHABLE_KEY =
 
 export default function App() {
   const { confirmPayment, loading } = useConfirmPayment();
+  const [paymentInProgress, setPaymentInProgress] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const route = useRoute();
   const navigation = useNavigation();
@@ -43,6 +45,8 @@ export default function App() {
   };
 
   const handlePayPress = async () => {
+    setPaymentInProgress(true);
+    
     const billingDetails = {
       email: FIREBASE_AUTH.currentUser.email,
     };
@@ -55,6 +59,8 @@ export default function App() {
         billingDetails,
       },
     });
+
+    setPaymentInProgress(false);
 
     if (error) {
       console.log("Payment confirmation error", error);
@@ -109,23 +115,34 @@ export default function App() {
                   accessibilityLabel="Credit Card Information"
                 />
               </KeyboardAvoidingView>
-              <TouchableOpacity
-                onPress={handlePayPress}
-                disabled={loading || success}
-                style={[
-                  styles.button,
-                  {
-                    backgroundColor:
-                      loading || success
-                        ? customTheme.colors.tertiary
-                        : customTheme.colors.primary,
-                  },
-                ]}
-              >
-                <Text style={styles.buttonText} allowFontScaling={true}>
-                  Pay
-                </Text>
-              </TouchableOpacity>
+              {!paymentInProgress ? (
+                <TouchableOpacity
+                  onPress={handlePayPress}
+                  disabled={loading || success}
+                  style={[
+                    styles.button,
+                    {
+                      backgroundColor:
+                        loading || success
+                          ? customTheme.colors.tertiary
+                          : customTheme.colors.primary,
+                    },
+                  ]}
+                >
+                  <Text style={styles.buttonText} allowFontScaling={true}>
+                    Pay
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator
+                    animating={true}
+                    size="large"
+                    color={customTheme.colors.onPrimary}
+                    style={styles.spinner}
+                  />
+                </View>
+            )}
             </View>
           </View>
         </StripeProvider>
@@ -180,4 +197,13 @@ const styles = StyleSheet.create({
   keyboardScroll: {
     backgroundColor: customTheme.colors.background,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#141414",
+  },
+  spinner:{
+    paddingTop: 15,
+  }
 });

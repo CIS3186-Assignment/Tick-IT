@@ -109,17 +109,21 @@ const Profile = () => {
           <Text style={styles.transactionHistoryText}>
             Transaction History:
           </Text>
-          {isLoading ? (
-            <ActivityIndicator
-              size="large"
-              color={customTheme.colors.primary}
-            />
+          {isLoading ? (S
+           <View style={styles.loadingContainer}>
+           <ActivityIndicator
+             animating={true}
+             size="large"
+             color={customTheme.colors.onPrimary}
+           />
+         </View>
           ) : (
             <FlatList
               data={bookedEvents}
               showsVerticalScrollIndicator={false}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => <TransactionEntry item={item} />}
+              style={styles.history}
             />
           )}
         </View>
@@ -136,6 +140,9 @@ const styles = StyleSheet.create({
     backgroundColor: customTheme.colors.background,
     alignItems: "center",
     justifyContent: "flex-start",
+  },
+  history:{
+    height: "55%",
   },
   icon: {
     position: "absolute",
@@ -228,6 +235,12 @@ const styles = StyleSheet.create({
   },
   loginButtonContainer: {
     marginTop: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#141414",
   },
 });
 

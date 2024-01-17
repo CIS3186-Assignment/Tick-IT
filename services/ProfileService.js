@@ -56,9 +56,7 @@ export const getUserBookedEvents = async (userId) => {
     );
     const bookingsSnapshot = await getDocs(bookingsCollectionRef);
 
-    const bookedEvents = [];
-
-    for (const bookingDoc of bookingsSnapshot.docs) {
+    const bookedEventsPromises = bookingsSnapshot.docs.map(async (bookingDoc) => {
       const booking = bookingDoc.data();
 
       const bookingTicketCollectionRef = collection(
@@ -73,12 +71,10 @@ export const getUserBookedEvents = async (userId) => {
 
       if (bookingTicketSnapshot.empty) {
         console.error("BookingTicket not found for bookingId:", bookingDoc.id);
-        continue;
+        return null;
       }
 
-      const bookingTickets = [];
-
-      for (const ticketDoc of bookingTicketSnapshot.docs) {
+      const bookingTicketsPromises = bookingTicketSnapshot.docs.map(async (ticketDoc) => {
         const ticket = ticketDoc.data();
 
         if (
@@ -88,7 +84,7 @@ export const getUserBookedEvents = async (userId) => {
           !ticket.eventTicket._key.path
         ) {
           console.error("Incomplete or undefined ticket details:", ticket);
-          continue;
+          return null;
         }
 
         const eventSegmentsIndex =
@@ -121,26 +117,31 @@ export const getUserBookedEvents = async (userId) => {
             };
 
             const eventWithImage = await fetchImagesForEvents([eventDetails]);
-            bookingTickets.push(eventWithImage[0]);
+            return eventWithImage[0];
           } else {
             console.error("Event not found for eventId:", eventId);
+            return null;
           }
         } else {
           console.error("EventId is undefined in ticket details:", ticket);
+          return null;
         }
-      }
-
-      bookedEvents.push({
-        id: bookingDoc.id,
-        eventDetails: bookingTickets,
       });
-    }
 
-    return bookedEvents;
+      const bookingTickets = await Promise.all(bookingTicketsPromises);
+      return {
+        id: bookingDoc.id,
+        eventDetails: bookingTickets.filter(Boolean),
+      };
+    });
+
+    const bookedEvents = await Promise.all(bookedEventsPromises);
+    return bookedEvents.filter(Boolean);
   } catch (error) {
     console.error("Error fetching booked events:", error);
     throw error;
   }
 };
+
 
 export default { fetchImagesForEvents, getUserBookedEvents };
